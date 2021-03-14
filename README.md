@@ -24,6 +24,8 @@ RGB Stripes:
 # 2. Measurements  
 ## ws2812b  
 https://learn.adafruit.com/adafruit-neopixel-uberguide/arduino-library-use  
+
+**Power Demand:**  
 150 LEDS: every LED ~40ma  
 
 | COLOR/BRIGHTNESS | 10   | 50   | 100  | 150 | 200 | 250 |  
@@ -36,9 +38,15 @@ https://learn.adafruit.com/adafruit-neopixel-uberguide/arduino-library-use
 | CYAN             | 0.23 | 0.77 | 1.44 | 2.0 | 2.4 | 2.6 |  
 | WHITE            | 0.3  | 1.1  | 2.0  | 2.5 | 2.9 | 3.1 |  
 
-- AP102  
-  - 60 LEDs: 100ma!!!
-  
+**Timings Salae:**  
+transmit data takes ~30us per LED  
+&rarr; updating 150 LEDs takes ~0.8ms set and ~4.5ms transmit = ~5.3ms per show() command   
+&rarr; ~190 updates per second!!!  
+
+optimize code: call show() only when all LED updated!  
+
+## AP102  
+60 LEDs: 100ma!!!
   
 # 3. Code
 ## 3.1 WS2812B

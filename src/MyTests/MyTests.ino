@@ -31,7 +31,7 @@ uint32_t tempBrightness = 0;
 #define WHITE(brightness) strip.Color(brightness, brightness, brightness)
 
 #define DELAYVAL 50 // Time (in milliseconds) to pause between strip
-#define DELAYLOOP 1000
+#define DELAYLOOP 100
 
 // function declaration
 void animation(uint32_t color, uint32_t delayval);
@@ -155,20 +155,25 @@ void testAnimation(uint8_t brightness, uint32_t delayval){
 
 
 void testSegment(uint8_t brightness){
-  setSegment(0, 50, RED(brightness));
-  setSegment(50, 100, GREEN(brightness));
-  setSegment(100, 150, BLUE(brightness));
+  setSegment(0, 20, RED(brightness));
+  setSegment(20, 40, GREEN(brightness));
+  setSegment(40, 60, BLUE(brightness));
+  setSegment(60, 80, YELLOW(brightness));
+  setSegment(80, 100, MAGENTA(brightness));
+  setSegment(100, 120, CYAN(brightness));
+  setSegment(120, 150, WHITE(brightness));
+  strip.show();   // Send the updated pixel colors to the hardware.
   delay(DELAYLOOP); 
 
-  setSegment(0, 50, GREEN(brightness));
-  setSegment(50, 100, BLUE(brightness));
-  setSegment(100, 150, RED(brightness));
-  delay(DELAYLOOP);
-
-  setSegment(0, 50, BLUE(brightness));
-  setSegment(50, 100, RED(brightness));
-  setSegment(100, 150, GREEN(brightness));
-  delay(DELAYLOOP);
+//  setSegment(0, 50, GREEN(brightness));
+//  setSegment(50, 100, BLUE(brightness));
+//  setSegment(100, 150, RED(brightness));
+//  delay(DELAYLOOP);
+//
+//  setSegment(0, 50, BLUE(brightness));
+//  setSegment(50, 100, RED(brightness));
+//  setSegment(100, 150, GREEN(brightness));
+//  delay(DELAYLOOP);
 }
 
 
@@ -191,7 +196,6 @@ void setSegment(uint8_t startPixel, uint8_t endPixel, uint32_t color) {
    for(int i=startPixel; i<endPixel; i++) { // For each pixel in the segment
     strip.setPixelColor(i, color);
   }
-  strip.show();   // Send the updated pixel colors to the hardware.
 }
 
 void animateSegment(uint8_t startPixel, uint8_t endPixel, uint32_t color, uint32_t delayval) {
