@@ -1,32 +1,40 @@
-# Arduino Nano
+# RGB Bicycle  
+https://learn.adafruit.com/adafruit-neopixel-uberguide/  
+https://www.instructables.com/NeoPixel-Party-Bike-Music-Reactive-Animations-With/  
 
-# 1. Connection
+[# 1. Hardware Setup](#1-hardware-setup)  
+[# 2. Measurements](#2-measurements)  
+[# 3. Code](#3-code)  
+
+---
+# 1. Hardware Setup
+Board: Arduino Nano  
 install correct driver for the CH340 serial communication chip  
 &rarr; https://learn.sparkfun.com/tutorials/how-to-install-ch340-drivers/all  
 
-Board: Arduino Nano  
 Processor: ATmega328P Old Bootloader  
 &rarr; Port should be available  
 
 same as Arduino Uno  
 &rarr; 5V pins
 
-Library:  
-- Adafruit NeoPixel  
-- APA102
-- NeoPixelBus by Makuna  
-
 RGB Stripes:  
-- ws2812b (3 Wire, PWM)  
+- **ws2812b** (3 Wire, PWM)  
 - APA102 (4 Wire, SPI)  
 
+best practices:  
+- add a large capacitor (>1000uF) between +/- of the power source  
+- add a 300-500Ohm Restistor to the data line  
 
+
+---
 # 2. Measurements  
-## ws2812b  
+## 2.1 WS2812B   
 https://learn.adafruit.com/adafruit-neopixel-uberguide/arduino-library-use  
 
 **Power Demand:**  
 150 LEDS: every LED ~40ma  
++ each NeoPixel requires about 3 bytes of RAM: 450Bytes  
 
 | COLOR/BRIGHTNESS | 10   | 50   | 100  | 150 | 200 | 250 |  
 |------------------|------|------|------|-----|-----|-----|  
@@ -45,15 +53,83 @@ transmit data takes ~30us per LED
 
 optimize code: call show() only when all LED updated!  
 
-## AP102  
+## 2.2 AP102  
 60 LEDs: 100ma!!!
-  
+
+
+--- 
 # 3. Code
-## 3.1 WS2812B
+Libraries:  
+- APA102
+- NeoPixelBus by Makuna  
+- **Adafruit NeoPixel**  
+
+
+## 3.1 Adafruit NeoPixel Basics
+https://adafruit.github.io/Adafruit_NeoPixel/html/index.html  
+
+1. basic setup
+```cpp
+#include <Adafruit_NeoPixel.h>
+
+#define LED_PIN   2
+#define LED_COUNT 150
+
+// Declare our NeoPixel strip object:
+Adafruit_NeoPixel strip(LED_COUNT, LED_PIN, NEO_GRB + NEO_KHZ800);
+
+void setup() {
+  Serial.begin(115200);
+  strip.begin();
+  strip.show(); // Initialize all pixels to 'off'
+  Serial.println("Running...");
+}
+```
+
+2. set pixel color  
+```cpp
+// n = pixel number along the strip starting with 0
+// pixel color rgb brightness levels: 0 is dimmest (off) and 255 maximum brightness  
+strip.setPixelColor(n, red, green, blue);
+
+// alternative: sometimes easier and faster: color 32-bit type
+uint32_t magenta = strip.Color(255, 0, 255);
+strip.setPixelColor(n, color);  
+```
+
+3. update pixel  
+```cpp
+// push color data to the strip
+// -> update the whole strip at once
+strip.show();
+
+// set multiple pixel to the same 32-bit RGB color value:  
+strip.fill(color, first, count);
+
+// turn LEDs “off”
+strip.clear();
+```
+
+other methods: query existing strips objects  
+```cpp
+// query the color of a previously-set pixel
+uint32_t color = strip.getPixelColor(11);
+
+// number of pixels in a previously-declared strip
+uint16_t n = strip.numPixels();
+```
+
+## 3.2 FastLED Basics
+http://fastled.io/  
+
+
+## 3.3 Color Brightness  
+
 fixed brightness
 ```cpp
 // colors
 #define BRIGHTNESS 150
+#define OFF strip.Color(0, 0, 0)
 #define RED strip.Color(BRIGHTNESS, 0, 0)
 #define GREEN strip.Color(0, BRIGHTNESS, 0)
 #define BLUE strip.Color(0, 0, BRIGHTNESS)
