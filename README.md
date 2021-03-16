@@ -26,6 +26,10 @@ best practices:
 - add a large capacitor (>1000uF) between +/- of the power source  
 - add a 300-500Ohm Restistor to the data line  
 
+ToDo: add led strip light diffuser  
+- [Flexible Diffusing Sleeve](https://www.alibaba.com/product-detail/Flexible-Diffusing-Sleeve-for-LED-Strip_60735604546.html)  
+- https://s.click.aliexpress.com/e/ctKFn7htp  
+- aliexpress.com/item/4000095850068.html
 
 ---
 # 2. Measurements  
@@ -121,6 +125,9 @@ uint16_t n = strip.numPixels();
 
 ## 3.2 FastLED Basics
 http://fastled.io/  
+
+FUNCTION-BASED ANIMATION SEQUENCES:  
+https://gist.github.com/hsiboy/f9ef711418b40e259b06  
 
 
 ## 3.3 Color Brightness  
