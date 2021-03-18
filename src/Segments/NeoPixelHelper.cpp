@@ -2,8 +2,8 @@
 
 // class: SegmentedStrip
 // constructor
-SegmentedStrip::SegmentedStrip(uint8_t segment_starts[], uint16_t n, uint16_t p, neoPixelType t): Adafruit_NeoPixel(n, p, t) {
-  this->n_segments = sizeof(segment_starts)/sizeof(segment_starts[0]);
+SegmentedStrip::SegmentedStrip(uint8_t segment_starts[], uint8_t n_segments, uint16_t n, uint16_t p, neoPixelType t): Adafruit_NeoPixel(n, p, t) {
+  this->n_segments = n_segments;
   update_segments(segment_starts);
   update_longest_segment();
 }
@@ -35,31 +35,31 @@ void SegmentedStrip::update_longest_segment() {
 
 
 // methods
-void blinkPoliceSegments(uint8_t brightness, SegmentedStrip *segmentStrip) {
+void SegmentedStrip::blinkPoliceSegments(uint8_t brightness) {
   // todo
   // - save state: toggle based on state
   // - provide array: stripes color a/color b/ unchanged
   // - only call strip show at the end of loop
-  for(int i=0; i<segmentStrip->n_segments; i++) {
+  for(int i=0; i<this->n_segments; i++) {
     if(i%2) {
-      segmentStrip->fill(RED(brightness), segmentStrip->segments[i].first, segmentStrip->segments[i].count);
+      this->fill(RED(brightness), this->segments[i].first, 15); // this->segments[i].count);
     }
     else {
-      segmentStrip->fill(BLUE(brightness), segmentStrip->segments[i].first, segmentStrip->segments[i].count);
+      this->fill(BLUE(brightness), this->segments[i].first, 15); //this->segments[i].count);
     }
   }
-  segmentStrip->show();
+  this->show();
   delay(500);
 
-  for(int i=0; i<segmentStrip->n_segments; i++) {
+  for(int i=0; i<this->n_segments; i++) {
     if(i%2) {
-      segmentStrip->fill(BLUE(brightness), segmentStrip->segments[i].first, segmentStrip->segments[i].count);
+      this->fill(BLUE(brightness), this->segments[i].first, 15); //this->segments[i].count);
     }
     else {
-      segmentStrip->fill(RED(brightness), segmentStrip->segments[i].first, segmentStrip->segments[i].count);
+      this->fill(RED(brightness), this->segments[i].first, 15); //this->segments[i].count);
     }
   }
-  segmentStrip->show();
+  this->show();
   delay(500);
 }
 

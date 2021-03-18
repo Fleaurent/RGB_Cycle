@@ -16,8 +16,9 @@ uint8_t segment_starts[] = {0,
                             105,
                             120,
                             135};
+uint8_t n_segments = sizeof(segment_starts) / sizeof(segment_starts[0]);
 
-SegmentedStrip segmentStrip(segment_starts, LED_COUNT, LED_PIN, NEO_GRB + NEO_KHZ800);
+SegmentedStrip segmentStrip(segment_starts, n_segments, LED_COUNT, LED_PIN, NEO_GRB + NEO_KHZ800);
 
 
 
@@ -33,8 +34,11 @@ void loop() {
   // put your main code here, to run repeatedly:
   uint8_t tempBrightness = 100;
   Serial.println(tempBrightness);
+  Serial.println(segmentStrip.n_segments);
+  Serial.println(segmentStrip.longest_segment);
+  Serial.println(sizeof(segment_starts));
 
-  blinkPoliceSegments(tempBrightness, &segmentStrip);
+  segmentStrip.blinkPoliceSegments(tempBrightness);
   // blinkSegments(RED(tempBrightness), BLUE(tempBrightness), 500);
   // animateSegments(RED(tempBrightness), 500);
   // animateSegments(BLUE(tempBrightness), 500);
