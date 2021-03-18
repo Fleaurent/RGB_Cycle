@@ -22,10 +22,10 @@ struct Segment {
 // ToDo: Class
 // members: n_segments, list of segments, LED_COUNT
 // methods: animate_all segments, only selected segments, ...
-class SegmentedStrip {
+class SegmentedStrip : public Adafruit_NeoPixel {
   public:
     // constructor
-    SegmentedStrip(uint8_t n_segments, uint8_t longest_segment, Segment *segments);
+    SegmentedStrip(uint8_t segment_starts[], uint16_t n, uint16_t p, neoPixelType t);
 
     // attributes
     uint8_t n_segments;
@@ -37,9 +37,11 @@ class SegmentedStrip {
   private:
     // attributes
     // methods
+    void update_segments(uint8_t segment_starts[]);
+    void update_longest_segment();
 };
 
 
 // methods
-void blinkPoliceSegments(uint8_t brightness, Adafruit_NeoPixel *strip, SegmentedStrip *segments);
+void blinkPoliceSegments(uint8_t brightness, SegmentedStrip *segments);
 #endif

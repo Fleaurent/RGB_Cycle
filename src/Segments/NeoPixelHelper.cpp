@@ -1,38 +1,65 @@
 #include "NeoPixelHelper.h"
 
-// class
-SegmentedStrip::SegmentedStrip(uint8_t n_segments, uint8_t longest_segment, Segment *segments) {
-  this->n_segments = n_segments;
-  this->longest_segment = longest_segment;
-  this->segments = segments;
+// class: SegmentedStrip
+// constructor
+SegmentedStrip::SegmentedStrip(uint8_t segment_starts[], uint16_t n, uint16_t p, neoPixelType t): Adafruit_NeoPixel(n, p, t) {
+  this->n_segments = sizeof(segment_starts)/sizeof(segment_starts[0]);
+  update_segments(segment_starts);
+  update_longest_segment();
 }
 
+// public methods
+
+// private methods
+void SegmentedStrip::update_segments(uint8_t segment_starts[]) {
+  // update segments: first&count
+  // -> get longest segment
+  this->segments = new Segment[this->n_segments];
+  for(uint8_t i = 0; i < (this->n_segments - 1); i++) {
+    this->segments[i].first = segment_starts[i];
+    this->segments[i].count = this->segments[i+1].first - this->segments[i].first;
+  }
+  // calculate last segment length based on number of leds!
+  this->segments[this->n_segments].first = segment_starts[this->n_segments];
+  this->segments[this->n_segments].count = numLEDs - this->segments[this->n_segments].first;
+}
+
+void SegmentedStrip::update_longest_segment() {
+  this->longest_segment = this->segments[0].count;
+  for(uint8_t i = 1; i < this->n_segments; i++) {
+    if(this->segments[i].count > this->longest_segment) {
+      this->longest_segment = this->segments[i].count;
+    }
+  }  
+}
+
+
 // methods
-void blinkPoliceSegments(uint8_t brightness, Adafruit_NeoPixel *strip, SegmentedStrip *segmentStrip) {
+void blinkPoliceSegments(uint8_t brightness, SegmentedStrip *segmentStrip) {
   // todo
   // - save state: toggle based on state
   // - provide array: stripes color a/color b/ unchanged
   // - only call strip show at the end of loop
   for(int i=0; i<segmentStrip->n_segments; i++) {
     if(i%2) {
-      strip->fill(RED(brightness), segmentStrip->segments[i].first, segmentStrip->segments[i].count);
+      segmentStrip->fill(RED(brightness), segmentStrip->segments[i].first, segmentStrip->segments[i].count);
     }
     else {
-      strip->fill(BLUE(brightness), segmentStrip->segments[i].first, segmentStrip->segments[i].count);
+      segmentStrip->fill(BLUE(brightness), segmentStrip->segments[i].first, segmentStrip->segments[i].count);
     }
   }
-  strip->show();
+  segmentStrip->show();
   delay(500);
 
   for(int i=0; i<segmentStrip->n_segments; i++) {
     if(i%2) {
-      strip->fill(BLUE(brightness), segmentStrip->segments[i].first, segmentStrip->segments[i].count);
+      segmentStrip->fill(BLUE(brightness), segmentStrip->segments[i].first, segmentStrip->segments[i].count);
     }
     else {
-      strip->fill(RED(brightness), segmentStrip->segments[i].first, segmentStrip->segments[i].count);
+      segmentStrip->fill(RED(brightness), segmentStrip->segments[i].first, segmentStrip->segments[i].count);
     }
   }
-  strip->show();
+  segmentStrip->show();
   delay(500);
 }
 
