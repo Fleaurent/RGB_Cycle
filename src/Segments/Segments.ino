@@ -3,7 +3,9 @@
 
 #define LED_PIN 2
 #define LED_COUNT 150
-#define SNAKE_LEN 10
+
+uint32_t frame_counter = 0;
+uint8_t tempBrightness = 100;
 
 // declare segments
 uint8_t segment_starts[] = {0,
@@ -18,9 +20,8 @@ uint8_t segment_starts[] = {0,
                             135};
 uint8_t n_segments = sizeof(segment_starts) / sizeof(segment_starts[0]);
 
-SegmentedStrip segmentStrip(segment_starts, n_segments, LED_COUNT, LED_PIN, NEO_GRB + NEO_KHZ800);
-
-
+// declare strip object
+SegmentedStrip segmentStrip(LED_COUNT, LED_PIN, NEO_GRB + NEO_KHZ800, segment_starts, n_segments);
 
 
 void setup() {
@@ -28,17 +29,29 @@ void setup() {
   segmentStrip.begin();
   segmentStrip.show(); // Initialize all pixels to 'off'
   Serial.println("Running...");
+
+  for(uint8_t i = 0; i < n_segments - 1; i++) {
+    Serial.print(segmentStrip.segments[i].first);
+    Serial.print('\t');
+    Serial.println(segmentStrip.segments[i].count);
+  }
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-  uint8_t tempBrightness = 100;
-  Serial.println(tempBrightness);
-  Serial.println(segmentStrip.n_segments);
-  Serial.println(segmentStrip.longest_segment);
-  Serial.println(sizeof(segment_starts));
+  // global loop 
+  // todo: 
+  // - add statemachine: run specific function based on selection
+  // - add static framecounter passed to function
+  // - add selection of segments to function
+  // - update strip at the end of loop
 
-  segmentStrip.blinkPoliceSegments(tempBrightness);
+  // Serial.println(tempBrightness);
+  // Serial.println(segmentStrip.n_segments);
+  // Serial.println(segmentStrip.longest_segment);
+  // Serial.println(sizeof(segment_starts));
+
+
+  segmentStrip.blinkPoliceSegments(100);
   // blinkSegments(RED(tempBrightness), BLUE(tempBrightness), 500);
   // animateSegments(RED(tempBrightness), 500);
   // animateSegments(BLUE(tempBrightness), 500);
@@ -46,4 +59,7 @@ void loop() {
   // animateSegment(0, BLUE(tempBrightness), 500);
   // animateAllSegments(RED(tempBrightness), 500);
   // animateAllSegments(BLUE(tempBrightness), 500);
+
+  segmentStrip.show();
+  segmentStrip.frame_counter++;
 }

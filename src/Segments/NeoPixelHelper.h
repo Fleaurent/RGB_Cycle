@@ -25,15 +25,17 @@ struct Segment {
 class SegmentedStrip : public Adafruit_NeoPixel {
   public:
     // constructor
-    SegmentedStrip(uint8_t segment_starts[], uint8_t n_segments, uint16_t n, uint16_t p, neoPixelType t);
+    SegmentedStrip(uint16_t n, uint16_t p, neoPixelType t, uint8_t segment_starts[], uint8_t n_segments);
 
     // attributes
     uint8_t n_segments;
     uint8_t longest_segment;
     Segment *segments;
+    uint32_t frame_counter = 0;
+    uint8_t brightness = 100;
 
     // methods
-    void blinkPoliceSegments(uint8_t brightness);
+    void blinkPoliceSegments(uint16_t frames);
 
   private:
     // attributes
