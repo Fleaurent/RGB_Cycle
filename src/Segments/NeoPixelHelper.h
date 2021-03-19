@@ -36,6 +36,8 @@ class SegmentedStrip : public Adafruit_NeoPixel {
 
     // methods
     void blinkPoliceSegments(uint16_t frames);
+    void blinkSegments(uint16_t frames, uint32_t color1, uint32_t color2, uint32_t active_segments);
+    void setSegments(uint32_t color, uint32_t active_segments);
 
   private:
     // attributes

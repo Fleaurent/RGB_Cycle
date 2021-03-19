@@ -71,6 +71,33 @@ void SegmentedStrip::blinkPoliceSegments(uint16_t frames) {
   }
 }
 
+void SegmentedStrip::blinkSegments(uint16_t frames, uint32_t color1, uint32_t color2, uint32_t active_segments) {
+  static bool showColor1 = false;
+
+  // 0. check if color changes
+  if(frame_counter%frames == 0){
+    // 1. set color status
+    showColor1 = !showColor1;
+
+    // 2. write colors
+    if(showColor1) {
+      setSegments(color1, active_segments);
+    }
+    else {
+      setSegments(color2, active_segments);
+    }
+  }
+
+}
+
+void SegmentedStrip::setSegments(uint32_t color, uint32_t active_segments) {
+  for(int i=0; i<n_segments; i++) {
+    if(active_segments & (1 << i)) {
+      fill(color, segments[i].first, segments[i].count);
+    }
+  }
+}
+
 /*
 void blinkSegments(uint32_t color1, uint32_t color2, uint32_t delayVal) {
   for(int i=0; i<n_segments; i++) {

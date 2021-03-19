@@ -30,6 +30,11 @@ void setup() {
   segmentStrip.show(); // Initialize all pixels to 'off'
   Serial.println("Running...");
 
+  /* Optional: print strip information */
+  Serial.println(segmentStrip.n_segments);
+  Serial.println(segmentStrip.longest_segment);
+  Serial.println(segmentStrip.brightness);
+
   for(uint8_t i = 0; i < n_segments - 1; i++) {
     Serial.print(segmentStrip.segments[i].first);
     Serial.print('\t');
@@ -37,21 +42,22 @@ void setup() {
   }
 }
 
+
 void loop() {
-  // global loop 
-  // todo: 
-  // - add statemachine: run specific function based on selection
-  // - add static framecounter passed to function
-  // - add selection of segments to function
-  // - update strip at the end of loop
+  /* 
+    ToDo:  
+    - add statemachine: run specific function based on selection
+    - add static framecounter passed to function
+    - add selection of segments to function
+    - update strip at the end of loop
+    - set brightness based on poti
+  */
+  
+  /* implemented methods */
+  // segmentStrip.blinkPoliceSegments(100);
+  segmentStrip.blinkSegments(100, RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), 0x3FF);
 
-  // Serial.println(tempBrightness);
-  // Serial.println(segmentStrip.n_segments);
-  // Serial.println(segmentStrip.longest_segment);
-  // Serial.println(sizeof(segment_starts));
-
-
-  segmentStrip.blinkPoliceSegments(100);
+  /* old functions */
   // blinkSegments(RED(tempBrightness), BLUE(tempBrightness), 500);
   // animateSegments(RED(tempBrightness), 500);
   // animateSegments(BLUE(tempBrightness), 500);
@@ -60,6 +66,7 @@ void loop() {
   // animateAllSegments(RED(tempBrightness), 500);
   // animateAllSegments(BLUE(tempBrightness), 500);
 
+  /* update strip at the end of the loop */
   segmentStrip.show();
   segmentStrip.frame_counter++;
 }
