@@ -21,43 +21,23 @@ void SegmentedStrip::setSegments(uint32_t color, uint32_t active_segments) {
 }
 
 void SegmentedStrip::setAllSegments(uint32_t color) {
-  for(int i=0; i<n_segments; i++) {
-    if(ALL_SEGMENTS & (1 << i)) {
-      fill(color, segments[i].first, segments[i].count);
-    }
-  }
+  setSegments(color, getAllSegments());
 }
 
 void SegmentedStrip::setEvenSegments(uint32_t color) {
-  for(int i=0; i<n_segments; i++) {
-    if(EVEN_SEGMENTS & (1 << i)) {
-      fill(color, segments[i].first, segments[i].count);
-    }
-  }
+  setSegments(color, getEvenSegments());
 }
 
 void SegmentedStrip::setOddSegments(uint32_t color) {
-  for(int i=0; i<n_segments; i++) {
-    if(ODD_SEGMENTS & (1 << i)) {
-      fill(color, segments[i].first, segments[i].count);
-    }
-  }
+  setSegments(color, getOddSegments());
 }
 
 void SegmentedStrip::setFirstSegments(uint32_t color, uint8_t n) {
-  for(int i=0; i<n_segments; i++) {
-    if(getFirstSegments(n) & (1 << i)) {
-      fill(color, segments[i].first, segments[i].count);
-    }
-  }
+  setSegments(color, getFirstSegments(n));
 }
 
 void SegmentedStrip::setLastSegments(uint32_t color, uint8_t n) {
-  for(int i=0; i<n_segments; i++) {
-    if(getLastSegments(n) & (1 << i)) {
-      fill(color, segments[i].first, segments[i].count);
-    }
-  }
+  setSegments(color, getLastSegments(n));
 }
 
 // time based animations
@@ -77,6 +57,26 @@ void SegmentedStrip::blinkSegments(uint16_t frames, uint32_t color1, uint32_t co
       setSegments(color2, active_segments);
     }
   }
+}
+
+void SegmentedStrip::blinkAllSegments(uint16_t frames, uint32_t color1, uint32_t color2) {
+  blinkSegments(frames, color1, color2, getAllSegments());
+}
+
+void SegmentedStrip::blinkEvenSegments(uint16_t frames, uint32_t color1, uint32_t color2) {
+  blinkSegments(frames, color1, color2, getEvenSegments());
+}
+
+void SegmentedStrip::blinkOddSegments(uint16_t frames, uint32_t color1, uint32_t color2) {
+  blinkSegments(frames, color1, color2, getOddSegments());
+}
+
+void SegmentedStrip::blinkFirstSegments(uint16_t frames, uint32_t color1, uint32_t color2, uint8_t n) {
+  blinkSegments(frames, color1, color2, getFirstSegments(n));
+}
+
+void SegmentedStrip::blinkLastSegments(uint16_t frames, uint32_t color1, uint32_t color2, uint8_t n) {
+  blinkSegments(frames, color1, color2, getLastSegments(n));
 }
 
 void SegmentedStrip::blinkPoliceSegments(uint16_t frames) {
@@ -134,7 +134,7 @@ uint32_t SegmentedStrip::getFirstSegments(uint8_t n) {
 }
 
 uint32_t SegmentedStrip::getLastSegments(uint8_t n) {
-  return ALL_SEGMENTS & !getFirstSegments(n_segments-n);
+  return ALL_SEGMENTS & ~getFirstSegments(n_segments-n);
 }
 
 /* setter methods */

@@ -53,13 +53,33 @@ void loop() {
     - set brightness based on poti
     - shift per segment/per pixel
   */
-  
-  /* implemented methods */
-  // segmentStrip.blinkPoliceSegments(100);
-  // segmentStrip.blinkSegments(100, RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), 0x3FF);
 
-  // segmentStrip.blinkSegments(100, RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), 0x2AA);
-  segmentStrip.blinkSegments(100, RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), 0x155);
+  // 1. get input
+  // i.e. UART input
+
+  // 2. run method based on last valid input
+  // segmentStrip.blinkPoliceSegments(100);
+  
+  // segmentStrip.blinkSegments(100, RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), 0x3FF);
+  // segmentStrip.blinkSegments(100, RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), segmentStrip.getAllSegments());
+  // segmentStrip.blinkAllSegments(100, RED(segmentStrip.brightness), BLUE(segmentStrip.brightness));
+  // segmentStrip.blinkEvenSegments(100, RED(segmentStrip.brightness), BLUE(segmentStrip.brightness));
+  // segmentStrip.blinkOddSegments(100, BLUE(segmentStrip.brightness), RED(segmentStrip.brightness));
+  // segmentStrip.blinkFirstSegments(100, RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), 5);
+  segmentStrip.blinkLastSegments(100, RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), 5);
+  
+  // segmentStrip.blinkAllSegments(100, RED(segmentStrip.brightness));
+  // segmentStrip.blinkEvenSegments(100, RED(segmentStrip.brightness));
+  // segmentStrip.blinkOddSegments(100, RED(segmentStrip.brightness));
+  // segmentStrip.blinkFirstSegments(100, RED(segmentStrip.brightness));
+  // segmentStrip.blinkFastSegments(100, RED(segmentStrip.brightness));
+
+
+  /* 3. update strip at the end of the loop */
+  segmentStrip.show();
+  segmentStrip.frame_counter++;
+}
+
 
   /* old functions */
   // blinkSegments(RED(tempBrightness), BLUE(tempBrightness), 500);
@@ -69,8 +89,3 @@ void loop() {
   // animateSegment(0, BLUE(tempBrightness), 500);
   // animateAllSegments(RED(tempBrightness), 500);
   // animateAllSegments(BLUE(tempBrightness), 500);
-
-  /* update strip at the end of the loop */
-  segmentStrip.show();
-  segmentStrip.frame_counter++;
-}
