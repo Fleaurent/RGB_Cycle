@@ -51,11 +51,15 @@ void loop() {
     - add selection of segments to function
     - update strip at the end of loop
     - set brightness based on poti
+    - shift per segment/per pixel
   */
   
   /* implemented methods */
   // segmentStrip.blinkPoliceSegments(100);
-  segmentStrip.blinkSegments(100, RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), 0x3FF);
+  // segmentStrip.blinkSegments(100, RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), 0x3FF);
+
+  // segmentStrip.blinkSegments(100, RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), 0x2AA);
+  segmentStrip.blinkSegments(100, RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), 0x155);
 
   /* old functions */
   // blinkSegments(RED(tempBrightness), BLUE(tempBrightness), 500);

@@ -34,16 +34,35 @@ class SegmentedStrip : public Adafruit_NeoPixel {
     uint32_t frame_counter = 0;
     uint8_t brightness = 100;
 
+
+    // getters
+    uint32_t getAllSegments();
+    uint32_t getEvenSegments();
+    uint32_t getOddSegments();
+    uint32_t getFirstSegments(uint8_t n);
+    uint32_t getLastSegments(uint8_t n);
+
     // methods
-    void blinkPoliceSegments(uint16_t frames);
-    void blinkSegments(uint16_t frames, uint32_t color1, uint32_t color2, uint32_t active_segments);
     void setSegments(uint32_t color, uint32_t active_segments);
+    void setAllSegments(uint32_t color);  
+    void setEvenSegments(uint32_t color);  
+    void setOddSegments(uint32_t color);  
+    void setFirstSegments(uint32_t color, uint8_t n);
+    void setLastSegments(uint32_t color, uint8_t n);
+
+    void blinkSegments(uint16_t frames, uint32_t color1, uint32_t color2, uint32_t active_segments);
+    void blinkPoliceSegments(uint16_t frames);
+    
 
   private:
     // attributes
     // methods
     void update_segments(uint8_t segment_starts[]);
     void update_longest_segment();
+    uint8_t MAX_NUMBER_SEGMENTS = 32;
+    uint32_t ALL_SEGMENTS;
+    uint32_t EVEN_SEGMENTS;
+    uint32_t ODD_SEGMENTS;
 };
 
 
