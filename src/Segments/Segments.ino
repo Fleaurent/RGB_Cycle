@@ -54,27 +54,25 @@ void loop() {
     - shift per segment/per pixel
   */
 
-  // 1. get input
+  // 1. get input, set brightness
   // i.e. UART input
 
   // 2. run method based on last valid input
   // segmentStrip.blinkPoliceSegments(100);
   
-  // segmentStrip.blinkSegments(100, RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), 0x3FF);
-  // segmentStrip.blinkSegments(100, RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), segmentStrip.getAllSegments());
-  // segmentStrip.blinkAllSegments(100, RED(segmentStrip.brightness), BLUE(segmentStrip.brightness));
-  // segmentStrip.blinkEvenSegments(100, RED(segmentStrip.brightness), BLUE(segmentStrip.brightness));
-  // segmentStrip.blinkOddSegments(100, BLUE(segmentStrip.brightness), RED(segmentStrip.brightness));
-  // segmentStrip.blinkFirstSegments(100, RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), 5);
-  segmentStrip.blinkLastSegments(100, RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), 5);
+  // 2.1 blink
+  // a) blink 50/50 duty cycle
+  // segmentStrip.blinkSegments(RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), 0x3FF, 200);
+  // segmentStrip.blinkSegments(RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), segmentStrip.getAllSegments(), 200);
+  // segmentStrip.blinkAllSegments(RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), 200);
+  // segmentStrip.blinkEvenSegments(RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), 200);
+  // segmentStrip.blinkOddSegments(BLUE(segmentStrip.brightness), RED(segmentStrip.brightness), 200);
+  // segmentStrip.blinkFirstSegments(RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), 5, 200);
+  // segmentStrip.blinkLastSegments(RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), 5, 200);
+
+  // b) blink 75/50 duty cycle
+  segmentStrip.blinkSegments(RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), 0x3FF, 200, 50);
   
-  // segmentStrip.blinkAllSegments(100, RED(segmentStrip.brightness));
-  // segmentStrip.blinkEvenSegments(100, RED(segmentStrip.brightness));
-  // segmentStrip.blinkOddSegments(100, RED(segmentStrip.brightness));
-  // segmentStrip.blinkFirstSegments(100, RED(segmentStrip.brightness));
-  // segmentStrip.blinkFastSegments(100, RED(segmentStrip.brightness));
-
-
   /* 3. update strip at the end of the loop */
   segmentStrip.show();
   segmentStrip.frame_counter++;

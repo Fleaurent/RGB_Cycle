@@ -42,6 +42,7 @@ class SegmentedStrip : public Adafruit_NeoPixel {
     uint32_t getLastSegments(uint8_t n);
 
     // methods
+    // defaults always go in the header file!
     void setSegments(uint32_t color, uint32_t active_segments);
     void setAllSegments(uint32_t color);  
     void setEvenSegments(uint32_t color);  
@@ -49,24 +50,25 @@ class SegmentedStrip : public Adafruit_NeoPixel {
     void setFirstSegments(uint32_t color, uint8_t n);
     void setLastSegments(uint32_t color, uint8_t n);
 
-    void blinkSegments(uint16_t frames, uint32_t color1, uint32_t color2, uint32_t active_segments);
-    void blinkAllSegments(uint16_t frames, uint32_t color1, uint32_t color2);
-    void blinkEvenSegments(uint16_t frames, uint32_t color1, uint32_t color2);
-    void blinkOddSegments(uint16_t frames, uint32_t color1, uint32_t color2);
-    void blinkFirstSegments(uint16_t frames, uint32_t color1, uint32_t color2, uint8_t n);
-    void blinkLastSegments(uint16_t frames, uint32_t color1, uint32_t color2, uint8_t n);
+    void blinkSegments(uint32_t color1, uint32_t color2, uint32_t active_segments, uint16_t frames, uint16_t frame_color_switch = NULL);
+    void blinkAllSegments(uint32_t color1, uint32_t color2, uint16_t frames, uint16_t frame_color_switch = NULL);
+    void blinkEvenSegments(uint32_t color1, uint32_t color2, uint16_t frames, uint16_t frame_color_switch = NULL);
+    void blinkOddSegments(uint32_t color1, uint32_t color2, uint16_t frames, uint16_t frame_color_switch = NULL);
+    void blinkFirstSegments(uint32_t color1, uint32_t color2, uint8_t n, uint16_t frames, uint16_t frame_color_switch = NULL);
+    void blinkLastSegments(uint32_t color1, uint32_t color2, uint8_t n, uint16_t frames, uint16_t frame_color_switch = NULL);
     void blinkPoliceSegments(uint16_t frames);
     
 
   private:
     // attributes
-    // methods
-    void update_segments(uint8_t segment_starts[]);
-    void update_longest_segment();
     uint8_t MAX_NUMBER_SEGMENTS = 32;
     uint32_t ALL_SEGMENTS;
     uint32_t EVEN_SEGMENTS;
     uint32_t ODD_SEGMENTS;
+
+    // methods
+    void update_segments(uint8_t segment_starts[]);
+    void update_longest_segment();
 };
 
 // methods

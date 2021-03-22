@@ -41,42 +41,38 @@ void SegmentedStrip::setLastSegments(uint32_t color, uint8_t n) {
 }
 
 // time based animations
-void SegmentedStrip::blinkSegments(uint16_t frames, uint32_t color1, uint32_t color2, uint32_t active_segments) {
-  static bool showColor1 = false;  // ToDo: get rid of static variable 
+void SegmentedStrip::blinkSegments(uint32_t color1, uint32_t color2, uint32_t active_segments, uint16_t frames, uint16_t frame_color_switch) {
+  if(frame_color_switch == NULL){
+    frame_color_switch = frames / 2;
+  }
   
-  // 0. check if color changes
-  if(frame_counter%frames == 0){
-    // 1. set color status
-    showColor1 = !showColor1;
-
-    // 2. write colors
-    if(showColor1) {
-      setSegments(color1, active_segments);
-    }
-    else {
-      setSegments(color2, active_segments);
-    }
+  // always set colors (improve: only set when changing?)
+  if((frame_counter%frames) < frame_color_switch) {
+    setSegments(color1, active_segments);
+  }
+  else {
+    setSegments(color2, active_segments);
   }
 }
 
-void SegmentedStrip::blinkAllSegments(uint16_t frames, uint32_t color1, uint32_t color2) {
-  blinkSegments(frames, color1, color2, getAllSegments());
+void SegmentedStrip::blinkAllSegments(uint32_t color1, uint32_t color2, uint16_t frames, uint16_t frame_color_switch) {
+  blinkSegments(color1, color2, getAllSegments(), frames, frame_color_switch);
 }
 
-void SegmentedStrip::blinkEvenSegments(uint16_t frames, uint32_t color1, uint32_t color2) {
-  blinkSegments(frames, color1, color2, getEvenSegments());
+void SegmentedStrip::blinkEvenSegments(uint32_t color1, uint32_t color2, uint16_t frames, uint16_t frame_color_switch) {
+  blinkSegments(color1, color2, getEvenSegments(), frames, frame_color_switch);
 }
 
-void SegmentedStrip::blinkOddSegments(uint16_t frames, uint32_t color1, uint32_t color2) {
-  blinkSegments(frames, color1, color2, getOddSegments());
+void SegmentedStrip::blinkOddSegments(uint32_t color1, uint32_t color2, uint16_t frames, uint16_t frame_color_switch) {
+  blinkSegments(color1, color2, getOddSegments(), frames, frame_color_switch);
 }
 
-void SegmentedStrip::blinkFirstSegments(uint16_t frames, uint32_t color1, uint32_t color2, uint8_t n) {
-  blinkSegments(frames, color1, color2, getFirstSegments(n));
+void SegmentedStrip::blinkFirstSegments(uint32_t color1, uint32_t color2, uint8_t n, uint16_t frames, uint16_t frame_color_switch) {
+  blinkSegments(color1, color2, getFirstSegments(n), frames, frame_color_switch);
 }
 
-void SegmentedStrip::blinkLastSegments(uint16_t frames, uint32_t color1, uint32_t color2, uint8_t n) {
-  blinkSegments(frames, color1, color2, getLastSegments(n));
+void SegmentedStrip::blinkLastSegments(uint32_t color1, uint32_t color2, uint8_t n, uint16_t frames, uint16_t frame_color_switch) {
+  blinkSegments(color1, color2, getLastSegments(n), frames, frame_color_switch);
 }
 
 void SegmentedStrip::blinkPoliceSegments(uint16_t frames) {
