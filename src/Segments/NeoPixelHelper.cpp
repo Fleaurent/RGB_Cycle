@@ -3,11 +3,11 @@
 /* class: SegmentedStrip */
 /* constructor */
 SegmentedStrip::SegmentedStrip(uint16_t n, uint16_t p, neoPixelType t, uint8_t segment_starts[], uint8_t n_segments): Adafruit_NeoPixel(n, p, t) {
+  // LED_COUNT, LED_PIN, NEO_GRB + NEO_KHZ800, segment_starts, n_segments
   this->n_segments = n_segments;
   this->segments = new Segment[n_segments];
 
   update_segments(segment_starts);
-  update_longest_segment();
 }
 
 
@@ -42,7 +42,7 @@ void SegmentedStrip::setLastSegments(uint32_t color, uint8_t n) {
 
 // time based animations
 void SegmentedStrip::blinkSegments(uint32_t color1, uint32_t color2, uint32_t active_segments, uint16_t frames, uint16_t frame_color_switch) {
-  if(frame_color_switch == NULL){
+  if(frame_color_switch == 0){
     frame_color_switch = frames / 2;
   }
   
@@ -111,7 +111,45 @@ void SegmentedStrip::blinkPoliceSegments(uint16_t frames) {
   }
 }
 
+void SegmentedStrip::setSegmentsPixel(uint32_t color, uint32_t active_segments, uint32_t active_pixel) {
+  for(int i=0; i<n_segments; i++) {
+    if(active_segments & (1 << i)) {
+      for(int j=0; j<segments[i].count; j++) {
+        if(active_pixel & (1 << j)) {
+          setPixelColor(segments[i].first+j, color); 
+        }
+      }
+    }
+  }
+}
+
+void SegmentedStrip::blinkSegmentsPixel(uint32_t color1, uint32_t color2, uint32_t active_segments, uint32_t active_pixel, uint16_t frames, uint16_t frame_color_switch) {
+  if(frame_color_switch == 0){
+    frame_color_switch = frames / 2;
+  }
+  
+  // always set colors (improve: only set when changing?)
+  if((frame_counter%frames) < frame_color_switch) {
+    setSegmentsPixel(color1, active_segments, active_pixel);
+  }
+  else {
+    setSegmentsPixel(color2, active_segments, active_pixel);
+  }
+}
+
 /* getter methods */
+uint8_t SegmentedStrip::getNSegments() {
+  return n_segments;
+}
+
+uint8_t SegmentedStrip::getLongestSegment() {
+  return longest_segment;
+}
+
+Segment* SegmentedStrip::getSegments() {
+  return segments;
+}
+
 uint32_t SegmentedStrip::getAllSegments() {
   return ALL_SEGMENTS;
 }
@@ -133,6 +171,28 @@ uint32_t SegmentedStrip::getLastSegments(uint8_t n) {
   return ALL_SEGMENTS & ~getFirstSegments(n_segments-n);
 }
 
+uint32_t SegmentedStrip::getAllPixels() {
+  return ALL_PIXELS;
+}
+
+uint32_t SegmentedStrip::getEvenPixels() {
+  return EVEN_PIXELS;
+}
+
+uint32_t SegmentedStrip::getOddPixels() {
+  return ODD_PIXELS;
+}
+
+uint32_t SegmentedStrip::getFirstPixels(uint8_t n) {
+  // ALL_SEGMENTS = 0xFFFFFFFF >> (uint8_t)(MAX_NUMBER_SEGMENT_PIXELS-longest_segment);
+  return ALL_PIXELS >> (uint8_t)(longest_segment-n);
+}
+
+uint32_t SegmentedStrip::getLastPixels(uint8_t n) {
+  return ALL_PIXELS & ~getFirstPixels(longest_segment-n);
+}
+
+
 /* setter methods */
 
 
@@ -151,6 +211,12 @@ void SegmentedStrip::update_segments(uint8_t segment_starts[]) {
   ALL_SEGMENTS = 0xFFFFFFFF >> (uint8_t)(MAX_NUMBER_SEGMENTS-n_segments);
   EVEN_SEGMENTS = ALL_SEGMENTS & 0xAAAAAAAA;
   ODD_SEGMENTS  = ALL_SEGMENTS & 0x55555555;
+
+  // pixel specific settings
+  update_longest_segment();
+  ALL_PIXELS = 0xFFFFFFFF >> (uint8_t)(MAX_NUMBER_SEGMENT_PIXELS-longest_segment);
+  EVEN_PIXELS = ALL_PIXELS & 0xAAAAAAAA;
+  ODD_PIXELS  = ALL_PIXELS & 0x55555555;
 }
 
 void SegmentedStrip::update_longest_segment() {

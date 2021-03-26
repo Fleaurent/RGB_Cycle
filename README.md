@@ -160,16 +160,6 @@ macro brightness
 #define WHITE(brightness) strip.Color(brightness, brightness, brightness)
 ```
 
-todo: set brightness dynamically  
-```cpp
-typedef struct {
-    uint8_t r;
-    uint8_t g;
-    uint8_t b;
-} color;
-
-```
-
 
 ---
 # 4. BLE
@@ -208,5 +198,18 @@ A device can be a Server and Client at the same time.
 
 ## 4.2 Arduino Nano 33 BLE
 https://www.arduino.cc/en/Guide/NANO33BLE  
+ToDo!  
 
+
+---
+# 5. ToDo  
+- add animations using setSegmentsPixel (i.e. shift n pixels forward & backwards)  
+- set brightness dynamically  
+```cpp
+typedef struct {
+    uint8_t r;
+    uint8_t g;
+    uint8_t b;
+} color;
+```  
 

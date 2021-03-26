@@ -27,22 +27,29 @@ class SegmentedStrip : public Adafruit_NeoPixel {
     // constructor
     SegmentedStrip(uint16_t n, uint16_t p, neoPixelType t, uint8_t segment_starts[], uint8_t n_segments);
 
-    // attributes
-    uint8_t n_segments;
-    uint8_t longest_segment;
-    Segment *segments;
+    // public attributes
     uint32_t frame_counter = 0;
     uint8_t brightness = 100;
 
-    // getters
+    // public getters
+    uint8_t getNSegments();
+    uint8_t getLongestSegment();
+    Segment* getSegments();
     uint32_t getAllSegments();
     uint32_t getEvenSegments();
     uint32_t getOddSegments();
     uint32_t getFirstSegments(uint8_t n);
     uint32_t getLastSegments(uint8_t n);
+    uint32_t getAllPixels();
+    uint32_t getEvenPixels();
+    uint32_t getOddPixels();
+    uint32_t getFirstPixels(uint8_t n);
+    uint32_t getLastPixels(uint8_t n);
 
-    // methods
+    // public methods
     // defaults always go in the header file!
+    void update_segments(uint8_t segment_starts[]);
+
     void setSegments(uint32_t color, uint32_t active_segments);
     void setAllSegments(uint32_t color);  
     void setEvenSegments(uint32_t color);  
@@ -50,24 +57,35 @@ class SegmentedStrip : public Adafruit_NeoPixel {
     void setFirstSegments(uint32_t color, uint8_t n);
     void setLastSegments(uint32_t color, uint8_t n);
 
-    void blinkSegments(uint32_t color1, uint32_t color2, uint32_t active_segments, uint16_t frames, uint16_t frame_color_switch = NULL);
-    void blinkAllSegments(uint32_t color1, uint32_t color2, uint16_t frames, uint16_t frame_color_switch = NULL);
-    void blinkEvenSegments(uint32_t color1, uint32_t color2, uint16_t frames, uint16_t frame_color_switch = NULL);
-    void blinkOddSegments(uint32_t color1, uint32_t color2, uint16_t frames, uint16_t frame_color_switch = NULL);
-    void blinkFirstSegments(uint32_t color1, uint32_t color2, uint8_t n, uint16_t frames, uint16_t frame_color_switch = NULL);
-    void blinkLastSegments(uint32_t color1, uint32_t color2, uint8_t n, uint16_t frames, uint16_t frame_color_switch = NULL);
+    void blinkSegments(uint32_t color1, uint32_t color2, uint32_t active_segments, uint16_t frames, uint16_t frame_color_switch=0);
+    void blinkAllSegments(uint32_t color1, uint32_t color2, uint16_t frames, uint16_t frame_color_switch=0);
+    void blinkEvenSegments(uint32_t color1, uint32_t color2, uint16_t frames, uint16_t frame_color_switch=0);
+    void blinkOddSegments(uint32_t color1, uint32_t color2, uint16_t frames, uint16_t frame_color_switch=0);
+    void blinkFirstSegments(uint32_t color1, uint32_t color2, uint8_t n, uint16_t frames, uint16_t frame_color_switch=0);
+    void blinkLastSegments(uint32_t color1, uint32_t color2, uint8_t n, uint16_t frames, uint16_t frame_color_switch=0);
     void blinkPoliceSegments(uint16_t frames);
+
+    void setSegmentsPixel(uint32_t color, uint32_t active_segments, uint32_t active_pixel);
+    
+    void blinkSegmentsPixel(uint32_t color1, uint32_t color2, uint32_t active_segments, uint32_t active_pixel, uint16_t frames, uint16_t frame_color_switch=0);
     
 
   private:
-    // attributes
-    uint8_t MAX_NUMBER_SEGMENTS = 32;
-    uint32_t ALL_SEGMENTS;
+    // private attributes
+    uint8_t n_segments;
+    uint8_t longest_segment;  // n_pixels in the longest segment
+    Segment *segments;  // extract array of Segments elements from array of segment_starts
+
+    uint8_t MAX_NUMBER_SEGMENTS       = 32;
+    uint8_t MAX_NUMBER_SEGMENT_PIXELS = 32;
+    uint32_t ALL_SEGMENTS;  // binary representations
     uint32_t EVEN_SEGMENTS;
     uint32_t ODD_SEGMENTS;
+    uint32_t ALL_PIXELS;  // given by longest_segment!!!
+    uint32_t EVEN_PIXELS;
+    uint32_t ODD_PIXELS;
 
-    // methods
-    void update_segments(uint8_t segment_starts[]);
+    // private methods
     void update_longest_segment();
 };
 

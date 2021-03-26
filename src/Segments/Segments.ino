@@ -28,18 +28,19 @@ void setup() {
   Serial.begin(115200);
   segmentStrip.begin();
   segmentStrip.show(); // Initialize all pixels to 'off'
-  Serial.println("Running...");
-
+  
   /* Optional: print strip information */
-  Serial.println(segmentStrip.n_segments);
-  Serial.println(segmentStrip.longest_segment);
+  Serial.println(segmentStrip.getNSegments());
+  Serial.println(segmentStrip.getLongestSegment());
   Serial.println(segmentStrip.brightness);
 
   for(uint8_t i = 0; i < n_segments - 1; i++) {
-    Serial.print(segmentStrip.segments[i].first);
+    Serial.print(segmentStrip.getSegments()[i].first);
     Serial.print('\t');
-    Serial.println(segmentStrip.segments[i].count);
+    Serial.println(segmentStrip.getSegments()[i].count);
   }
+
+  Serial.println("Running...");
 }
 
 
@@ -60,7 +61,7 @@ void loop() {
   // 2. run method based on last valid input
   // segmentStrip.blinkPoliceSegments(100);
   
-  // 2.1 blink
+  // 2.1 blink complete segments
   // a) blink 50/50 duty cycle
   // segmentStrip.blinkSegments(RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), 0x3FF, 200);
   // segmentStrip.blinkSegments(RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), segmentStrip.getAllSegments(), 200);
@@ -70,9 +71,22 @@ void loop() {
   // segmentStrip.blinkFirstSegments(RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), 5, 200);
   // segmentStrip.blinkLastSegments(RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), 5, 200);
 
-  // b) blink 75/50 duty cycle
-  segmentStrip.blinkSegments(RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), 0x3FF, 200, 50);
+  // b) blink 25/75  duty cycle -> repeat after 200 ticks: 50 ticks color1, remaining 150 ticks color2
+  // segmentStrip.blinkSegments(RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), 0x3FF, 200, 50);
   
+  // 2.2 blink pixel of segments
+  // segmentStrip.blinkSegmentsPixel(RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), 0x3FF, 0x7FFF, 200);  // all segments: 0x7FFF = all pixels
+  // segmentStrip.blinkSegmentsPixel(RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), 0x3FF, 1 << 0, 200);  // all segments: 0x1 = first pixel
+  // segmentStrip.blinkSegmentsPixel(RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), 0x3FF, 1 << 14, 200);  // all segments: 0x4000 = last pixel 
+  // segmentStrip.blinkSegmentsPixel(RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), 0x3FF, 1 << (segmentStrip.longest_segment - 1), 200);  // all segments: 0x4000 = last pixel 
+  // segmentStrip.blinkSegmentsPixel(RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), 0x3FF, 0x03C0, 200);  // all segments: 0x03C0 = inner 4 pixels
+  // segmentStrip.blinkSegmentsPixel(RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), segmentStrip.getOddSegments(), segmentStrip.getOddPixels(), 200);
+  // segmentStrip.blinkSegmentsPixel(RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), segmentStrip.getEvenSegments(), segmentStrip.getEvenPixels(), 200);
+  // segmentStrip.blinkSegmentsPixel(RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), segmentStrip.getAllSegments(), segmentStrip.getAllPixels(), 200);
+
+  // b) blink 25/75  duty cycle -> repeat after 200 ticks: 50 ticks color1, remaining 150 ticks color2
+  segmentStrip.blinkSegmentsPixel(RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), segmentStrip.getAllSegments(), segmentStrip.getAllPixels(), 200, 50);
+
   /* 3. update strip at the end of the loop */
   segmentStrip.show();
   segmentStrip.frame_counter++;
