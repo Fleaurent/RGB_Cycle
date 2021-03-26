@@ -2,9 +2,11 @@
 https://learn.adafruit.com/adafruit-neopixel-uberguide/  
 https://www.instructables.com/NeoPixel-Party-Bike-Music-Reactive-Animations-With/  
 
-[# 1. Hardware Setup](#1-hardware-setup)  
-[# 2. Measurements](#2-measurements)  
-[# 3. Code](#3-code)  
+[1. Hardware Setup](#1-hardware-setup)  
+[2. Measurements](#2-measurements)  
+[3. Code](#3-code)  
+[4. BLE](#4-ble)  
+
 
 ---
 # 1. Hardware Setup
@@ -167,3 +169,44 @@ typedef struct {
 } color;
 
 ```
+
+
+---
+# 4. BLE
+## 4.1 BLE Roles
+https://embedded.fm/blog/ble-roles  
+https://web.archive.org/web/20160930015609/http://projects.mbientlab.com:80/bluetooth-low-energy-basics/  
+
+pre-connection vs. post-connection  
+1. **Pre-connection:**  
+  At startup a device is either a peripheral or a central  
+  - **Peripheral:** advertises itself and waits for a central to connect to it  
+    a peripheral is usually a small device like a Fitbit or smart watch  
+    &rarr; a peripheral that made a connection is a **Slave**  
+  - **Central:** scans for other devices  
+    a central is usually a smartphone or a PC  
+    &rarr; a central that made a connection is a **Master**  
+
+2. **Post-connection:**  
+  After a BLE connection has been established, devices can be either a client or a server  
+  - **Client:** access remote resources  
+    usually the master, but could also be the slave  
+  - **Server:** has a local database of resources, provide resource to clients  
+    usually the slave, but could also be the master  
+
+![](images/ble_roles.png)  
+use read, write, notify, or indicate operations to move data between the client and the server:  
+a) client send read/write operations to the server  
+  &rarr; the server responds with data/changes data  
+b) server send data to the client  
+  &rarr; indicate operations: ack by client  
+  &rarr; notify operations: no ack by client  
+
+A device can switch between a Master and Slave but it cannot be both at the same time.  
+A device can be a Server and Client at the same time.  
+
+
+## 4.2 Arduino Nano 33 BLE
+https://www.arduino.cc/en/Guide/NANO33BLE  
+
+
