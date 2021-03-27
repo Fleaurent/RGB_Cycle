@@ -34,7 +34,7 @@ void setup() {
   Serial.println(segmentStrip.getLongestSegment());
   Serial.println(segmentStrip.brightness);
 
-  for(uint8_t i = 0; i < n_segments - 1; i++) {
+  for(uint8_t i = 0; i < n_segments; i++) {
     Serial.print(segmentStrip.getSegments()[i].first);
     Serial.print('\t');
     Serial.println(segmentStrip.getSegments()[i].count);
@@ -85,10 +85,17 @@ void loop() {
   // segmentStrip.blinkSegmentsPixel(RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), segmentStrip.getAllSegments(), segmentStrip.getAllPixels(), 200);
 
   // b) blink 25/75  duty cycle -> repeat after 200 ticks: 50 ticks color1, remaining 150 ticks color2
-  segmentStrip.blinkSegmentsPixel(RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), segmentStrip.getAllSegments(), segmentStrip.getAllPixels(), 200, 50);
+  // segmentStrip.blinkSegmentsPixel(RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), segmentStrip.getAllSegments(), segmentStrip.getAllPixels(), 200, 50);
+
+  // 2.3 animations
+  // segmentStrip.animateSegments(RED(segmentStrip.brightness), segmentStrip.getAllSegments(), 0x1, 1, 500, 50);  // 10 stripes
+  // segmentStrip.animateSegments(RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), segmentStrip.getAllSegments(), 0x1, 1, 500, 50);
+  // segmentStrip.animateSegmentsPixel(RED(segmentStrip.brightness), segmentStrip.getAllSegments(), 0x7, 1, 300, 20);  // 15 LEDs per Stripe
+  segmentStrip.animateSegmentsPixel(RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), segmentStrip.getAllSegments(), 0x7, 1, 300, 20); 
 
   /* 3. update strip at the end of the loop */
   segmentStrip.show();
+  segmentStrip.clear();
   segmentStrip.frame_counter++;
 }
 

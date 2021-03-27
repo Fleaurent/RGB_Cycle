@@ -1,3 +1,5 @@
+/* https://github.com/adafruit/Adafruit_NeoPixel/blob/master/Adafruit_NeoPixel.cpp */
+
 #include "NeoPixelHelper.h"
 
 /* class: SegmentedStrip */
@@ -12,12 +14,24 @@ SegmentedStrip::SegmentedStrip(uint16_t n, uint16_t p, neoPixelType t, uint8_t s
 
 
 /* public methods */
+void SegmentedStrip::setStripe(uint32_t color) {
+  fill(color, 0, numLEDs);
+}
+
+void SegmentedStrip::resetStripe() {
+  setStripe(OFF);
+}
+
 void SegmentedStrip::setSegments(uint32_t color, uint32_t active_segments) {
   for(int i=0; i<n_segments; i++) {
     if(active_segments & (1 << i)) {
       fill(color, segments[i].first, segments[i].count);
     }
   }
+}
+
+void SegmentedStrip::resetSegments(uint32_t active_segments) {
+  setSegments(OFF, active_segments);
 }
 
 void SegmentedStrip::setAllSegments(uint32_t color) {
@@ -39,6 +53,7 @@ void SegmentedStrip::setFirstSegments(uint32_t color, uint8_t n) {
 void SegmentedStrip::setLastSegments(uint32_t color, uint8_t n) {
   setSegments(color, getLastSegments(n));
 }
+
 
 // time based animations
 void SegmentedStrip::blinkSegments(uint32_t color1, uint32_t color2, uint32_t active_segments, uint16_t frames, uint16_t frame_color_switch) {
@@ -137,6 +152,28 @@ void SegmentedStrip::blinkSegmentsPixel(uint32_t color1, uint32_t color2, uint32
   }
 }
 
+void SegmentedStrip::animateSegments(uint32_t color1, uint32_t color2, uint32_t active_segments, uint32_t init_segments, uint8_t shift_segments, uint16_t frames, uint16_t frames_shift) {
+  uint8_t step = (frame_counter%frames) / frames_shift; 
+  uint32_t temp_active_segments = active_segments & (init_segments << (shift_segments*step));
+  setSegments(color2, active_segments);  
+  setSegments(color1, temp_active_segments);
+}
+
+void SegmentedStrip::animateSegments(uint32_t color, uint32_t active_segments, uint32_t init_segments, uint8_t shift_segments, uint16_t frames, uint16_t frames_shift) {
+  animateSegments(color, OFF, active_segments, init_segments, shift_segments, frames, frames_shift);
+}
+
+void SegmentedStrip::animateSegmentsPixel(uint32_t color1, uint32_t color2, uint32_t active_segments, uint32_t init_pixel, uint8_t shift_pixel, uint16_t frames, uint16_t frames_shift) {
+  uint8_t step = (frame_counter%frames) / frames_shift; 
+  uint32_t temp_active_pixel = init_pixel << (shift_pixel*step);
+  setSegments(color2, active_segments);
+  setSegmentsPixel(color1, active_segments, temp_active_pixel);
+}
+
+void SegmentedStrip::animateSegmentsPixel(uint32_t  color, uint32_t active_segments, uint32_t init_pixel, uint8_t shift_pixel, uint16_t frames, uint16_t frames_shift) {
+  animateSegmentsPixel(color, OFF, active_segments, init_pixel, shift_pixel, frames, frames_shift);
+}
+
 /* getter methods */
 uint8_t SegmentedStrip::getNSegments() {
   return n_segments;
@@ -231,30 +268,6 @@ void SegmentedStrip::update_longest_segment() {
 
 /* methods to be replaced */
 /*
-void blinkSegments(uint32_t color1, uint32_t color2, uint32_t delayVal) {
-  for(int i=0; i<n_segments; i++) {
-    if(i%2) {
-      strip.fill(color1, segments[i].first, segments[i].count);
-    }
-    else {
-      strip.fill(color2, segments[i].first, segments[i].count);
-    }
-  }
-  strip.show();
-  delay(delayVal);
-
-  for(int i=0; i<n_segments; i++) {
-    if(i%2) {
-      strip.fill(color2, segments[i].first, segments[i].count);
-    }
-    else {
-      strip.fill(color1, segments[i].first, segments[i].count);
-    }
-  }
-  strip.show();
-  delay(delayVal);
-}
-
 // set all LEDs Segment by Segment
 void animateSegments(uint32_t color, uint32_t delayVal) {
   for(int i=0; i<n_segments; i++) {

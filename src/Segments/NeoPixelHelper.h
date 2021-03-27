@@ -1,3 +1,5 @@
+/* https://github.com/adafruit/Adafruit_NeoPixel/blob/master/Adafruit_NeoPixel.cpp */
+
 #ifndef NEOPIXELHELPER_H
 #define NEOPIXELHELPER_H
 
@@ -30,6 +32,7 @@ class SegmentedStrip : public Adafruit_NeoPixel {
     // public attributes
     uint32_t frame_counter = 0;
     uint8_t brightness = 100;
+    // numLEDs
 
     // public getters
     uint8_t getNSegments();
@@ -50,7 +53,11 @@ class SegmentedStrip : public Adafruit_NeoPixel {
     // defaults always go in the header file!
     void update_segments(uint8_t segment_starts[]);
 
+    void resetStripe(void);
+    void setStripe(uint32_t color);
+
     void setSegments(uint32_t color, uint32_t active_segments);
+    void resetSegments(uint32_t active_segments);
     void setAllSegments(uint32_t color);  
     void setEvenSegments(uint32_t color);  
     void setOddSegments(uint32_t color);  
@@ -68,6 +75,11 @@ class SegmentedStrip : public Adafruit_NeoPixel {
     void setSegmentsPixel(uint32_t color, uint32_t active_segments, uint32_t active_pixel);
     
     void blinkSegmentsPixel(uint32_t color1, uint32_t color2, uint32_t active_segments, uint32_t active_pixel, uint16_t frames, uint16_t frame_color_switch=0);
+
+    void animateSegments(uint32_t color, uint32_t active_segments, uint32_t init_segments, uint8_t shift_segments, uint16_t frames, uint16_t frames_shift);
+    void animateSegments(uint32_t color1, uint32_t color2, uint32_t active_segments, uint32_t init_segments, uint8_t shift_segments, uint16_t frames, uint16_t frames_shift);
+    void animateSegmentsPixel(uint32_t color, uint32_t active_segments, uint32_t init_pixel, uint8_t shift_pixel, uint16_t frames, uint16_t frames_shift);
+    void animateSegmentsPixel(uint32_t color1, uint32_t color2, uint32_t active_segments, uint32_t init_pixel, uint8_t shift_pixel, uint16_t frames, uint16_t frames_shift);
     
 
   private:
