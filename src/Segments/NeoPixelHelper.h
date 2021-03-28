@@ -5,16 +5,9 @@
 
 #include <Adafruit_NeoPixel.h>
 
-#define OFF Adafruit_NeoPixel::Color(0, 0, 0)
-
-// macro brightness
-#define RED(brightness) Adafruit_NeoPixel::Color(brightness, 0, 0)
-#define GREEN(brightness) Adafruit_NeoPixel::Color(0, brightness, 0)
-#define BLUE(brightness) Adafruit_NeoPixel::Color(0, 0, brightness)
-#define YELLOW(brightness) Adafruit_NeoPixel::Color(brightness, brightness, 0)
-#define MAGENTA(brightness) Adafruit_NeoPixel::Color(brightness, 0, brightness)
-#define CYAN(brightness) Adafruit_NeoPixel::Color(0, brightness, brightness)
-#define WHITE(brightness) Adafruit_NeoPixel::Color(brightness, brightness, brightness)
+#define HUE_DEGREE 182
+#define OFF   Adafruit_NeoPixel::Color(0, 0, 0)
+// #define WHITE Adafruit_NeoPixel::Color(0xFF, 0xFF, 0xFF)
 
 struct Segment {
   uint8_t first;
@@ -27,7 +20,6 @@ class SegmentedStrip : public Adafruit_NeoPixel {
     SegmentedStrip(uint16_t n, uint16_t p, neoPixelType t, uint8_t segment_starts[], uint8_t n_segments);
 
     // public attributes
-    uint8_t brightness = 100;
     // numLEDs -> given by parent class
 
     // public methods
@@ -65,10 +57,24 @@ class SegmentedStrip : public Adafruit_NeoPixel {
     void animateSegmentsPixel(uint32_t color, uint32_t active_segments, uint32_t init_pixel, int8_t shift_pixel, uint16_t frames, uint16_t frames_shift);
     void animateSegmentsPixel(uint32_t color1, uint32_t color2, uint32_t active_segments, uint32_t init_pixel, int8_t shift_pixel, uint16_t frames, uint16_t frames_shift);
     
+    // colors
+    uint32_t color(uint16_t degree);
+    uint32_t WHITE(void);
+    uint32_t RED(void);
+    uint32_t YELLOW(void);
+    uint32_t GREEN(void);
+    uint32_t CYAN(void);
+    uint32_t BLUE(void);
+    uint32_t MAGENTA(void);
+
     // public getters
+    Segment* getSegments();
     uint8_t getNSegments();
     uint8_t getLongestSegment();
-    Segment* getSegments();
+    uint32_t getFrameCounter();
+    uint8_t getBrightenss();
+    uint8_t getSaturation();
+
     uint32_t getAllSegments();
     uint32_t getEvenSegments();
     uint32_t getOddSegments();
@@ -79,10 +85,12 @@ class SegmentedStrip : public Adafruit_NeoPixel {
     uint32_t getOddPixels();
     uint32_t getFirstPixels(uint8_t n);
     uint32_t getLastPixels(uint8_t n);
-    uint32_t getFrameCounter();
-
+    
     // public setters
     void resetFrameCounter(void);
+    void setBrightness(uint8_t);
+    void setSaturation(uint8_t);
+
 
   private:
     // private attributes
@@ -90,6 +98,8 @@ class SegmentedStrip : public Adafruit_NeoPixel {
     uint8_t n_segments;
     uint8_t longest_segment;  // n_pixels in the longest segment
     uint32_t frame_counter = 0;
+    uint8_t brightness = 100;
+    uint8_t saturation = 255;
 
     uint8_t MAX_NUMBER_SEGMENTS       = 32;
     uint8_t MAX_NUMBER_SEGMENT_PIXELS = 32;

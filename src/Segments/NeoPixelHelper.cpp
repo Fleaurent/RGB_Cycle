@@ -111,20 +111,20 @@ void SegmentedStrip::blinkPoliceSegments(uint16_t frames) {
     if(redFirst) {
       for(int i=0; i<n_segments; i++) {
         if(i%2) {
-          fill(RED(brightness), segments[i].first, segments[i].count);
+          fill(RED(), segments[i].first, segments[i].count);
         }
         else {
-          fill(BLUE(brightness), segments[i].first, segments[i].count);
+          fill(BLUE(), segments[i].first, segments[i].count);
         }
       }
     }
     else {
       for(int i=0; i<n_segments; i++) {
         if(i%2) {
-          fill(BLUE(brightness), segments[i].first, segments[i].count);
+          fill(BLUE(), segments[i].first, segments[i].count);
         }
         else {
-          fill(RED(brightness), segments[i].first, segments[i].count);
+          fill(RED(), segments[i].first, segments[i].count);
         }
       }
     }
@@ -182,8 +182,45 @@ void SegmentedStrip::animateSegmentsPixel(uint32_t  color, uint32_t active_segme
   animateSegmentsPixel(color, OFF, active_segments, init_pixel, shift_pixel, frames, frames_shift);
 }
 
+/* colors */
+uint32_t SegmentedStrip::color(uint16_t degree) {
+  return Adafruit_NeoPixel::ColorHSV(degree*HUE_DEGREE, saturation, brightness);
+}
+
+uint32_t SegmentedStrip::WHITE() {
+  return Adafruit_NeoPixel::ColorHSV(0, 0, brightness);
+}
+
+uint32_t SegmentedStrip::RED() {
+  return color(0);
+}
+
+uint32_t SegmentedStrip::YELLOW() {
+  return color(60);
+}
+
+uint32_t SegmentedStrip::GREEN() {
+  return color(120);
+}
+
+uint32_t SegmentedStrip::CYAN() {
+  return color(180);
+}
+
+uint32_t SegmentedStrip::BLUE() {
+  return color(240);
+}
+
+uint32_t SegmentedStrip::MAGENTA() {
+  return color(300);
+}
+
 
 /* getter methods */
+Segment* SegmentedStrip::getSegments() {
+  return segments;
+}
+
 uint8_t SegmentedStrip::getNSegments() {
   return n_segments;
 }
@@ -192,8 +229,12 @@ uint8_t SegmentedStrip::getLongestSegment() {
   return longest_segment;
 }
 
-Segment* SegmentedStrip::getSegments() {
-  return segments;
+uint8_t SegmentedStrip::getBrightenss() {
+  return brightness;
+}
+
+uint8_t SegmentedStrip::getSaturation() {
+  return saturation;
 }
 
 uint32_t SegmentedStrip::getAllSegments() {
@@ -247,6 +288,13 @@ void SegmentedStrip::resetFrameCounter(void) {
   frame_counter = 0;
 }
 
+void SegmentedStrip::setBrightness(uint8_t b) {
+  brightness = b;
+}
+
+void SegmentedStrip::setSaturation(uint8_t s) {
+  saturation = s;
+}
 
 /* private methods */
 void SegmentedStrip::update_segments(uint8_t segment_starts[]) {

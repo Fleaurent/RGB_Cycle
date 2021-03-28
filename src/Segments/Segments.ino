@@ -29,7 +29,7 @@ void setup() {
   /* Optional: print strip information */
   Serial.println(segmentStrip.getNSegments());
   Serial.println(segmentStrip.getLongestSegment());
-  Serial.println(segmentStrip.brightness);
+  Serial.println(segmentStrip.getBrightness());
 
   for(uint8_t i = 0; i < n_segments; i++) {
     Serial.print(segmentStrip.getSegments()[i].first);
@@ -60,37 +60,37 @@ void loop() {
   
   // 2.1 blink complete segments
   // a) blink 50/50 duty cycle
-  // segmentStrip.blinkSegments(RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), 0x3FF, 200);
-  // segmentStrip.blinkSegments(RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), segmentStrip.getAllSegments(), 200);
-  // segmentStrip.blinkAllSegments(RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), 200);
-  // segmentStrip.blinkEvenSegments(RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), 200);
-  // segmentStrip.blinkOddSegments(BLUE(segmentStrip.brightness), RED(segmentStrip.brightness), 200);
-  // segmentStrip.blinkFirstSegments(RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), 5, 200);
-  // segmentStrip.blinkLastSegments(RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), 5, 200);
+  // segmentStrip.blinkSegments(segmentStrip.RED(), segmentStrip.BLUE(), 0x3FF, 200);
+  // segmentStrip.blinkSegments(segmentStrip.RED(), segmentStrip.BLUE(), segmentStrip.getAllSegments(), 200);
+  // segmentStrip.blinkAllSegments(segmentStrip.RED(), segmentStrip.BLUE(), 200);
+  // segmentStrip.blinkEvenSegments(segmentStrip.RED(), segmentStrip.BLUE(), 200);
+  // segmentStrip.blinkOddSegments(segmentStrip.BLUE(), segmentStrip.RED(), 200);
+  // segmentStrip.blinkFirstSegments(segmentStrip.RED(), segmentStrip.BLUE(), 5, 200);
+  // segmentStrip.blinkLastSegments(segmentStrip.RED(), segmentStrip.BLUE(), 5, 200);
 
   // b) blink 25/75  duty cycle -> repeat after 200 ticks: 50 ticks color1, remaining 150 ticks color2
-  // segmentStrip.blinkSegments(RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), 0x3FF, 200, 50);
+  // segmentStrip.blinkSegments(segmentStrip.RED(), segmentStrip.BLUE(), 0x3FF, 200, 50);
   
   // 2.2 blink pixel of segments
-  // segmentStrip.blinkSegmentsPixel(RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), 0x3FF, 0x7FFF, 200);  // all segments: 0x7FFF = all pixels
-  // segmentStrip.blinkSegmentsPixel(RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), 0x3FF, 1 << 0, 200);  // all segments: 0x1 = first pixel
-  // segmentStrip.blinkSegmentsPixel(RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), 0x3FF, 1 << 14, 200);  // all segments: 0x4000 = last pixel 
-  // segmentStrip.blinkSegmentsPixel(RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), 0x3FF, 1 << (segmentStrip.longest_segment - 1), 200);  // all segments: 0x4000 = last pixel 
-  // segmentStrip.blinkSegmentsPixel(RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), 0x3FF, 0x03C0, 200);  // all segments: 0x03C0 = inner 4 pixels
-  // segmentStrip.blinkSegmentsPixel(RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), segmentStrip.getOddSegments(), segmentStrip.getOddPixels(), 200);
-  // segmentStrip.blinkSegmentsPixel(RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), segmentStrip.getEvenSegments(), segmentStrip.getEvenPixels(), 200);
-  // segmentStrip.blinkSegmentsPixel(RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), segmentStrip.getAllSegments(), segmentStrip.getAllPixels(), 200);
+  // segmentStrip.blinkSegmentsPixel(segmentStrip.RED(), segmentStrip.BLUE(), 0x3FF, 0x7FFF, 200);  // all segments: 0x7FFF = all pixels
+  // segmentStrip.blinkSegmentsPixel(segmentStrip.RED(), segmentStrip.BLUE(), 0x3FF, 1 << 0, 200);  // all segments: 0x1 = first pixel
+  // segmentStrip.blinkSegmentsPixel(segmentStrip.RED(), segmentStrip.BLUE(), 0x3FF, 1 << 14, 200);  // all segments: 0x4000 = last pixel 
+  // segmentStrip.blinkSegmentsPixel(segmentStrip.RED(), segmentStrip.BLUE(), 0x3FF, 1 << (segmentStrip.longest_segment - 1), 200);  // all segments: 0x4000 = last pixel 
+  // segmentStrip.blinkSegmentsPixel(segmentStrip.RED(), segmentStrip.BLUE(), 0x3FF, 0x03C0, 200);  // all segments: 0x03C0 = inner 4 pixels
+  // segmentStrip.blinkSegmentsPixel(segmentStrip.RED(), segmentStrip.BLUE(), segmentStrip.getOddSegments(), segmentStrip.getOddPixels(), 200);
+  // segmentStrip.blinkSegmentsPixel(segmentStrip.RED(), segmentStrip.BLUE(), segmentStrip.getEvenSegments(), segmentStrip.getEvenPixels(), 200);
+  // segmentStrip.blinkSegmentsPixel(segmentStrip.RED(), segmentStrip.BLUE(), segmentStrip.getAllSegments(), segmentStrip.getAllPixels(), 200);
 
   // b) blink 25/75  duty cycle -> repeat after 200 ticks: 50 ticks color1, remaining 150 ticks color2
-  // segmentStrip.blinkSegmentsPixel(RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), segmentStrip.getAllSegments(), segmentStrip.getAllPixels(), 200, 50);
+  // segmentStrip.blinkSegmentsPixel(segmentStrip.RED(), segmentStrip.BLUE(), segmentStrip.getAllSegments(), segmentStrip.getAllPixels(), 200, 50);
 
   // 2.3 animations
-  // segmentStrip.animateSegments(RED(segmentStrip.brightness), segmentStrip.getAllSegments(), 0x1, 1, 500, 50);  // 10 stripes
-  // segmentStrip.animateSegments(RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), segmentStrip.getAllSegments(), 0x1, 1, 500, 50);
-  // segmentStrip.animateSegments(RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), segmentStrip.getAllSegments(), segmentStrip.getLastSegments(1), -1, 500, 50);
-  // segmentStrip.animateSegmentsPixel(RED(segmentStrip.brightness), segmentStrip.getAllSegments(), 0x7, 1, 300, 20);  // 15 LEDs per Stripe
-  // segmentStrip.animateSegmentsPixel(RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), segmentStrip.getAllSegments(), 0x7, 1, 300, 20); 
-  // segmentStrip.animateSegmentsPixel(RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), segmentStrip.getAllSegments(), segmentStrip.getLastPixels(3), -1, 300, 20); 
+  // segmentStrip.animateSegments(segmentStrip.RED(), segmentStrip.getAllSegments(), 0x1, 1, 500, 50);  // 10 stripes
+  // segmentStrip.animateSegments(segmentStrip.RED(), segmentStrip.BLUE(), segmentStrip.getAllSegments(), 0x1, 1, 500, 50);
+  // segmentStrip.animateSegments(segmentStrip.RED(), segmentStrip.BLUE(), segmentStrip.getAllSegments(), segmentStrip.getLastSegments(1), -1, 500, 50);
+  // segmentStrip.animateSegmentsPixel(segmentStrip.RED(), segmentStrip.getAllSegments(), 0x7, 1, 300, 20);  // 15 LEDs per Stripe
+  // segmentStrip.animateSegmentsPixel(segmentStrip.RED(), segmentStrip.BLUE(), segmentStrip.getAllSegments(), 0x7, 1, 300, 20); 
+  // segmentStrip.animateSegmentsPixel(segmentStrip.RED(), segmentStrip.BLUE(), segmentStrip.getAllSegments(), segmentStrip.getLastPixels(3), -1, 300, 20); 
 
   // 2.4 combined animations
   // animateEvenOdd();
@@ -103,17 +103,17 @@ void loop() {
 
 /* combined animations */
 void animateEvenOdd(void) {
-  segmentStrip.animateSegmentsPixel(RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), segmentStrip.getEvenSegments(), segmentStrip.getLastPixels(3), -1, 300, 20); 
-  segmentStrip.animateSegmentsPixel(RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), segmentStrip.getOddSegments(), segmentStrip.getFirstPixels(3), 1, 300, 20); 
+  segmentStrip.animateSegmentsPixel(segmentStrip.RED(), segmentStrip.BLUE(), segmentStrip.getEvenSegments(), segmentStrip.getLastPixels(3), -1, 300, 20); 
+  segmentStrip.animateSegmentsPixel(segmentStrip.RED(), segmentStrip.BLUE(), segmentStrip.getOddSegments(), segmentStrip.getFirstPixels(3), 1, 300, 20); 
 }
 
 void animateEvenOdd(uint32_t frames, uint32_t frameswitch) {
   if(segmentStrip.getFrameCounter() % frames < frameswitch) {
-    segmentStrip.animateSegmentsPixel(RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), segmentStrip.getEvenSegments(), segmentStrip.getLastPixels(3), -1, 300, 20); 
-    segmentStrip.animateSegmentsPixel(RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), segmentStrip.getOddSegments(), segmentStrip.getFirstPixels(3), 1, 300, 20); 
+    segmentStrip.animateSegmentsPixel(segmentStrip.RED(), segmentStrip.BLUE(), segmentStrip.getEvenSegments(), segmentStrip.getLastPixels(3), -1, 300, 20); 
+    segmentStrip.animateSegmentsPixel(segmentStrip.RED(), segmentStrip.BLUE(), segmentStrip.getOddSegments(), segmentStrip.getFirstPixels(3), 1, 300, 20); 
   }
   else {
-    segmentStrip.animateSegmentsPixel(RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), segmentStrip.getEvenSegments(), segmentStrip.getFirstPixels(3), 1, 300, 20); 
-    segmentStrip.animateSegmentsPixel(RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), segmentStrip.getOddSegments(), segmentStrip.getLastPixels(3), -1, 300, 20); 
+    segmentStrip.animateSegmentsPixel(segmentStrip.RED(), segmentStrip.BLUE(), segmentStrip.getEvenSegments(), segmentStrip.getFirstPixels(3), 1, 300, 20); 
+    segmentStrip.animateSegmentsPixel(segmentStrip.RED(), segmentStrip.BLUE(), segmentStrip.getOddSegments(), segmentStrip.getLastPixels(3), -1, 300, 20); 
   }
 }
