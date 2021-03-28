@@ -132,32 +132,109 @@ FUNCTION-BASED ANIMATION SEQUENCES:
 https://gist.github.com/hsiboy/f9ef711418b40e259b06  
 
 
-## 3.3 Color Brightness  
+## 3.3 Colors  
 
-fixed brightness
+### 3.3.1 Simple RGB Colors
+a) fixed brightness:  
 ```cpp
-// colors
 #define BRIGHTNESS 150
-#define OFF strip.Color(0, 0, 0)
-#define RED strip.Color(BRIGHTNESS, 0, 0)
-#define GREEN strip.Color(0, BRIGHTNESS, 0)
-#define BLUE strip.Color(0, 0, BRIGHTNESS)
-#define YELLOW strip.Color(BRIGHTNESS, BRIGHTNESS, 0)
-#define MAGENTA strip.Color(BRIGHTNESS, 0, BRIGHTNESS)
-#define CYAN strip.Color(0, BRIGHTNESS, BRIGHTNESS)
-#define WHITE strip.Color(BRIGHTNESS, BRIGHTNESS, BRIGHTNESS)
+#define OFF Adafruit_NeoPixel::Color(0, 0, 0)
+#define RED Adafruit_NeoPixel::Color(BRIGHTNESS, 0, 0)
+#define GREEN Adafruit_NeoPixel::Color(0, BRIGHTNESS, 0)
+#define BLUE Adafruit_NeoPixel::Color(0, 0, BRIGHTNESS)
+#define YELLOW Adafruit_NeoPixel::Color(BRIGHTNESS, BRIGHTNESS, 0)
+#define MAGENTA Adafruit_NeoPixel::Color(BRIGHTNESS, 0, BRIGHTNESS)
+#define CYAN Adafruit_NeoPixel::Color(0, BRIGHTNESS, BRIGHTNESS)
+#define WHITE Adafruit_NeoPixel::Color(BRIGHTNESS, BRIGHTNESS, BRIGHTNESS)
 ```
 
-macro brightness  
+b) macro brightness:  
 ```cpp
-// macro brightness
-#define RED(brightness) strip.Color(brightness, 0, 0)
-#define GREEN(brightness) strip.Color(0, brightness, 0)
-#define BLUE(brightness) strip.Color(0, 0, brightness)
-#define YELLOW(brightness) strip.Color(brightness, brightness, 0)
-#define MAGENTA(brightness) strip.Color(brightness, 0, brightness)
-#define CYAN(brightness) strip.Color(0, brightness, brightness)
-#define WHITE(brightness) strip.Color(brightness, brightness, brightness)
+#define RED(brightness) Adafruit_NeoPixel::Color(brightness, 0, 0)
+#define GREEN(brightness) Adafruit_NeoPixel::Color(0, brightness, 0)
+#define BLUE(brightness) Adafruit_NeoPixel::Color(0, 0, brightness)
+#define YELLOW(brightness) Adafruit_NeoPixel::Color(brightness, brightness, 0)
+#define MAGENTA(brightness) Adafruit_NeoPixel::Color(brightness, 0, brightness)
+#define CYAN(brightness) Adafruit_NeoPixel::Color(0, brightness, brightness)
+#define WHITE(brightness) Adafruit_NeoPixel::Color(brightness, brightness, brightness)
+```
+
+### 3.3.2 HSV Colors
+https://alloyui.com/examples/color-picker/hsv.html  
+&rarr; google color picker: HSV    
+
+```cpp
+/* Convert hue, saturation and value into a packed 32-bit RGB color that can be passed to setPixelColor() or other RGB-compatible functions. */
+uint32_t Adafruit_NeoPixel::ColorHSV	(	
+  uint16_t 	hue,
+  uint8_t 	sat = 255,
+  uint8_t 	val = 255 
+);		
+
+/* A gamma-correction function for 32-bit packed RGB or WRGB colors. Makes color transitions appear more perceptially correct. */
+uint32_t Adafruit_NeoPixel::gamma32	(	uint32_t 	x	);	
+```
+
+Parameters:
+- **hue**  	
+  An unsigned 16-bit value, 0 to 65535, representing one full loop of the color wheel, which allows 16-bit hues to "roll over" while still doing the expected thing (and allowing more precision than the wheel() function that was common to prior NeoPixel examples).
+- **sat =	Saturation**  
+  8-bit value, 0 (min or pure grayscale) to 255 (max or pure hue). Default of 255 if unspecified.
+- **val =	brightness**  
+  8-bit value, 0 (min / black / off) to 255 (max or full brightness). Default of 255 if unspecified.
+
+Returns 32-bit RGB color:  
+Result is linearly but not perceptually correct  
+&rarr; pass the result through the gamma32() function   
+Diffusing the LEDs also really seems to help when using low-saturation colors.
+
+**a) fixed brightess:**  
+```cpp
+#define BRIGHTNESS 150
+#define SATURATION 255
+#define HUE_DEGREE 182  // 65535 / 360 = 182.0417
+
+#define OFF     Adafruit_NeoPixel::ColorHSV(0, 0, 0)
+#define WHITE   Adafruit_NeoPixel::ColorHSV(0, 0, BRIGHTNESS)
+#define COLOR(degree) Adafruit_NeoPixel::ColorHSV(degree*HUE_DEGREE, SATURATION, BRIGHTNESS)
+#define RED     Adafruit_NeoPixel::ColorHSV(0*HUE_DEGREE, SATURATION, BRIGHTNESS) 
+#define YELLOW  Adafruit_NeoPixel::ColorHSV(60*HUE_DEGREE, SATURATION, BRIGHTNESS)   // 10920 vs. 10922
+#define GREEN   Adafruit_NeoPixel::ColorHSV(120*HUE_DEGREE, SATURATION, BRIGHTNESS)  // 21840 vs. 21845
+#define CYAN    Adafruit_NeoPixel::ColorHSV(180*HUE_DEGREE, SATURATION, BRIGHTNESS)  // 32760 vs. 32767
+#define BLUE    Adafruit_NeoPixel::ColorHSV(240*HUE_DEGREE, SATURATION, BRIGHTNESS)  // 43680 vs. 43690
+#define MAGENTA Adafruit_NeoPixel::ColorHSV(300*HUE_DEGREE, SATURATION, BRIGHTNESS)  // 54600 vs. 54612
+```
+
+**b) macro brightness:**  
+```cpp
+#define SATURATION 255
+#define HUE_DEGREE 182
+
+#define OFF                 Adafruit_NeoPixel::ColorHSV(0, 0, 0)
+#define WHITE(brightness)   Adafruit_NeoPixel::ColorHSV(0, 0, brighness)
+#define COLOR(degree, brightness) Adafruit_NeoPixel::ColorHSV(degree*HUE_DEGREE, SATURATION, brightness)
+#define RED(brightness)     Adafruit_NeoPixel::ColorHSV(0*HUE_DEGREE, SATURATION, brighness)
+#define YELLOW(brightness)  Adafruit_NeoPixel::ColorHSV(60*HUE_DEGREE, SATURATION, brighness)
+#define GREEN(brightness)   Adafruit_NeoPixel::ColorHSV(120*HUE_DEGREE, SATURATION, brighness)
+#define CYAN(brightness)    Adafruit_NeoPixel::ColorHSV(180*HUE_DEGREE, SATURATION, brighness)
+#define BLUE(brightness)    Adafruit_NeoPixel::ColorHSV(240*HUE_DEGREE, SATURATION, brighness)
+#define MAGENTA(brightness) Adafruit_NeoPixel::ColorHSV(300*HUE_DEGREE, SATURATION, brighness)
+
+```
+
+**c) pass only hue:**  
+&rarr; requires special handling for OFF and WHITE  
+```cpp
+#define BRIGHTNESS 150
+#define HUE_DEGREE 182
+
+#define COLOR(degree) degree*HUE_DEGREE
+#define RED        0*HUE_DEGREE
+#define YELLOW     60*HUE_DEGREE
+#define GREEN      120*HUE_DEGREE
+#define CYAN       180*HUE_DEGREE
+#define BLUE       240*HUE_DEGREE
+#define MAGENTA    300*HUE_DEGREE
 ```
 
 
@@ -288,7 +365,10 @@ ToDo!
 - add animations using setSegmentsPixel (i.e. shift n pixels forward & backwards)  
 - animation: shift n_pixel smooth into and out of segment  
 - add color gradients like fastled for each segment i.e. animation  
+  &rarr; use hue/saturation/value    
 - set brightness dynamically  
+- add statemachine selecting current animation 
+- set state using infrared/ble  
 - replace color implementation  
 ```cpp
 typedef struct {
