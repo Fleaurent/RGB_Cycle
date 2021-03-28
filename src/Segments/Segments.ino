@@ -87,8 +87,10 @@ void loop() {
   // 2.3 animations
   // segmentStrip.animateSegments(RED(segmentStrip.brightness), segmentStrip.getAllSegments(), 0x1, 1, 500, 50);  // 10 stripes
   // segmentStrip.animateSegments(RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), segmentStrip.getAllSegments(), 0x1, 1, 500, 50);
+  segmentStrip.animateSegments(RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), segmentStrip.getAllSegments(), segmentStrip.getLastSegments(1), -1, 500, 50);
   // segmentStrip.animateSegmentsPixel(RED(segmentStrip.brightness), segmentStrip.getAllSegments(), 0x7, 1, 300, 20);  // 15 LEDs per Stripe
-  segmentStrip.animateSegmentsPixel(RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), segmentStrip.getAllSegments(), 0x7, 1, 300, 20); 
+  // segmentStrip.animateSegmentsPixel(RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), segmentStrip.getAllSegments(), 0x7, 1, 300, 20); 
+  // segmentStrip.animateSegmentsPixel(RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), segmentStrip.getAllSegments(), segmentStrip.getLastPixels(3), -1, 300, 20); 
 
   /* 3. update strip at the end of the loop */
   segmentStrip.update();

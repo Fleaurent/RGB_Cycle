@@ -132,14 +132,14 @@ void SegmentedStrip::blinkPoliceSegments(uint16_t frames) {
   }
 }
 
-void SegmentedStrip::animateSegments(uint32_t color1, uint32_t color2, uint32_t active_segments, uint32_t init_segments, uint8_t shift_segments, uint16_t frames, uint16_t frames_shift) {
+void SegmentedStrip::animateSegments(uint32_t color1, uint32_t color2, uint32_t active_segments, uint32_t init_segments, int8_t shift_segments, uint16_t frames, uint16_t frames_shift) {
   uint8_t step = (frame_counter%frames) / frames_shift; 
-  uint32_t temp_active_segments = active_segments & (init_segments << (shift_segments*step));
+  uint32_t temp_active_segments = (shift_segments >= 0) ? active_segments & (init_segments << (shift_segments*step)) : active_segments & (init_segments >> (abs(shift_segments)*step));
   setSegments(color2, active_segments);  
   setSegments(color1, temp_active_segments);
 }
 
-void SegmentedStrip::animateSegments(uint32_t color, uint32_t active_segments, uint32_t init_segments, uint8_t shift_segments, uint16_t frames, uint16_t frames_shift) {
+void SegmentedStrip::animateSegments(uint32_t color, uint32_t active_segments, uint32_t init_segments, int8_t shift_segments, uint16_t frames, uint16_t frames_shift) {
   animateSegments(color, OFF, active_segments, init_segments, shift_segments, frames, frames_shift);
 }
 
@@ -171,14 +171,14 @@ void SegmentedStrip::blinkSegmentsPixel(uint32_t color1, uint32_t color2, uint32
   }
 }
 
-void SegmentedStrip::animateSegmentsPixel(uint32_t color1, uint32_t color2, uint32_t active_segments, uint32_t init_pixel, uint8_t shift_pixel, uint16_t frames, uint16_t frames_shift) {
+void SegmentedStrip::animateSegmentsPixel(uint32_t color1, uint32_t color2, uint32_t active_segments, uint32_t init_pixel, int8_t shift_pixel, uint16_t frames, uint16_t frames_shift) {
   uint8_t step = (frame_counter%frames) / frames_shift; 
-  uint32_t temp_active_pixel = init_pixel << (shift_pixel*step);
+  uint32_t temp_active_pixel = (shift_pixel >= 0) ? init_pixel << (shift_pixel*step) : init_pixel >> (abs(shift_pixel)*step);
   setSegments(color2, active_segments);
   setSegmentsPixel(color1, active_segments, temp_active_pixel);
 }
 
-void SegmentedStrip::animateSegmentsPixel(uint32_t  color, uint32_t active_segments, uint32_t init_pixel, uint8_t shift_pixel, uint16_t frames, uint16_t frames_shift) {
+void SegmentedStrip::animateSegmentsPixel(uint32_t  color, uint32_t active_segments, uint32_t init_pixel, int8_t shift_pixel, uint16_t frames, uint16_t frames_shift) {
   animateSegmentsPixel(color, OFF, active_segments, init_pixel, shift_pixel, frames, frames_shift);
 }
 
