@@ -79,6 +79,7 @@ class SegmentedStrip : public Adafruit_NeoPixel {
     uint32_t getOddPixels();
     uint32_t getFirstPixels(uint8_t n);
     uint32_t getLastPixels(uint8_t n);
+    uint32_t getFrameCounter();
 
     // public setters
     void resetFrameCounter(void);

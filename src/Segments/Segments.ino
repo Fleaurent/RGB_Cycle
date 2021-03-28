@@ -87,11 +87,33 @@ void loop() {
   // 2.3 animations
   // segmentStrip.animateSegments(RED(segmentStrip.brightness), segmentStrip.getAllSegments(), 0x1, 1, 500, 50);  // 10 stripes
   // segmentStrip.animateSegments(RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), segmentStrip.getAllSegments(), 0x1, 1, 500, 50);
-  segmentStrip.animateSegments(RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), segmentStrip.getAllSegments(), segmentStrip.getLastSegments(1), -1, 500, 50);
+  // segmentStrip.animateSegments(RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), segmentStrip.getAllSegments(), segmentStrip.getLastSegments(1), -1, 500, 50);
   // segmentStrip.animateSegmentsPixel(RED(segmentStrip.brightness), segmentStrip.getAllSegments(), 0x7, 1, 300, 20);  // 15 LEDs per Stripe
   // segmentStrip.animateSegmentsPixel(RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), segmentStrip.getAllSegments(), 0x7, 1, 300, 20); 
   // segmentStrip.animateSegmentsPixel(RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), segmentStrip.getAllSegments(), segmentStrip.getLastPixels(3), -1, 300, 20); 
 
+  // 2.4 combined animations
+  // animateEvenOdd();
+  animateEvenOdd(600, 300);
+
   /* 3. update strip at the end of the loop */
   segmentStrip.update();
+}
+
+
+void animateEvenOdd(void) {
+  segmentStrip.animateSegmentsPixel(RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), segmentStrip.getEvenSegments(), segmentStrip.getLastPixels(3), -1, 300, 20); 
+  segmentStrip.animateSegmentsPixel(RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), segmentStrip.getOddSegments(), segmentStrip.getFirstPixels(3), 1, 300, 20); 
+}
+
+void animateEvenOdd(uint32_t frames, uint32_t frameswitch) {
+  if(segmentStrip.getFrameCounter() % frames < frameswitch) {
+    segmentStrip.animateSegmentsPixel(RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), segmentStrip.getEvenSegments(), segmentStrip.getLastPixels(3), -1, 300, 20); 
+    segmentStrip.animateSegmentsPixel(RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), segmentStrip.getOddSegments(), segmentStrip.getFirstPixels(3), 1, 300, 20); 
+  }
+  else {
+    segmentStrip.animateSegmentsPixel(RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), segmentStrip.getEvenSegments(), segmentStrip.getFirstPixels(3), 1, 300, 20); 
+    segmentStrip.animateSegmentsPixel(RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), segmentStrip.getOddSegments(), segmentStrip.getLastPixels(3), -1, 300, 20); 
+  }
+  
 }

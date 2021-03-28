@@ -238,6 +238,9 @@ uint32_t SegmentedStrip::getLastPixels(uint8_t n) {
   return ALL_PIXELS & ~getFirstPixels(longest_segment-n);
 }
 
+uint32_t SegmentedStrip::getFrameCounter() {
+  return frame_counter;
+}
 
 /* setter methods */
 void SegmentedStrip::resetFrameCounter(void) {
