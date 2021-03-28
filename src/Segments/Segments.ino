@@ -101,6 +101,7 @@ void loop() {
 }
 
 
+/* combined animations */
 void animateEvenOdd(void) {
   segmentStrip.animateSegmentsPixel(RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), segmentStrip.getEvenSegments(), segmentStrip.getLastPixels(3), -1, 300, 20); 
   segmentStrip.animateSegmentsPixel(RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), segmentStrip.getOddSegments(), segmentStrip.getFirstPixels(3), 1, 300, 20); 
@@ -115,5 +116,4 @@ void animateEvenOdd(uint32_t frames, uint32_t frameswitch) {
     segmentStrip.animateSegmentsPixel(RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), segmentStrip.getEvenSegments(), segmentStrip.getFirstPixels(3), 1, 300, 20); 
     segmentStrip.animateSegmentsPixel(RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), segmentStrip.getOddSegments(), segmentStrip.getLastPixels(3), -1, 300, 20); 
   }
-  
 }
