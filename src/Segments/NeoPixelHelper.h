@@ -6,8 +6,7 @@
 #include <Adafruit_NeoPixel.h>
 
 #define HUE_DEGREE 182
-#define OFF   Adafruit_NeoPixel::Color(0, 0, 0)
-// #define WHITE Adafruit_NeoPixel::Color(0xFF, 0xFF, 0xFF)
+#define OFF Adafruit_NeoPixel::Color(0, 0, 0)
 
 struct Segment {
   uint8_t first;

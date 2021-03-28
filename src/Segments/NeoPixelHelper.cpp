@@ -184,10 +184,12 @@ void SegmentedStrip::animateSegmentsPixel(uint32_t  color, uint32_t active_segme
 
 /* colors */
 uint32_t SegmentedStrip::color(uint16_t degree) {
+  // Adafruit_NeoPixel::gamma32(temp_color);
   return Adafruit_NeoPixel::ColorHSV(degree*HUE_DEGREE, saturation, brightness);
 }
 
 uint32_t SegmentedStrip::WHITE() {
+  // Adafruit_NeoPixel::Color(0xFF, 0xFF, 0xFF)
   return Adafruit_NeoPixel::ColorHSV(0, 0, brightness);
 }
 
