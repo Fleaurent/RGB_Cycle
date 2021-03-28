@@ -286,7 +286,10 @@ ToDo!
 ---
 # 5. ToDo  
 - add animations using setSegmentsPixel (i.e. shift n pixels forward & backwards)  
+- animation: shift n_pixel smooth into and out of segment  
+- add color gradients like fastled for each segment i.e. animation  
 - set brightness dynamically  
+- replace color implementation  
 ```cpp
 typedef struct {
     uint8_t r;

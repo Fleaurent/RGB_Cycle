@@ -4,9 +4,6 @@
 #define LED_PIN 2
 #define LED_COUNT 150
 
-uint32_t frame_counter = 0;
-uint8_t tempBrightness = 100;
-
 // declare segments
 uint8_t segment_starts[] = {0,
                             15, 
@@ -94,17 +91,5 @@ void loop() {
   segmentStrip.animateSegmentsPixel(RED(segmentStrip.brightness), BLUE(segmentStrip.brightness), segmentStrip.getAllSegments(), 0x7, 1, 300, 20); 
 
   /* 3. update strip at the end of the loop */
-  segmentStrip.show();
-  segmentStrip.clear();
-  segmentStrip.frame_counter++;
+  segmentStrip.update();
 }
-
-
-  /* old functions */
-  // blinkSegments(RED(tempBrightness), BLUE(tempBrightness), 500);
-  // animateSegments(RED(tempBrightness), 500);
-  // animateSegments(BLUE(tempBrightness), 500);
-  // animateSegment(0, RED(tempBrightness), 500);
-  // animateSegment(0, BLUE(tempBrightness), 500);
-  // animateAllSegments(RED(tempBrightness), 500);
-  // animateAllSegments(BLUE(tempBrightness), 500);

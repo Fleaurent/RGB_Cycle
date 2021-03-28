@@ -14,6 +14,12 @@ SegmentedStrip::SegmentedStrip(uint16_t n, uint16_t p, neoPixelType t, uint8_t s
 
 
 /* public methods */
+// complete strip
+void SegmentedStrip::update(void) {
+  frame_counter++;
+  show();
+}
+
 void SegmentedStrip::setStripe(uint32_t color) {
   fill(color, 0, numLEDs);
 }
@@ -22,6 +28,8 @@ void SegmentedStrip::resetStripe() {
   setStripe(OFF);
 }
 
+
+// segments
 void SegmentedStrip::setSegments(uint32_t color, uint32_t active_segments) {
   for(int i=0; i<n_segments; i++) {
     if(active_segments & (1 << i)) {
@@ -54,8 +62,6 @@ void SegmentedStrip::setLastSegments(uint32_t color, uint8_t n) {
   setSegments(color, getLastSegments(n));
 }
 
-
-// time based animations
 void SegmentedStrip::blinkSegments(uint32_t color1, uint32_t color2, uint32_t active_segments, uint16_t frames, uint16_t frame_color_switch) {
   if(frame_color_switch == 0){
     frame_color_switch = frames / 2;
@@ -126,6 +132,19 @@ void SegmentedStrip::blinkPoliceSegments(uint16_t frames) {
   }
 }
 
+void SegmentedStrip::animateSegments(uint32_t color1, uint32_t color2, uint32_t active_segments, uint32_t init_segments, uint8_t shift_segments, uint16_t frames, uint16_t frames_shift) {
+  uint8_t step = (frame_counter%frames) / frames_shift; 
+  uint32_t temp_active_segments = active_segments & (init_segments << (shift_segments*step));
+  setSegments(color2, active_segments);  
+  setSegments(color1, temp_active_segments);
+}
+
+void SegmentedStrip::animateSegments(uint32_t color, uint32_t active_segments, uint32_t init_segments, uint8_t shift_segments, uint16_t frames, uint16_t frames_shift) {
+  animateSegments(color, OFF, active_segments, init_segments, shift_segments, frames, frames_shift);
+}
+
+
+// segments pixel
 void SegmentedStrip::setSegmentsPixel(uint32_t color, uint32_t active_segments, uint32_t active_pixel) {
   for(int i=0; i<n_segments; i++) {
     if(active_segments & (1 << i)) {
@@ -152,17 +171,6 @@ void SegmentedStrip::blinkSegmentsPixel(uint32_t color1, uint32_t color2, uint32
   }
 }
 
-void SegmentedStrip::animateSegments(uint32_t color1, uint32_t color2, uint32_t active_segments, uint32_t init_segments, uint8_t shift_segments, uint16_t frames, uint16_t frames_shift) {
-  uint8_t step = (frame_counter%frames) / frames_shift; 
-  uint32_t temp_active_segments = active_segments & (init_segments << (shift_segments*step));
-  setSegments(color2, active_segments);  
-  setSegments(color1, temp_active_segments);
-}
-
-void SegmentedStrip::animateSegments(uint32_t color, uint32_t active_segments, uint32_t init_segments, uint8_t shift_segments, uint16_t frames, uint16_t frames_shift) {
-  animateSegments(color, OFF, active_segments, init_segments, shift_segments, frames, frames_shift);
-}
-
 void SegmentedStrip::animateSegmentsPixel(uint32_t color1, uint32_t color2, uint32_t active_segments, uint32_t init_pixel, uint8_t shift_pixel, uint16_t frames, uint16_t frames_shift) {
   uint8_t step = (frame_counter%frames) / frames_shift; 
   uint32_t temp_active_pixel = init_pixel << (shift_pixel*step);
@@ -173,6 +181,7 @@ void SegmentedStrip::animateSegmentsPixel(uint32_t color1, uint32_t color2, uint
 void SegmentedStrip::animateSegmentsPixel(uint32_t  color, uint32_t active_segments, uint32_t init_pixel, uint8_t shift_pixel, uint16_t frames, uint16_t frames_shift) {
   animateSegmentsPixel(color, OFF, active_segments, init_pixel, shift_pixel, frames, frames_shift);
 }
+
 
 /* getter methods */
 uint8_t SegmentedStrip::getNSegments() {
@@ -231,6 +240,9 @@ uint32_t SegmentedStrip::getLastPixels(uint8_t n) {
 
 
 /* setter methods */
+void SegmentedStrip::resetFrameCounter(void) {
+  frame_counter = 0;
+}
 
 
 /* private methods */
