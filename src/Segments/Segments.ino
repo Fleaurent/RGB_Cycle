@@ -56,8 +56,6 @@ void loop() {
   // i.e. UART input
 
   // 2. run method based on last valid input
-  // segmentStrip.blinkPoliceSegments(100);
-  
   // 2.1 blink complete segments
   // a) blink 50/50 duty cycle
   // segmentStrip.blinkSegments(segmentStrip.RED(), segmentStrip.BLUE(), 0x3FF, 200);
