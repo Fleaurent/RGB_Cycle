@@ -397,7 +397,54 @@ ToDo!
 
 
 ---
-# 5. ToDo  
+# 5. Infrared
+Sensor: TSOP4838  
+Arduino Library: [IRemote](https://github.com/Arduino-IRremote/Arduino-IRremote)  
+[project homepage](https://arduino-irremote.github.io/Arduino-IRremote/)  
+[wiki](https://github.com/Arduino-IRremote/Arduino-IRremote/wiki)  
+[Problem: IRemote and NeoPixel](http://marc.merlins.org/perso/arduino/post_2017-04-03_Arduino-328P-Uno-Teensy3_1-ESP8266-ESP32-IR-and-Neopixels.html)  
+
+Protocols can be switched off and on by definining macros before the line #incude <IRremote.h>  
+`#define DECODE_NEC`  
+
+**remote control codes:**  
+| column 1   | column 2    | column 3   |  
+|------------|-------------|------------|  
+| CH- = 0x45 | CH = 0x46   | CH+ = 0x47 |  
+| |<< = 0x44 | >>| = 0x40  | >|| = 0x43 |  
+| - = 0x7    | + = 0x15    | EQ = 0x9   |  
+| 0 = 0x16   | 100+ = 0x19 | 200+ = 0xD |  
+| 1 = 0xC    | 2 = 0x18    | 3 = 0x5E   |  
+| 4 = 0x8    | 5 = 0x1C    | 6 = 0x5A   |  
+| 7 = 0x42   | 8 = 0x52    | 9 = 0x4A   |  
+  
+```cpp  
+#define CHM 0x45
+#define CH  0x46
+#define CHP 0x47
+#define LEFT 0x44
+#define RIGHT 0x40
+#define PLAY_PAUSE 0x43
+#define MINUS 0x7
+#define PLUS 0x15
+#define EQ 0x9
+#define ZERO 0x16
+#define HUNDRED 0x19
+#define HUNDRED2 0xD
+#define ONE 0xC
+#define TWO 0x18
+#define THREE 0x5E
+#define FOUR 0x8
+#define FIVE 0x1C
+#define SIX 0x5A
+#define SEVEN 0x42
+#define EIGHT 0x52
+#define NINE 0x4A
+```
+
+
+---
+# ToDo  
 - add animations using setSegmentsPixel (i.e. shift n pixels forward & backwards)  
 - animation: shift n_pixel smooth into and out of segment  
 - add statemachine selecting current animation 
