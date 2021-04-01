@@ -92,18 +92,20 @@ void loop() {
   // segmentStrip.shiftPatternInit(segmentStrip.RED(), segmentStrip.BLUE(), segmentStrip.getAllSegments(), segmentStrip.getFirstPixels(3), -3, 1, 360, 20); 
   // segmentStrip.shiftPatternInit(segmentStrip.RED(), segmentStrip.BLUE(), segmentStrip.getAllSegments(), segmentStrip.getLastPixels(3), 3, -1, 360, 20); 
 
-  // 2.4 combined animations
-  // animateEvenOdd();
-  // animateEvenOdd(600, 300);
-  // animateEvenOddInit();
-  // animateEvenOddInit(720, 360);
-
-  // 2.5 play with colors
+  // 2.4 play with colors
   // segmentStrip.animateRainbowStripe(0, 1, 5);
   // segmentStrip.animateRainbowLEDs(0, 2, 1, 5);
   // segmentStrip.animateSegmentsRainbow(0, 24, segmentStrip.getAllSegments(), 24, 20);
   // segmentStrip.animateSegmentsRainbow(0, -24, segmentStrip.getAllSegments(), 24, 20);
-  segmentStrip.animateSegmentsRainbow(0, 24, segmentStrip.getAllSegments(), -24, 20);
+  // segmentStrip.animateSegmentsRainbow(0, 24, segmentStrip.getAllSegments(), -24, 20);
+
+  // 2.5 combined animations
+  // animateEvenOdd();
+  // animateEvenOdd(600, 300);
+  // animateEvenOddInit();
+  // animateEvenOddInit(720, 360);
+  // animateEvenOddRainbow();
+  animateEvenOddRainbow(600, 300);
 
   /* 3. update strip at the end of the loop */
   segmentStrip.update();
@@ -140,11 +142,30 @@ void animateEvenOddInit(uint32_t frames, uint32_t frameswitch) {
   // 1. shift pattern forward
   if(segmentStrip.getFrameCounter() % frames < frameswitch) {
     segmentStrip.shiftPatternInit(segmentStrip.RED(), segmentStrip.BLUE(), segmentStrip.getEvenSegments(), segmentStrip.getFirstPixels(3), -3, 1, 360, 20); 
-  segmentStrip.shiftPatternInit(segmentStrip.RED(), segmentStrip.BLUE(), segmentStrip.getOddSegments(), segmentStrip.getLastPixels(3), 3, -1, 360, 20); 
+    segmentStrip.shiftPatternInit(segmentStrip.RED(), segmentStrip.BLUE(), segmentStrip.getOddSegments(), segmentStrip.getLastPixels(3), 3, -1, 360, 20); 
   }
   else {
     // 2. shift pattern backwards
     segmentStrip.shiftPatternInit(segmentStrip.RED(), segmentStrip.BLUE(), segmentStrip.getEvenSegments(), segmentStrip.getLastPixels(3), 3, -1, 360, 20);
     segmentStrip.shiftPatternInit(segmentStrip.RED(), segmentStrip.BLUE(), segmentStrip.getOddSegments(), segmentStrip.getFirstPixels(3), -3, 1, 360, 20); 
+  }
+}
+
+void animateEvenOddRainbow(void) {
+  // 1. shift pattern forward, jump back
+  segmentStrip.animateSegmentsRainbow(0, 24, segmentStrip.getEvenSegments(), 24, 20);
+  segmentStrip.animateSegmentsRainbow(0, -24, segmentStrip.getOddSegments(), 24, 20);
+}
+
+void animateEvenOddRainbow(uint32_t frames, uint32_t frameswitch) {
+  // 1. shift pattern forward
+  if(segmentStrip.getFrameCounter() % frames < frameswitch) {
+    segmentStrip.animateSegmentsRainbow(0, 24, segmentStrip.getEvenSegments(), 24, 20);
+    segmentStrip.animateSegmentsRainbow(0, -24, segmentStrip.getOddSegments(), 24, 20);
+  }
+  else {
+    // 2. shift pattern backwards
+    segmentStrip.animateSegmentsRainbow(0, -24, segmentStrip.getEvenSegments(), 24, 20);
+    segmentStrip.animateSegmentsRainbow(0, 24, segmentStrip.getOddSegments(), 24, 20);
   }
 }
