@@ -161,11 +161,11 @@ void animateEvenOddRainbow(uint32_t frames, uint32_t frameswitch) {
   // 1. shift pattern forward
   if(segmentStrip.getFrameCounter() % frames < frameswitch) {
     segmentStrip.animateSegmentsRainbow(0, 24, segmentStrip.getEvenSegments(), 24, 20);
-    segmentStrip.animateSegmentsRainbow(0, -24, segmentStrip.getOddSegments(), 24, 20);
+    segmentStrip.animateSegmentsRainbow(0, 24, segmentStrip.getOddSegments(), -24, 20);
   }
   else {
     // 2. shift pattern backwards
-    segmentStrip.animateSegmentsRainbow(0, -24, segmentStrip.getEvenSegments(), 24, 20);
+    segmentStrip.animateSegmentsRainbow(0, 24, segmentStrip.getEvenSegments(), -24, 20);
     segmentStrip.animateSegmentsRainbow(0, 24, segmentStrip.getOddSegments(), 24, 20);
   }
 }
