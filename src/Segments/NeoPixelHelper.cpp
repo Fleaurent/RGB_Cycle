@@ -178,20 +178,20 @@ void SegmentedStrip::blinkLastSegments(uint32_t color1, uint32_t color2, uint8_t
  * @param   frames number of frames one animation cycle takes
  * @param   animation_frames number of frames a single animation frame is shown
  */
-void SegmentedStrip::animateSegments(uint32_t color1, uint32_t color2, uint32_t active_segments, uint32_t init_segments, int8_t shift_segments, uint16_t frames, uint16_t animation_frames) {
+void SegmentedStrip::shiftSegments(uint32_t color1, uint32_t color2, uint32_t active_segments, uint32_t init_segments, int8_t shift_segments, uint16_t frames, uint16_t animation_frames) {
   uint8_t step = (frame_counter%frames) / animation_frames; 
   uint32_t temp_active_segments = (shift_segments >= 0) ? active_segments & (init_segments << (shift_segments*step)) : active_segments & (init_segments >> (abs(shift_segments)*step));
   setSegments(color2, active_segments);  
   setSegments(color1, temp_active_segments);
 }
 
-/** animateSegments: color1=color, color2=OFF */
-void SegmentedStrip::animateSegments(uint32_t color, uint32_t active_segments, uint32_t init_segments, int8_t shift_segments, uint16_t frames, uint16_t animation_frames) {
-  animateSegments(color, OFF, active_segments, init_segments, shift_segments, frames, animation_frames);
+/** shiftSegments: color1=color, color2=OFF */
+void SegmentedStrip::shiftSegments(uint32_t color, uint32_t active_segments, uint32_t init_segments, int8_t shift_segments, uint16_t frames, uint16_t animation_frames) {
+  shiftSegments(color, OFF, active_segments, init_segments, shift_segments, frames, animation_frames);
 }
 
 
-// segments pixel specific methods
+// segments pixel pattern specific methods
 /**
  * @brief   set active_pixels of active_segments to the provided color
  *          all other leds stay the same! i.e. reset segments before
@@ -199,7 +199,7 @@ void SegmentedStrip::animateSegments(uint32_t color, uint32_t active_segments, u
  * @param   active_segments update only the specified segments 
  * @param   active_pixel update only the specified pixel of each segment
  */
-void SegmentedStrip::setSegmentsPixel(uint32_t color, uint32_t active_segments, uint32_t active_pixel) {
+void SegmentedStrip::setPattern(uint32_t color, uint32_t active_segments, uint32_t active_pixel) {
   for(int i=0; i<n_segments; i++) {
     if(active_segments & (1 << i)) {
       for(int j=0; j<segments[i].count; j++) {
@@ -220,17 +220,17 @@ void SegmentedStrip::setSegmentsPixel(uint32_t color, uint32_t active_segments, 
  * @param   frames number of frames one blink cycle takes
  * @param   frame_color_switch number of frames color1 is active
  */
-void SegmentedStrip::blinkSegmentsPixel(uint32_t color1, uint32_t color2, uint32_t active_segments, uint32_t active_pixel, uint16_t frames, uint16_t frame_color_switch) {
+void SegmentedStrip::blinkPattern(uint32_t color1, uint32_t color2, uint32_t active_segments, uint32_t active_pixel, uint16_t frames, uint16_t frame_color_switch) {
   if(frame_color_switch == 0){
     frame_color_switch = frames / 2;
   }
   
   // always set colors (improve: only set when changing?)
   if((frame_counter%frames) < frame_color_switch) {
-    setSegmentsPixel(color1, active_segments, active_pixel);
+    setPattern(color1, active_segments, active_pixel);
   }
   else {
-    setSegmentsPixel(color2, active_segments, active_pixel);
+    setPattern(color2, active_segments, active_pixel);
   }
 }
 
@@ -239,21 +239,57 @@ void SegmentedStrip::blinkSegmentsPixel(uint32_t color1, uint32_t color2, uint32
  * @param   color1 set all temp_active_pixel of active_segments to color1 for the animation
  * @param   color2 set all remaining pixel of active_segments to color2
  * @param   active_segments update only the specified segments
- * @param   init_pixel initial pixel set to color1
- * @param   shift_pixel number of pixel the animation is shifted forward e.g. shift_pixel=1: shift init_pixel 1 pixel forward per animation frame
+ * @param   pixel_pattern initial pixel set to color1
+ * @param   shift_pixel number of pixel the animation is shifted forward e.g. shift_pixel=1: shift pixel_pattern 1 pixel forward per animation frame
  * @param   frames number of frames one animation cycle takes
  * @param   animation_frames number of frames a single animation frame is shown
  */
-void SegmentedStrip::animateSegmentsPixel(uint32_t color1, uint32_t color2, uint32_t active_segments, uint32_t init_pixel, int8_t shift_pixel, uint16_t frames, uint16_t animation_frames) {
+void SegmentedStrip::shiftPattern(uint32_t color1, uint32_t color2, uint32_t active_segments, uint32_t pixel_pattern, int8_t shift_pixel, uint16_t frames, uint16_t animation_frames) {
   uint8_t step = (frame_counter%frames) / animation_frames; 
-  uint32_t temp_active_pixel = (shift_pixel >= 0) ? init_pixel << (shift_pixel*step) : init_pixel >> (abs(shift_pixel)*step);
+  uint32_t temp_active_pixel = (shift_pixel >= 0) ? pixel_pattern << (shift_pixel*step) : pixel_pattern >> (abs(shift_pixel)*step);
   setSegments(color2, active_segments);
-  setSegmentsPixel(color1, active_segments, temp_active_pixel);
+  setPattern(color1, active_segments, temp_active_pixel);
 }
 
-/** animateSegmentsPixel: color1=color, color2=OFF */
-void SegmentedStrip::animateSegmentsPixel(uint32_t color, uint32_t active_segments, uint32_t init_pixel, int8_t shift_pixel, uint16_t frames, uint16_t animation_frames) {
-  animateSegmentsPixel(color, OFF, active_segments, init_pixel, shift_pixel, frames, animation_frames);
+/** shiftPattern: color1=color, color2=OFF */
+void SegmentedStrip::shiftPattern(uint32_t color, uint32_t active_segments, uint32_t pixel_pattern, int8_t shift_pixel, uint16_t frames, uint16_t animation_frames) {
+  shiftPattern(color, OFF, active_segments, pixel_pattern, shift_pixel, frames, animation_frames);
+}
+
+/**
+ * @brief   animate active_pixels of active_segments
+ * @param   color1 set all temp_active_pixel of active_segments to color1 for the animation
+ * @param   color2 set all remaining pixel of active_segments to color2
+ * @param   active_segments update only the specified segments
+ * @param   pixel_pattern initial pixel set to color1
+ * @param   shift_pixel number of pixel the animation is shifted forward e.g. shift_pixel=1: shift pixel_pattern 1 pixel forward per animation frame
+ * @param   init_shift_pixel 
+ * @param   frames number of frames one animation cycle takes
+ * @param   animation_frames number of frames a single animation frame is shown
+ */
+void SegmentedStrip::shiftPatternInit(uint32_t color1, uint32_t color2, uint32_t active_segments, uint32_t pixel_pattern, int8_t init_shift_pixel, int8_t shift_pixel, uint16_t frames, uint16_t animation_frames) {
+  // uint32_t temp_active_pixel = (shift_pixel >= 0) ? pixel_pattern << (shift_pixel*step) : pixel_pattern >> (abs(shift_pixel)*step);
+
+  // 1. init pattern
+  uint8_t step = (frame_counter%frames) / animation_frames; 
+  int8_t shift_pattern = init_shift_pixel + shift_pixel*step;
+  uint32_t temp_active_pixel = (shift_pattern >= 0) ? pixel_pattern << shift_pattern : pixel_pattern >> abs(shift_pattern);
+  // uint32_t temp_active_pixel;
+  // if (shift_pattern >= 0) {
+  //   temp_active_pixel = pixel_pattern << shift_pattern;
+  // } 
+  // else {
+  //   temp_active_pixel = pixel_pattern >> abs(shift_pattern);
+  // } 
+
+  // 3. update strip
+  setSegments(color2, active_segments);
+  setPattern(color1, active_segments, temp_active_pixel);
+}
+
+/** shiftPatternInit: color1=color, color2=OFF */
+void SegmentedStrip::shiftPatternInit(uint32_t color, uint32_t active_segments, uint32_t pixel_pattern, int8_t init_shift_pixel, int8_t shift_pixel, uint16_t frames, uint16_t animation_frames) {
+  shiftPatternInit(color, OFF, active_segments, pixel_pattern, init_shift_pixel, shift_pixel, frames, animation_frames);
 }
 
 /* colors */
@@ -430,7 +466,7 @@ void SegmentedStrip::update_longest_segment() {
 /* methods to be replaced */
 /*
 // set all LEDs Segment by Segment
-void animateSegments(uint32_t color, uint32_t delayVal) {
+void shiftSegments(uint32_t color, uint32_t delayVal) {
   for(int i=0; i<n_segments; i++) {
     strip.fill(color, segments[i].first, segments[i].count);
     strip.show();
