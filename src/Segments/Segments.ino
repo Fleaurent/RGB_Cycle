@@ -96,7 +96,12 @@ void loop() {
   // animateEvenOdd();
   // animateEvenOdd(600, 300);
   // animateEvenOddInit();
-  animateEvenOddInit(720, 360);
+  // animateEvenOddInit(720, 360);
+
+  // 2.5 play with colors
+  // segmentStrip.animateRainbowStripe(0, 1, 5);
+  // segmentStrip.animateRainbowLEDs(0, 2, 1, 5);
+  segmentStrip.animateSegmentsRainbow(0, 24, segmentStrip.getAllSegments(), 24, 20);
 
   /* 3. update strip at the end of the loop */
   segmentStrip.update();
