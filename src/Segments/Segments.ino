@@ -101,7 +101,9 @@ void loop() {
   // 2.5 play with colors
   // segmentStrip.animateRainbowStripe(0, 1, 5);
   // segmentStrip.animateRainbowLEDs(0, 2, 1, 5);
-  segmentStrip.animateSegmentsRainbow(0, 24, segmentStrip.getAllSegments(), 24, 20);
+  // segmentStrip.animateSegmentsRainbow(0, 24, segmentStrip.getAllSegments(), 24, 20);
+  // segmentStrip.animateSegmentsRainbow(0, -24, segmentStrip.getAllSegments(), 24, 20);
+  segmentStrip.animateSegmentsRainbow(0, 24, segmentStrip.getAllSegments(), -24, 20);
 
   /* 3. update strip at the end of the loop */
   segmentStrip.update();
