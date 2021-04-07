@@ -82,14 +82,20 @@ void loop() {
   char customKey = customKeypad.getKey();
   
   if (customKey){
+    Serial.print(segmentStrip.getFrameCounter());
+    Serial.print(' ');
     Serial.println(customKey);
 
     switch(customKey) {
       case '*':
         // */#: update brightenss
+        segmentStrip.decreaseBrightness(10);
+        Serial.println(segmentStrip.getBrightness());
         break;
       case '#':
         // */#: update brightenss
+        segmentStrip.increaseBrightness(10);
+        Serial.println(segmentStrip.getBrightness());
         break;
       case 'A':
       case 'B':

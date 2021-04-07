@@ -414,7 +414,7 @@ uint8_t SegmentedStrip::getLongestSegment() {
   return longest_segment;
 }
 
-uint8_t SegmentedStrip::getBrightenss() {
+uint8_t SegmentedStrip::getBrightness() {
   return brightness;
 }
 
@@ -475,6 +475,24 @@ void SegmentedStrip::resetFrameCounter(void) {
 
 void SegmentedStrip::setBrightness(uint8_t b) {
   brightness = b;
+}
+
+void SegmentedStrip::increaseBrightness(uint8_t b) {
+  if((uint16_t)brightness + b > 255){
+    brightness = 255;
+  }
+  else {
+    brightness += b;
+  }
+}
+
+void SegmentedStrip::decreaseBrightness(uint8_t b) {
+  if((int16_t)brightness - b < 0){
+    brightness = 0;
+  }
+  else {
+    brightness -= b;
+  }
 }
 
 void SegmentedStrip::setSaturation(uint8_t s) {
