@@ -411,7 +411,11 @@ void loop(){
 }
 ```
 
-
+**SegmentsKeypad:**  
+- */#: decrease/increase Brightness by 10  
+- A-D: select animation set  
+- 0-9: set animation  
+  &rarr; 40 different animations
 
 ---
 # 5. BLE
