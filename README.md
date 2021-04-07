@@ -5,7 +5,9 @@ https://www.instructables.com/NeoPixel-Party-Bike-Music-Reactive-Animations-With
 [1. Hardware Setup](#1-hardware-setup)  
 [2. Measurements](#2-measurements)  
 [3. Code](#3-code)  
-[4. BLE](#4-ble)  
+[4. Keypad](#4-keypad)  
+[5. BLE](#5-ble)  
+[6. Infrared](#6-infrared)  
 
 
 ---
@@ -358,8 +360,62 @@ class SegmentedStrip : public Adafruit_NeoPixel {
 
 
 ---
-# 4. BLE
-## 4.1 BLE Roles
+# 4. Keypad
+
+https://www.circuitbasics.com/how-to-set-up-a-keypad-on-an-arduino/  
+
+**Principle:**  
+![](images/keypad_schematic.png)  
+
+0. all columns held high, all rows low    
+1. button press: pulls column of the button low  
+  ![](images/keypad_button_1.png)  
+
+2. find the row: switch each row HIGH an read columns  
+  &rarr; when column is low: detected the row  
+  ![](images/keypad_button_2.png)  
+
+
+**Keypad Library for Arduino:**  
+Authors:  Mark Stanley, Alexander Brevig  
+https://playground.arduino.cc/Code/Keypad/  
+
+```cpp
+#include <Keypad.h>
+
+const byte ROWS = 4; 
+const byte COLS = 4; 
+
+char hexaKeys[ROWS][COLS] = {
+  {'1', '2', '3', 'A'},
+  {'4', '5', '6', 'B'},
+  {'7', '8', '9', 'C'},
+  {'*', '0', '#', 'D'}
+};
+
+byte rowPins[ROWS] = {12, 11, 10, 9}; 
+byte colPins[COLS] = {8, 7, 6, 5}; 
+
+Keypad customKeypad = Keypad(makeKeymap(hexaKeys), rowPins, colPins, ROWS, COLS); 
+
+void setup(){
+  Serial.begin(115200);
+}
+  
+void loop(){
+  char customKey = customKeypad.getKey();
+  
+  if (customKey){
+    Serial.println(customKey);
+  }
+}
+```
+
+
+
+---
+# 5. BLE
+## 5.1 BLE Roles
 https://embedded.fm/blog/ble-roles  
 https://web.archive.org/web/20160930015609/http://projects.mbientlab.com:80/bluetooth-low-energy-basics/  
 
@@ -392,13 +448,13 @@ A device can switch between a Master and Slave but it cannot be both at the same
 A device can be a Server and Client at the same time.  
 
 
-## 4.2 Arduino Nano 33 BLE
+## 5.2 Arduino Nano 33 BLE
 https://www.arduino.cc/en/Guide/NANO33BLE  
 ToDo!  
 
 
 ---
-# 5. Infrared
+# 6. Infrared
 Sensor: TSOP4838  
 Arduino Library: [IRemote](https://github.com/Arduino-IRremote/Arduino-IRremote)  
 [project homepage](https://arduino-irremote.github.io/Arduino-IRremote/)  
