@@ -495,6 +495,26 @@ void SegmentedStrip::decreaseBrightness(uint8_t b) {
   }
 }
 
+void SegmentedStrip::increaseBrightnessStep(void) {
+  if(brightnessStep >= nBrightnessSteps) {
+    brightnessStep = nBrightnessSteps;
+  }
+  else {
+    brightnessStep++;
+  }
+  brightness = brightnessSteps[brightnessStep];
+}
+
+void SegmentedStrip::decreaseBrightnessStep(void) {
+  if(brightnessStep <= 0) {
+    brightnessStep = 0;
+  }
+  else {
+    brightnessStep--;
+  }
+  brightness = brightnessSteps[brightnessStep];
+}
+
 void SegmentedStrip::setSaturation(uint8_t s) {
   saturation = s;
 }

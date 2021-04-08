@@ -106,12 +106,14 @@ void updateKeypad(void){
     switch(customKey) {
       case '*':
         // */#: update brightenss
-        segmentStrip.decreaseBrightness(10);
+        // segmentStrip.decreaseBrightness(10);
+        segmentStrip.decreaseBrightnessStep();
         Serial.print(segmentStrip.getBrightness());
         break;
       case '#':
         // */#: update brightenss
-        segmentStrip.increaseBrightness(10);
+        // segmentStrip.increaseBrightness(10);
+        segmentStrip.increaseBrightnessStep();
         Serial.print(segmentStrip.getBrightness());
         break;
       case 'A':

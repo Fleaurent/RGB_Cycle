@@ -240,6 +240,9 @@ Diffusing the LEDs also really seems to help when using low-saturation colors.
 ```
 
 
+**brightness steps:**  
+0 5 10 20 30 50 75 100 150 200 255  
+
 ## 3.4 NeoPixelHelper
 additional library to split strip into multiple Segments  
 &rarr; built on top of Adafruit_NeoPixel  
