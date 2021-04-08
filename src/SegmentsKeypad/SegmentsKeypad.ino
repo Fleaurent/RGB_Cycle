@@ -41,27 +41,20 @@ byte rowPins[ROWS] = {12, 11, 10, 9};
 byte colPins[COLS] = {8, 7, 6, 5}; 
 
 Keypad customKeypad = Keypad(makeKeymap(hexaKeys), rowPins, colPins, ROWS, COLS); 
-//////////////////////////////
 
 char animationMode = '1';
 char animationSet  = 'A';
+//////////////////////////////
+
 
 void setup() {
   Serial.begin(115200);
+
+  // initialize strip: set all pixels 'off'
   segmentStrip.begin();
-  segmentStrip.show(); // Initialize all pixels to 'off'
+  segmentStrip.show(); 
   
-  /* Optional: print strip information */
-  Serial.println(segmentStrip.getNSegments());
-  Serial.println(segmentStrip.getLongestSegment());
-  Serial.println(segmentStrip.getBrightness());
-
-  for(uint8_t i = 0; i < n_segments; i++) {
-    Serial.print(segmentStrip.getSegments()[i].first);
-    Serial.print('\t');
-    Serial.println(segmentStrip.getSegments()[i].count);
-  }
-
+  printStripInformation();
   Serial.println("Running...");
 }
 
@@ -79,23 +72,47 @@ void loop() {
 
   // 1. get input, set brightness
   // i.e. UART input
+  updateKeypad();
+  
+  // 2. apply pattern based on input
+  applyPattern();
+  // testPattern();
+  
+  /* 3. update strip at the end of the loop */
+  segmentStrip.update();
+}
+
+void printStripInformation(void) {
+  Serial.println(segmentStrip.getNSegments());
+  Serial.println(segmentStrip.getLongestSegment());
+  Serial.println(segmentStrip.getBrightness());
+
+  for(uint8_t i = 0; i < n_segments; i++) {
+    Serial.print(segmentStrip.getSegments()[i].first);
+    Serial.print('\t');
+    Serial.println(segmentStrip.getSegments()[i].count);
+  }
+}
+
+void updateKeypad(void){
   char customKey = customKeypad.getKey();
   
-  if (customKey){
+  if (customKey) {
     Serial.print(segmentStrip.getFrameCounter());
     Serial.print(' ');
-    Serial.println(customKey);
+    Serial.print(customKey);
+    Serial.print(' ');
 
     switch(customKey) {
       case '*':
         // */#: update brightenss
         segmentStrip.decreaseBrightness(10);
-        Serial.println(segmentStrip.getBrightness());
+        Serial.print(segmentStrip.getBrightness());
         break;
       case '#':
         // */#: update brightenss
         segmentStrip.increaseBrightness(10);
-        Serial.println(segmentStrip.getBrightness());
+        Serial.print(segmentStrip.getBrightness());
         break;
       case 'A':
       case 'B':
@@ -109,54 +126,177 @@ void loop() {
         animationMode = customKey;
         break;
     }
-  }
 
-  // 2. run method based on last valid input
+     Serial.println();
+  }
+}
+
+void applyPattern(void){
   if(animationSet == 'A') {
-    switch(animationMode) {
-      case '0':
-        break;
-      case '1':
-        segmentStrip.blinkAllSegments(segmentStrip.RED(), segmentStrip.BLUE(), 200);
-        break;
-      case '2':
-        segmentStrip.blinkEvenSegments(segmentStrip.RED(), segmentStrip.BLUE(), 200);
-        break;
-      case '3':
-        segmentStrip.blinkOddSegments(segmentStrip.BLUE(), segmentStrip.RED(), 200);
-        break;
-      case '4':
-        segmentStrip.blinkFirstSegments(segmentStrip.RED(), segmentStrip.BLUE(), 5, 200);
-        break;
-      case '5':
-        segmentStrip.blinkLastSegments(segmentStrip.RED(), segmentStrip.BLUE(), 5, 200);
-        break;
-      case '6':
-        break;
-      case '7':
-        break;
-      case '8':
-        break;
-      case '9':
-        break;
-      default:
-        // do nothing
-        break;
-    }
+    applyPatternA();
   }
   else if(animationSet == 'B') {
-    segmentStrip.shiftPatternInit(segmentStrip.RED(), segmentStrip.BLUE(), segmentStrip.getAllSegments(), segmentStrip.getFirstPixels(3), -3, 1, 360, 20); 
+    applyPatternB();
   }
   else if(animationSet == 'C') {
-    segmentStrip.animateRainbowLEDs(0, 2, 1, 5);
+    applyPatternC();
   }
   else if(animationSet == 'D') {
-    animateEvenOddRainbow();
+    applyPatternD();
   }
-  
+}
 
+void applyPatternA(void) {
+  // 1. blink complete segments
+  switch(animationMode) {
+    case '0':
+      break;
+    case '1':
+      segmentStrip.blinkAllSegments(segmentStrip.RED(), segmentStrip.BLUE(), 200);
+      break;
+    case '2':
+      segmentStrip.blinkEvenSegments(segmentStrip.RED(), segmentStrip.BLUE(), 200);
+      break;
+    case '3':
+      segmentStrip.blinkOddSegments(segmentStrip.BLUE(), segmentStrip.RED(), 200);
+      break;
+    case '4':
+      segmentStrip.blinkFirstSegments(segmentStrip.RED(), segmentStrip.BLUE(), 5, 200);
+      break;
+    case '5':
+      segmentStrip.blinkLastSegments(segmentStrip.RED(), segmentStrip.BLUE(), 5, 200);
+      break;
+    case '6':
+      // blink 25/75  duty cycle -> repeat after 200 ticks: 50 ticks color1, remaining 150 ticks color2
+      segmentStrip.blinkSegments(segmentStrip.RED(), segmentStrip.BLUE(), 0x3FF, 200, 50);
+      break;
+    case '7':
+      break;
+    case '8':
+      break;
+    case '9':
+      break;
+    default:  // do nothing
+      break;  
+  }
+}
 
-  // 2.1 blink complete segments
+void applyPatternB(void) {
+  // 2. blink pixel of segments
+  switch(animationMode) {
+    case '0':
+      break;
+    case '1':
+      segmentStrip.blinkPattern(segmentStrip.RED(), segmentStrip.BLUE(), 0x3FF, 0x7FFF, 200);  // all segments: 0x7FFF = all pixels
+      break;
+    case '2':
+      segmentStrip.blinkPattern(segmentStrip.RED(), segmentStrip.BLUE(), 0x3FF, 1 << 0, 200);  // all segments: 0x1 = first pixel
+      break;
+    case '3':
+      segmentStrip.blinkPattern(segmentStrip.RED(), segmentStrip.BLUE(), 0x3FF, 1 << 14, 200);  // all segments: 0x4000 = last pixel 
+      break;
+    case '4':
+      segmentStrip.blinkPattern(segmentStrip.RED(), segmentStrip.BLUE(), 0x3FF, 1 << (segmentStrip.getLongestSegment() - 1), 200);  // all segments: 0x4000 = last pixel 
+      break;
+    case '5':
+      segmentStrip.blinkPattern(segmentStrip.RED(), segmentStrip.BLUE(), 0x3FF, 0x03C0, 200);  // all segments: 0x03C0 = inner 4 pixels
+      break;
+    case '6':
+      segmentStrip.blinkPattern(segmentStrip.RED(), segmentStrip.BLUE(), segmentStrip.getOddSegments(), segmentStrip.getOddPixels(), 200);
+      break;
+    case '7':
+      segmentStrip.blinkPattern(segmentStrip.RED(), segmentStrip.BLUE(), segmentStrip.getEvenSegments(), segmentStrip.getEvenPixels(), 200);
+      break;
+    case '8':
+      segmentStrip.blinkPattern(segmentStrip.RED(), segmentStrip.BLUE(), segmentStrip.getAllSegments(), segmentStrip.getAllPixels(), 200);
+      break;
+    case '9':
+      // blink 25/75  duty cycle -> repeat after 200 ticks: 50 ticks color1, remaining 150 ticks color2
+      segmentStrip.blinkPattern(segmentStrip.RED(), segmentStrip.BLUE(), segmentStrip.getAllSegments(), segmentStrip.getAllPixels(), 200, 50);
+      break;
+    default:  // do nothing
+      break;  
+  }
+}
+
+void applyPatternC(void) {
+  // 3. animations
+  switch(animationMode) {
+    case '0':
+      break;
+    case '1':
+      segmentStrip.shiftSegments(segmentStrip.RED(), segmentStrip.getAllSegments(), 0x1, 1, 500, 50);  // 10 stripes
+      break;
+    case '2':
+      segmentStrip.shiftSegments(segmentStrip.RED(), segmentStrip.BLUE(), segmentStrip.getAllSegments(), 0x1, 1, 500, 50);
+      break;
+    case '3':
+      segmentStrip.shiftSegments(segmentStrip.RED(), segmentStrip.BLUE(), segmentStrip.getAllSegments(), segmentStrip.getLastSegments(1), -1, 500, 50);
+      break;
+    case '4':
+      segmentStrip.shiftPattern(segmentStrip.RED(), segmentStrip.getAllSegments(), 0x7, 1, 300, 20);  // 15 LEDs per Stripe
+      break;
+    case '5':
+      segmentStrip.shiftPattern(segmentStrip.RED(), segmentStrip.BLUE(), segmentStrip.getAllSegments(), 0x7, 1, 300, 20); 
+      break;
+    case '6':
+     segmentStrip.shiftPattern(segmentStrip.RED(), segmentStrip.BLUE(), segmentStrip.getAllSegments(), segmentStrip.getLastPixels(3), -1, 300, 20); 
+      break;
+    case '7':
+      segmentStrip.shiftPatternInit(segmentStrip.RED(), segmentStrip.BLUE(), segmentStrip.getAllSegments(), segmentStrip.getFirstPixels(3), -3, 1, 360, 20); 
+      break;
+    case '8':
+      segmentStrip.shiftPatternInit(segmentStrip.RED(), segmentStrip.BLUE(), segmentStrip.getAllSegments(), segmentStrip.getLastPixels(3), 3, -1, 360, 20); 
+      break;
+    case '9':
+      break;
+    default:  // do nothing
+      break;  
+  }
+}
+
+void applyPatternD(void) {
+  // 4. play with colors
+  // 5. combined animations
+  switch(animationMode) {
+    case '0':
+      break;
+    case '1':
+     segmentStrip.animateRainbowStripe(0, 1, 5);
+      break;
+    case '2':
+      segmentStrip.animateRainbowLEDs(0, 2, 1, 5);
+      break;
+    case '3':
+      segmentStrip.animateSegmentsRainbow(0, 24, segmentStrip.getAllSegments(), 24, 20);
+      break;
+    case '4':
+      segmentStrip.animateSegmentsRainbow(0, -24, segmentStrip.getAllSegments(), 24, 20);
+      break;
+    case '5':
+      segmentStrip.animateSegmentsRainbow(0, 24, segmentStrip.getAllSegments(), -24, 20);
+      break;
+    case '6':
+      // animateEvenOdd();
+      animateEvenOdd(600, 300);
+      break;
+    case '7':
+      // animateEvenOddInit();
+      animateEvenOddInit(720, 360);
+      break;
+    case '8':
+      // animateEvenOddRainbow();
+      animateEvenOddRainbow(600, 300);
+      break;
+    case '9':
+      break;
+    default:  // do nothing
+      break;  
+  }
+}
+
+void testPattern(void) {
+  // 1. blink complete segments
   // a) blink 50/50 duty cycle
   // segmentStrip.blinkSegments(segmentStrip.RED(), segmentStrip.BLUE(), 0x3FF, 200);
   // segmentStrip.blinkSegments(segmentStrip.RED(), segmentStrip.BLUE(), segmentStrip.getAllSegments(), 200);
@@ -169,11 +309,11 @@ void loop() {
   // b) blink 25/75  duty cycle -> repeat after 200 ticks: 50 ticks color1, remaining 150 ticks color2
   // segmentStrip.blinkSegments(segmentStrip.RED(), segmentStrip.BLUE(), 0x3FF, 200, 50);
   
-  // 2.2 blink pixel of segments
+  // 2. blink pixel of segments
   // segmentStrip.blinkPattern(segmentStrip.RED(), segmentStrip.BLUE(), 0x3FF, 0x7FFF, 200);  // all segments: 0x7FFF = all pixels
   // segmentStrip.blinkPattern(segmentStrip.RED(), segmentStrip.BLUE(), 0x3FF, 1 << 0, 200);  // all segments: 0x1 = first pixel
   // segmentStrip.blinkPattern(segmentStrip.RED(), segmentStrip.BLUE(), 0x3FF, 1 << 14, 200);  // all segments: 0x4000 = last pixel 
-  // segmentStrip.blinkPattern(segmentStrip.RED(), segmentStrip.BLUE(), 0x3FF, 1 << (segmentStrip.longest_segment - 1), 200);  // all segments: 0x4000 = last pixel 
+  // segmentStrip.blinkPattern(segmentStrip.RED(), segmentStrip.BLUE(), 0x3FF, 1 << (segmentStrip.getLongestSegment() - 1), 200);  // all segments: 0x4000 = last pixel 
   // segmentStrip.blinkPattern(segmentStrip.RED(), segmentStrip.BLUE(), 0x3FF, 0x03C0, 200);  // all segments: 0x03C0 = inner 4 pixels
   // segmentStrip.blinkPattern(segmentStrip.RED(), segmentStrip.BLUE(), segmentStrip.getOddSegments(), segmentStrip.getOddPixels(), 200);
   // segmentStrip.blinkPattern(segmentStrip.RED(), segmentStrip.BLUE(), segmentStrip.getEvenSegments(), segmentStrip.getEvenPixels(), 200);
@@ -182,7 +322,7 @@ void loop() {
   // b) blink 25/75  duty cycle -> repeat after 200 ticks: 50 ticks color1, remaining 150 ticks color2
   // segmentStrip.blinkPattern(segmentStrip.RED(), segmentStrip.BLUE(), segmentStrip.getAllSegments(), segmentStrip.getAllPixels(), 200, 50);
 
-  // 2.3 animations
+  // 3. animations
   // segmentStrip.shiftSegments(segmentStrip.RED(), segmentStrip.getAllSegments(), 0x1, 1, 500, 50);  // 10 stripes
   // segmentStrip.shiftSegments(segmentStrip.RED(), segmentStrip.BLUE(), segmentStrip.getAllSegments(), 0x1, 1, 500, 50);
   // segmentStrip.shiftSegments(segmentStrip.RED(), segmentStrip.BLUE(), segmentStrip.getAllSegments(), segmentStrip.getLastSegments(1), -1, 500, 50);
@@ -192,23 +332,20 @@ void loop() {
   // segmentStrip.shiftPatternInit(segmentStrip.RED(), segmentStrip.BLUE(), segmentStrip.getAllSegments(), segmentStrip.getFirstPixels(3), -3, 1, 360, 20); 
   // segmentStrip.shiftPatternInit(segmentStrip.RED(), segmentStrip.BLUE(), segmentStrip.getAllSegments(), segmentStrip.getLastPixels(3), 3, -1, 360, 20); 
 
-  // 2.4 play with colors
+  // 4. play with colors
   // segmentStrip.animateRainbowStripe(0, 1, 5);
   // segmentStrip.animateRainbowLEDs(0, 2, 1, 5);
   // segmentStrip.animateSegmentsRainbow(0, 24, segmentStrip.getAllSegments(), 24, 20);
   // segmentStrip.animateSegmentsRainbow(0, -24, segmentStrip.getAllSegments(), 24, 20);
   // segmentStrip.animateSegmentsRainbow(0, 24, segmentStrip.getAllSegments(), -24, 20);
 
-  // 2.5 combined animations
+  // 5. combined animations
   // animateEvenOdd();
   // animateEvenOdd(600, 300);
   // animateEvenOddInit();
   // animateEvenOddInit(720, 360);
   // animateEvenOddRainbow();
-  // animateEvenOddRainbow(600, 300);
-
-  /* 3. update strip at the end of the loop */
-  segmentStrip.update();
+  animateEvenOddRainbow(600, 300);
 }
 
 
