@@ -505,6 +505,19 @@ Protocols can be switched off and on by definining macros before the line #incud
 
 
 ---
+# 7. Case
+- power arduino: usb-micro cable from power bank into the case  
+- keypad: Flat Cables from top of case into the case (centered: 5*23mm)  
+- Stripe:  
+  a) data: adapter cable from stripe into the case(data+GND)  
+  b) power: usb-cable from power bank to stripe (VCC+GND)  
+
+![](images/case.png)  
+![](images/case_dimensions_1.png)  
+![](images/case_dimensions_2.png)  
+
+
+---
 # ToDo  
 - add animations using setSegmentsPixel (i.e. shift n pixels forward & backwards)  
 - animation: shift n_pixel smooth into and out of segment  
