@@ -80,6 +80,7 @@ void loop() {
   
   /* 3. update strip at the end of the loop */
   segmentStrip.update();
+  delay(segmentStrip.getDelay());
 }
 
 void printStripInformation(void) {
@@ -94,7 +95,7 @@ void printStripInformation(void) {
   }
 }
 
-void updateKeypad(void){
+void updateKeypad(void) {
   char customKey = customKeypad.getKey();
   
   if (customKey) {
@@ -105,16 +106,12 @@ void updateKeypad(void){
 
     switch(customKey) {
       case '*':
-        // */#: update brightenss
-        // segmentStrip.decreaseBrightness(10);
-        segmentStrip.decreaseBrightnessStep();
-        Serial.print(segmentStrip.getBrightness());
+        // */#: update brightenss or frequency
+        applyAsteriks();
         break;
       case '#':
-        // */#: update brightenss
-        // segmentStrip.increaseBrightness(10);
-        segmentStrip.increaseBrightnessStep();
-        Serial.print(segmentStrip.getBrightness());
+        // */#: update brightenss or frequency
+        applyHashkey();
         break;
       case 'A':
       case 'B':
@@ -133,7 +130,35 @@ void updateKeypad(void){
   }
 }
 
-void applyPattern(void){
+void applyAsteriks(void) {
+  if(animationSet == 'D') {
+    // D: decrease delay
+    segmentStrip.decreaseDelay(1);
+    Serial.print(segmentStrip.getDelay());
+  }
+  else {
+    // A/B/C: decrease brightness
+    // segmentStrip.decreaseBrightness(10);
+    segmentStrip.decreaseBrightnessStep();
+    Serial.print(segmentStrip.getBrightness());
+  }
+}
+
+void applyHashkey(void) {
+  if(animationSet == 'D') {
+    // D: increase delay
+    segmentStrip.increaseDelay(1);
+    Serial.print(segmentStrip.getDelay());
+  }
+  else {
+    // A/B/C: increase brightness
+    // segmentStrip.increaseBrightness(10);
+    segmentStrip.increaseBrightnessStep();
+    Serial.print(segmentStrip.getBrightness());
+  }
+}
+
+void applyPattern(void) {
   if(animationSet == 'A') {
     applyPatternA();
   }

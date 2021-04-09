@@ -81,6 +81,7 @@ class SegmentedStrip : public Adafruit_NeoPixel {
     uint32_t getFrameCounter();
     uint8_t getBrightness();
     uint8_t getSaturation();
+    uint8_t getDelay();
 
     uint32_t getAllSegments();
     uint32_t getEvenSegments();
@@ -101,6 +102,8 @@ class SegmentedStrip : public Adafruit_NeoPixel {
     void increaseBrightnessStep(void);
     void decreaseBrightnessStep(void);
     void setSaturation(uint8_t);
+    void increaseDelay(uint8_t);
+    void decreaseDelay(uint8_t);
 
 
   private:
@@ -114,6 +117,7 @@ class SegmentedStrip : public Adafruit_NeoPixel {
     uint8_t nBrightnessSteps = 10;  // -1: do not count 0!
     uint8_t brightnessStep = 5;
     uint8_t saturation = 255;
+    uint8_t delay = 0;
 
     uint8_t MAX_NUMBER_SEGMENTS       = 32;
     uint8_t MAX_NUMBER_SEGMENT_PIXELS = 32;
