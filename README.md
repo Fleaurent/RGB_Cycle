@@ -5,9 +5,8 @@ https://www.instructables.com/NeoPixel-Party-Bike-Music-Reactive-Animations-With
 [1. Hardware Setup](#1-hardware-setup)  
 [2. Measurements](#2-measurements)  
 [3. Code](#3-code)  
-[4. Keypad](#4-keypad)  
-[5. BLE](#5-ble)  
-[6. Infrared](#6-infrared)  
+[4. Input](#4-input)  
+[5. Case](#5-case)  
 
 
 ---
@@ -294,13 +293,20 @@ class SegmentedStrip : public Adafruit_NeoPixel {
 
     // segments pixel pattern
     void setPattern(uint32_t color, uint32_t active_segments, uint32_t active_pixel);
-    
+  
     void blinkPattern(uint32_t color1, uint32_t color2, uint32_t active_segments, uint32_t active_pixel, uint16_t frames, uint16_t frame_color_switch=0);
 
     void shiftPattern(uint32_t color, uint32_t active_segments, uint32_t init_pixel, int8_t shift_pixel, uint16_t frames, uint16_t frames_shift);
     void shiftPattern(uint32_t color1, uint32_t color2, uint32_t active_segments, uint32_t init_pixel, int8_t shift_pixel, uint16_t frames, uint16_t frames_shift);
     void shiftPatternInit(uint32_t color1, uint32_t color2, uint32_t active_segments, uint32_t pixel_pattern, int8_t init_shift_pixel, int8_t shift_pixel, uint16_t frames, uint16_t animation_frames);
     void shiftPatternInit(uint32_t color, uint32_t active_segments, uint32_t pixel_pattern, int8_t init_shift_pixel, int8_t shift_pixel, uint16_t frames, uint16_t animation_frames);
+
+    // play with colors
+    void setSegmentsRainbow(uint16_t color_degree_start, uint16_t color_degree_led_step, uint32_t active_segments);
+    void animateSegmentsRainbow(uint16_t color_degree_start, uint16_t color_degree_led_step, uint32_t active_segments, uint16_t color_degree_frame_step, uint16_t animation_frames);
+    void animateRainbowStripe(uint16_t color_degree_start, uint16_t color_degree_frame_step, uint16_t animation_frames);
+    void animateRainbowLEDs(uint16_t color_degree_start, uint16_t color_degree_led_step, uint16_t color_degree_frame_step, uint16_t animation_frames);
+    
 
     // colors
     uint32_t color(uint16_t degree);
@@ -317,8 +323,9 @@ class SegmentedStrip : public Adafruit_NeoPixel {
     uint8_t getNSegments();
     uint8_t getLongestSegment();
     uint32_t getFrameCounter();
-    uint8_t getBrightenss();
+    uint8_t getBrightness();
     uint8_t getSaturation();
+    uint8_t getDelay();
 
     uint32_t getAllSegments();
     uint32_t getEvenSegments();
@@ -334,7 +341,13 @@ class SegmentedStrip : public Adafruit_NeoPixel {
     // public setters
     void resetFrameCounter(void);
     void setBrightness(uint8_t);
+    void increaseBrightness(uint8_t);
+    void decreaseBrightness(uint8_t);
+    void increaseBrightnessStep(void);
+    void decreaseBrightnessStep(void);
     void setSaturation(uint8_t);
+    void increaseDelay(uint8_t);
+    void decreaseDelay(uint8_t);
 
 
   private:
@@ -344,7 +357,11 @@ class SegmentedStrip : public Adafruit_NeoPixel {
     uint8_t longest_segment;  // n_pixels in the longest segment
     uint32_t frame_counter = 0;
     uint8_t brightness = 100;
+    uint8_t brightnessSteps[11] = {0, 5, 10, 20, 30, 50, 75, 100, 150, 200, 255};
+    uint8_t nBrightnessSteps = 10;  // -1: do not count 0!
+    uint8_t brightnessStep = 5;
     uint8_t saturation = 255;
+    uint8_t delay = 0;
 
     uint8_t MAX_NUMBER_SEGMENTS       = 32;
     uint8_t MAX_NUMBER_SEGMENT_PIXELS = 32;
@@ -363,7 +380,8 @@ class SegmentedStrip : public Adafruit_NeoPixel {
 
 
 ---
-# 4. Keypad
+# 4. Input
+## 4.1 Keypad
 
 https://www.circuitbasics.com/how-to-set-up-a-keypad-on-an-arduino/  
 
@@ -420,9 +438,127 @@ void loop(){
 - 0-9: set animation  
   &rarr; 40 different animations
 
+```cpp
+char animationMode = '1';
+char animationSet  = 'A';
+
+void updateKeypad(void) {
+  // 1. get keypad input
+  char customKey = customKeypad.getKey();
+  
+  // 2. only update settings if key pressed
+  if (customKey) {
+    // 2.1 print keypad debug output:
+    Serial.print(segmentStrip.getFrameCounter());
+    Serial.print(' ');
+    Serial.print(customKey);
+    Serial.print(' ');
+
+    // 2.2. update settings
+    switch(customKey) {
+      case '*':
+        // */#: update brightenss or frequency
+        applyAsteriks();
+        break;
+      case '#':
+        // */#: update brightenss or frequency
+        applyHashkey();
+        break;
+      case 'A':
+      case 'B':
+      case 'C':
+      case 'D':
+        // A-D: update animationSet
+        animationSet = customKey;
+        break;
+      case '0':
+      case '1':
+      case '2':
+      case '3':
+      case '4':
+      case '5':
+      case '6':
+      case '7':
+      case '8':
+      case '9':
+        // 0-9: update animationMode
+        animationMode = customKey;
+        break;
+      default:
+        // do nothing
+        break;
+    }
+
+    Serial.println();  // keypad debug output: end line
+  }
+}
+
+void applyAsteriks(void) {
+  switch(animationSet) {
+    case 'A':
+    case 'B':
+    case 'C':
+      // A/B/C: decrease brightness
+      // segmentStrip.decreaseBrightness(10);
+      segmentStrip.decreaseBrightnessStep();
+      Serial.print(segmentStrip.getBrightness());
+      break;
+    case 'D':
+      // D: decrease delay
+      segmentStrip.decreaseDelay(1);
+      Serial.print(segmentStrip.getDelay());
+      break;
+    default:
+      // do nothing
+      break;
+  }
+}
+
+void applyHashkey(void) {
+  switch(animationSet) {
+    case 'A':
+    case 'B':
+    case 'C':
+      // A/B/C: increase brightness
+      // segmentStrip.increaseBrightness(10);
+      segmentStrip.increaseBrightnessStep();
+      Serial.print(segmentStrip.getBrightness());
+      break;
+    case 'D':
+      // D: increase delay
+      segmentStrip.increaseDelay(1);
+      Serial.print(segmentStrip.getDelay());
+      break;
+    default:
+      // do nothing
+      break;
+  }
+}
+
+void applyPattern(void) {
+  switch(animationSet) {
+    case 'A':
+      applyPatternA();
+      break;
+    case 'B':
+      applyPatternB();
+      break;
+    case 'C':
+      applyPatternC();
+      break;
+    case 'D':
+      applyPatternD();
+      break;
+    default:
+      // do nothing
+      break;
+  }
+}
+```
+
 ---
-# 5. BLE
-## 5.1 BLE Roles
+## 4.2 BLE
+### 4.2.1 BLE Roles
 https://embedded.fm/blog/ble-roles  
 https://web.archive.org/web/20160930015609/http://projects.mbientlab.com:80/bluetooth-low-energy-basics/  
 
@@ -455,13 +591,13 @@ A device can switch between a Master and Slave but it cannot be both at the same
 A device can be a Server and Client at the same time.  
 
 
-## 5.2 Arduino Nano 33 BLE
+### 4.2.1 Arduino Nano 33 BLE
 https://www.arduino.cc/en/Guide/NANO33BLE  
 ToDo!  
 
 
 ---
-# 6. Infrared
+## 4.3 Infrared
 Sensor: TSOP4838  
 Arduino Library: [IRemote](https://github.com/Arduino-IRremote/Arduino-IRremote)  
 [project homepage](https://arduino-irremote.github.io/Arduino-IRremote/)  
@@ -508,7 +644,7 @@ Protocols can be switched off and on by definining macros before the line #incud
 
 
 ---
-# 7. Case
+# 5. Case
 - power arduino: usb-micro cable from power bank into the case  
 - keypad: Flat Cables from top of case into the case (centered: 5*23mm)  
 - Stripe:  
