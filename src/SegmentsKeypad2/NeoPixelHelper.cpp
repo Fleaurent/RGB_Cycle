@@ -121,6 +121,29 @@ void SegmentedStrip::setLastSegments(uint32_t color, uint8_t n) {
   setSegments(color, getLastSegments(n));
 }
 
+
+/**
+ * @brief   set all leds of the active_segments segments alternating to the provided colors
+ * @param   color set segments to color when (frame_counter%frames) < frame_color_switch
+                  & set segments to OFF when (frame_counter%frames) >= frame_color_switch
+ * @param   active_segments update only the specified segments
+ * @param   frames number of frames one blink cycle takes
+ * @param   frame_color_switch number of frames color1 is active
+ */
+void SegmentedStrip::blinkSegments(uint32_t color, uint32_t active_segments, uint16_t frames, uint16_t frame_color_switch) {
+  if(frame_color_switch == 0){
+    frame_color_switch = frames / 2;
+  }
+  
+  // always set colors (improve: only set when changing?)
+  if((frame_counter%frames) < frame_color_switch) {
+    setSegments(color, active_segments);
+  }
+  else {
+    setSegments(OFF, active_segments);
+  }
+}
+
 /**
  * @brief   set all leds of the active_segments segments alternating to the provided colors
  * @param   color1 set segments to color1 when (frame_counter%frames) < frame_color_switch
@@ -345,7 +368,7 @@ void SegmentedStrip::animateRainbowStripe(uint16_t color_degree_start, uint16_t 
  */
 void SegmentedStrip::animateRainbowLEDs(uint16_t color_degree_start, uint16_t color_degree_led_step, uint16_t color_degree_frame_step, uint16_t animation_frames) {
   uint32_t frame_step = frame_counter / animation_frames;
-  for(int led_i = 0; led_i < numLEDs; led_i++) {
+  for(uint16_t led_i = 0; led_i < numLEDs; led_i++) {
     uint32_t color_degree_led_i = color(color_degree_start + frame_step*color_degree_frame_step + led_i*color_degree_led_step);
     setPixelColor(led_i, color_degree_led_i);
   }
