@@ -1,7 +1,6 @@
 //////////////////////////////
 /* 1. Segmented RGB Strip */
 #include "NeoPixelHelper.h"
-#include <Adafruit_NeoPixel.h>
 
 #define LED_PIN_1 2
 #define LED_PIN_2 3
@@ -404,39 +403,83 @@ void applyPatternB(void) {
 
 void applyPatternC(void) {
   // 3. play with colors: 
+  /*
+    // shift only color degree per led
+    segmentStrip1.setColorSteps(0, 24, segmentStrip1.getAllSegments());
+    segmentStrip2.setColorSteps(360, -24, segmentStrip2.getAllSegments());
+
+    // shift only saturation per led
+    // segmentStrip1.setColorSteps(uint16_t color_degree_start, uint8_t saturation_start, uint8_t saturation_step, uint32_t active_segments);
+    segmentStrip1.setColorSteps(0, 255, -5, segmentStrip1.getAllSegments());
+    segmentStrip2.setColorSteps(0, 180, 5, segmentStrip1.getAllSegments());
+
+    // shift color degree and saturation per led
+    // segmentStrip1.setColorSteps(uint16_t color_degree_start, uint16_t color_degree_led_step, uint8_t saturation_start, uint8_t saturation_step, uint32_t active_segments);
+    segmentStrip1.setColorSteps(0, 24, 255, -5, segmentStrip1.getAllSegments());
+    segmentStrip2.setColorSteps(360, -24, 180, 5, segmentStrip2.getAllSegments());
+  */
   // ToDo: animate different color combinations
-  // ToDo: animate increasing speed?
+  
   switch(animationMode) {
     case '0':
       segmentStrip1.resetStripe();
       segmentStrip2.resetStripe();
       break;
     case '1':
-      
+      // shift only color degree per led and frame
+      // void shiftColorSteps(uint16_t color_degree_start, uint16_t color_degree_step, uint32_t active_segments, uint16_t color_degree_frame_step, uint16_t animation_frames);
+      segmentStrip1.shiftColorSteps(0, 6, segmentStrip1.getAllSegments(), 3, 5);
+      segmentStrip2.shiftColorSteps(360, -6, segmentStrip1.getAllSegments(), 3, 5);
       break;
     case '2':
-      
+      // shift only saturation per led and frame
+      // void shiftColorSteps(uint16_t color_degree_start, uint8_t saturation_start, uint8_t saturation_step, uint32_t active_segments, uint8_t saturation_frame_step, uint16_t animation_frames);
+      segmentStrip1.shiftColorSteps(0, 255, -5, segmentStrip1.getAllSegments(), -5, 20);
+      segmentStrip2.shiftColorSteps(0, 180, 5, segmentStrip1.getAllSegments(), 5, 20);
       break;
     case '3':
-      
+      // shift color degree and saturation per led and frame
+      // void shiftColorSteps(uint16_t color_degree_start, uint16_t color_degree_step, uint8_t saturation_start, uint8_t saturation_step, uint32_t active_segments, uint16_t color_degree_frame_step, uint8_t saturation_frame_step, uint16_t animation_frames);
+      segmentStrip1.shiftColorSteps(0, 24, 255, -5, segmentStrip1.getAllSegments(), 24, 0, 20);
+      segmentStrip2.shiftColorSteps(360, -24, 180, 5, segmentStrip1.getAllSegments(), 24, 0, 20);
       break;
     case '4':
-
+      
       break;
     case '5':
-
+      
       break;
     case '6':
- 
+      // color segments (increasing) shift only color degree per led and frame
+      segmentStrip1.shiftColorSteps(0, 3, segmentStrip1.getAllSegments(), 1, 4);
+      segmentStrip2.shiftColorSteps(0, 3, segmentStrip1.getAllSegments(), 1, 4);
       break;
     case '7':
-      
+      // color segments (decreasing) shift only color degree per led and frame
+      segmentStrip1.shiftColorSteps(0, 3, segmentStrip1.getAllSegments(), -1, 4);
+      segmentStrip2.shiftColorSteps(0, 3, segmentStrip1.getAllSegments(), -1, 4);
       break;
     case '8':
-      
+      // color wheel (increasing)
+      segmentStrip1.shiftColorSteps(0, 6, 0b00001, 6, 5);
+      segmentStrip1.shiftColorSteps(90, 6, 0b00010, 6, 5);
+      segmentStrip1.shiftColorSteps(180, 6, 0b00100, 6, 5);
+      segmentStrip1.shiftColorSteps(270, 6, 0b01000, 6, 5);
+      segmentStrip2.shiftColorSteps(0, 6, 0b00001, 6, 5);
+      segmentStrip2.shiftColorSteps(90, 6, 0b00010, 6, 5);
+      segmentStrip2.shiftColorSteps(180, 6, 0b00100, 6, 5);
+      segmentStrip2.shiftColorSteps(270, 6, 0b01000, 6, 5);
       break;
     case '9':
-
+      // color wheel (decreasing)
+      segmentStrip1.shiftColorSteps(0, 6, 0b00001, -6, 5);
+      segmentStrip1.shiftColorSteps(90, 6, 0b00010, -6, 5);
+      segmentStrip1.shiftColorSteps(180, 6, 0b00100, -6, 5);
+      segmentStrip1.shiftColorSteps(270, 6, 0b01000, -6, 5);
+      segmentStrip2.shiftColorSteps(0, 6, 0b00001, -6, 5);
+      segmentStrip2.shiftColorSteps(90, 6, 0b00010, -6, 5);
+      segmentStrip2.shiftColorSteps(180, 6, 0b00100, -6, 5);
+      segmentStrip2.shiftColorSteps(270, 6, 0b01000, -6, 5);
       break;
     default:  // do nothing
       break;  
@@ -445,6 +488,7 @@ void applyPatternC(void) {
 
 void applyPatternD(void) {
   // 4. combined animations
+  // ToDo: animate increasing speed?
   switch(animationMode) {
     case '0':
       segmentStrip1.resetStripe();

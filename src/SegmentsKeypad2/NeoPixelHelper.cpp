@@ -315,23 +315,113 @@ void SegmentedStrip::shiftPatternInit(uint32_t color, uint32_t active_segments, 
   shiftPatternInit(color, OFF, active_segments, pixel_pattern, init_shift_pixel, shift_pixel, frames, animation_frames);
 }
 
+
 // play with colors
 /**
- * @brief   set all leds of the active_segments to different colors
- * @param   color_degree_start color_degree of the first led segments to the provided color
- * @param   color_degree_led_step color_degree added to each subsequent led
+ * @brief   set all leds of the active_segments to different colors with constant saturation
+ * @param   color_degree_start color_degree of the first led
+ * @param   color_degree_step color_degree added to each subsequent led
  * @param   active_segments update only the specified segments 
  */
-void SegmentedStrip::setSegmentsRainbow(uint16_t color_degree_start, uint16_t color_degree_led_step, uint32_t active_segments) {
+void SegmentedStrip::setColorSteps(uint16_t color_degree_start, uint16_t color_degree_step, uint32_t active_segments) {
   for(int i=0; i<n_segments; i++) {
     if(active_segments & (1 << i)) {
-      for(int led_i = 0; led_i < segments[i].count ; led_i++) {
-        uint32_t color_degree_led_i = color(color_degree_start + led_i*color_degree_led_step);
-        setPixelColor(segments[i].first + led_i, color_degree_led_i);
+      for(uint8_t led_i = 0; led_i < segments[i].count ; led_i++) {
+        uint16_t color_degree_led_i = color_degree_start + led_i*color_degree_step;
+        uint32_t color_led_i = color(color_degree_led_i);
+        setPixelColor(segments[i].first + led_i, color_led_i);
       }
     }
   }
 }
+
+/**
+ * @brief   set all leds of the active_segments to same color degree but different saturation
+ * @param   color_degree_start color_degree of the first led
+ * @param   saturation_start saturation of the first led
+ * @param   saturation_step saturation added to each subsequent led
+ * @param   active_segments update only the specified segments 
+ */
+void SegmentedStrip::setColorSteps(uint16_t color_degree_start, uint8_t saturation_start, uint8_t saturation_step, uint32_t active_segments) {
+  for(int i=0; i<n_segments; i++) {
+    if(active_segments & (1 << i)) {
+      for(uint8_t led_i = 0; led_i < segments[i].count ; led_i++) {
+        uint8_t saturation_led_i = saturation_start + led_i*saturation_step;
+        uint32_t color_led_i = color(color_degree_start, saturation_led_i);
+        setPixelColor(segments[i].first + led_i, color_led_i);
+      }
+    }
+  }
+}
+
+/**
+ * @brief   set all leds of the active_segments to different colors
+ * @param   color_degree_start color_degree of the first led
+ * @param   color_degree_step color_degree added to each subsequent led
+ * @param   saturation_start saturation of the first led
+ * @param   saturation_step saturation added to each subsequent led
+ * @param   active_segments update only the specified segments 
+ */
+void SegmentedStrip::setColorSteps(uint16_t color_degree_start, uint16_t color_degree_step, uint8_t saturation_start, uint8_t saturation_step, uint32_t active_segments) {
+  for(int i=0; i<n_segments; i++) {
+    if(active_segments & (1 << i)) {
+      for(uint8_t led_i = 0; led_i < segments[i].count ; led_i++) {
+        uint16_t color_degree_led_i = color_degree_start + led_i*color_degree_step;
+        uint8_t saturation_led_i = saturation_start + led_i*saturation_step;
+        uint32_t color_led_i = color(color_degree_led_i, saturation_led_i);
+        setPixelColor(segments[i].first + led_i, color_led_i);
+      }
+    }
+  }
+}
+
+/**
+ * @brief   set all leds of the active_segments to different colors -> colors are shifted per frame
+ * @param   color_degree_start color_degree of the first led
+ * @param   color_degree_step color_degree added to each subsequent led
+ * @param   active_segments update only the specified segments 
+ * @param   color_degree_frame_step color_degree added to all leds every frame_step 
+ * @param   animation_frames number of frames the led colors are held constant
+ */
+void SegmentedStrip::shiftColorSteps(uint16_t color_degree_start, uint16_t color_degree_step, uint32_t active_segments, uint16_t color_degree_frame_step, uint16_t animation_frames) {
+  uint32_t frame_step = frame_counter / animation_frames;
+  uint16_t temp_color_degree_start = color_degree_start + frame_step*color_degree_frame_step;
+  setColorSteps(temp_color_degree_start, color_degree_step, active_segments);
+}
+
+/**
+ * @brief   set all leds of the active_segments to different colors -> colors are shifted per frame
+ * @param   color_degree_start color_degree of the first led
+ * @param   saturation_start saturation of the first led
+ * @param   saturation_step saturation added to each subsequent led
+ * @param   active_segments update only the specified segments 
+ * @param   saturation_frame_step saturation added to all leds every frame_step 
+ * @param   animation_frames number of frames the led colors are held constant
+ */
+void SegmentedStrip::shiftColorSteps(uint16_t color_degree_start, uint8_t saturation_start, uint8_t saturation_step, uint32_t active_segments, uint8_t saturation_frame_step, uint16_t animation_frames) {
+  uint32_t frame_step = frame_counter / animation_frames;
+  uint8_t temp_saturation_start = saturation_start + frame_step*saturation_frame_step;
+  setColorSteps(color_degree_start, temp_saturation_start, saturation_step, active_segments);
+}
+
+/**
+ * @brief   set all leds of the active_segments to different colors -> colors are shifted per frame
+ * @param   color_degree_start color_degree of the first led
+ * @param   color_degree_step color_degree added to each subsequent led
+ * @param   saturation_start saturation of the first led
+ * @param   saturation_step saturation added to each subsequent led
+ * @param   active_segments update only the specified segments 
+ * @param   color_degree_frame_step color_degree added to all leds every frame_step 
+ * @param   saturation_frame_step saturation added to all leds every frame_step 
+ * @param   animation_frames number of frames the led colors are held constant
+ */
+void SegmentedStrip::shiftColorSteps(uint16_t color_degree_start, uint16_t color_degree_step, uint8_t saturation_start, uint8_t saturation_step, uint32_t active_segments, uint16_t color_degree_frame_step, uint8_t saturation_frame_step, uint16_t animation_frames) {
+  uint32_t frame_step = frame_counter / animation_frames;
+  uint8_t temp_saturation_start = saturation_start + frame_step*saturation_frame_step;
+  uint16_t temp_color_degree_start = color_degree_start + frame_step*color_degree_frame_step;
+  setColorSteps(temp_color_degree_start, color_degree_step, temp_saturation_start, saturation_step, active_segments);
+}
+
 
 /**
  * @brief   set all leds of each active_segments to different colors, led colors are shifted per frame for the animation
@@ -344,7 +434,7 @@ void SegmentedStrip::setSegmentsRainbow(uint16_t color_degree_start, uint16_t co
 void SegmentedStrip::animateSegmentsRainbow(uint16_t color_degree_start, uint16_t color_degree_led_step, uint32_t active_segments, uint16_t color_degree_frame_step, uint16_t animation_frames) {
   uint32_t frame_step = frame_counter / animation_frames;
   uint16_t color_degree = color_degree_start + frame_step*color_degree_frame_step;
-  setSegmentsRainbow(color_degree, color_degree_led_step, active_segments);
+  setColorSteps(color_degree, color_degree_led_step, active_segments);
 }
 
 /**
@@ -383,6 +473,19 @@ void SegmentedStrip::animateRainbowLEDs(uint16_t color_degree_start, uint16_t co
  *          optional: apply additional gamma correction function to the returned 32bit value!
  */
 uint32_t SegmentedStrip::color(uint16_t degree) {
+  // Adafruit_NeoPixel::gamma32(temp_color);
+  return Adafruit_NeoPixel::ColorHSV(degree*HUE_DEGREE, saturation, brightness);
+}
+
+/**
+ * @brief   calculate HSV color for a given degree
+ *          using the private saturation and brightness settings
+ * @param   degree HSV color degree setting
+ * @param   saturation HSV color saturation setting
+ * @return  packed 32-bit RGB color
+ *          optional: apply additional gamma correction function to the returned 32bit value!
+ */
+uint32_t SegmentedStrip::color(uint16_t degree, uint8_t saturation) {
   // Adafruit_NeoPixel::gamma32(temp_color);
   return Adafruit_NeoPixel::ColorHSV(degree*HUE_DEGREE, saturation, brightness);
 }
