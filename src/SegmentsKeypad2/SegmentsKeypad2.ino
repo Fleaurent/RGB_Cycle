@@ -308,13 +308,13 @@ void applyPatternA(void) {
       break;
     case '8':
       // animate segments without background
-      segmentStrip1.shiftSegments(segmentStrip1.RED(), segmentStrip1.getAllSegments(), 0x1, 1, 250, 50); 
-      segmentStrip2.shiftSegments(segmentStrip2.RED(), segmentStrip2.getAllSegments(), 0x1, 1, 250, 50);
+      segmentStrip1.shiftSegments(segmentStrip1.RED(), segmentStrip1.getAllSegments(), 0x1, 1, 300, 60); 
+      segmentStrip2.shiftSegments(segmentStrip2.RED(), segmentStrip2.getAllSegments(), 0x1, 1, 300, 60);
       break;
     case '9':
       // animate segments without background (reversed)
-      segmentStrip1.shiftSegments(segmentStrip1.RED(), segmentStrip1.getAllSegments(), segmentStrip1.getLastSegments(1), -1, 250, 50); 
-      segmentStrip2.shiftSegments(segmentStrip2.RED(), segmentStrip2.getAllSegments(), segmentStrip2.getLastSegments(1), -1, 250, 50);
+      segmentStrip1.shiftSegments(segmentStrip1.RED(), segmentStrip1.getAllSegments(), segmentStrip1.getLastSegments(1), -1, 300, 60); 
+      segmentStrip2.shiftSegments(segmentStrip2.RED(), segmentStrip2.getAllSegments(), segmentStrip2.getLastSegments(1), -1, 300, 60);
       break;
     default:  // do nothing
       break;  
@@ -428,20 +428,20 @@ void applyPatternC(void) {
     case '1':
       // shift only color degree per led and frame
       // void shiftColorSteps(uint16_t color_degree_start, uint16_t color_degree_step, uint32_t active_segments, uint16_t color_degree_frame_step, int16_t animation_frames);
-      segmentStrip1.shiftColorSteps(0, 6, segmentStrip1.getAllSegments(), 3, 5);
-      segmentStrip2.shiftColorSteps(360, -6, segmentStrip1.getAllSegments(), 3, 5);
+      segmentStrip1.shiftColorSteps(0, 6, segmentStrip1.getAllSegments(), 1, 1);
+      segmentStrip2.shiftColorSteps(360, -6, segmentStrip1.getAllSegments(), 1, 1);
       break;
     case '2':
       // shift only saturation per led and frame
       // void shiftColorSteps(uint16_t color_degree_start, uint8_t saturation_start, uint8_t saturation_step, uint32_t active_segments, uint8_t saturation_frame_step, int16_t animation_frames);
-      segmentStrip1.shiftColorSteps(0, 255, -5, segmentStrip1.getAllSegments(), -5, 20);
-      segmentStrip2.shiftColorSteps(0, 180, 5, segmentStrip1.getAllSegments(), 5, 20);
+      segmentStrip1.shiftColorSteps(0, 255, -5, segmentStrip1.getAllSegments(), -1, 1);
+      segmentStrip2.shiftColorSteps(0, 180, 5, segmentStrip1.getAllSegments(), 1, 1);
       break;
     case '3':
       // shift color degree and saturation per led and frame
       // void shiftColorSteps(uint16_t color_degree_start, uint16_t color_degree_step, uint8_t saturation_start, uint8_t saturation_step, uint32_t active_segments, uint16_t color_degree_frame_step, uint8_t saturation_frame_step, uint16_t animation_frames);
-      segmentStrip1.shiftColorSteps(0, 24, 255, -5, segmentStrip1.getAllSegments(), 24, 0, 20);
-      segmentStrip2.shiftColorSteps(360, -24, 180, 5, segmentStrip1.getAllSegments(), 24, 0, 20);
+      segmentStrip1.shiftColorSteps(0, 24, 255, -1, segmentStrip1.getAllSegments(), 24, 0, 1);
+      segmentStrip2.shiftColorSteps(360, -24, 180, 1, segmentStrip1.getAllSegments(), 24, 0, 1);
       break;
     case '4':
       // color segments (increasing) shift only color degree per led and frame
@@ -464,11 +464,10 @@ void applyPatternC(void) {
       // colorWheel(-2, 1); // faster
       break;
     case '8':
-            
+      colorComplete(1, 5);
       break;
     case '9':
-      
-      
+      colorComplete(-1, 5);
       break;
     default:  // do nothing
       break;  
@@ -692,4 +691,14 @@ void colorWheel(uint16_t color_degree_frame_step, int16_t animation_frames) {
   segmentStrip2.shiftColorSteps(90, 6, 0b00010, color_degree_frame_step, animation_frames);
   segmentStrip2.shiftColorSteps(180, 6, 0b00100, color_degree_frame_step, animation_frames);
   segmentStrip2.shiftColorSteps(270, 6, 0b01000, color_degree_frame_step, animation_frames);
+}
+
+/**
+ * @brief   color complete stripe in the same color
+ * @param   color_degree_frame_step color_degree added to all leds every frame_step 
+ * @param   animation_frames number of frames the led colors are held constant
+ */
+void colorComplete(uint16_t color_degree_frame_step, int16_t animation_frames) {
+  segmentStrip1.shiftColorStripe(color_degree_frame_step, animation_frames);
+  segmentStrip2.shiftColorStripe(color_degree_frame_step, animation_frames);
 }

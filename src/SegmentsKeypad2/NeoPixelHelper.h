@@ -27,6 +27,7 @@ class SegmentedStrip : public Adafruit_NeoPixel {
     void update(void);
     void setStripe(uint32_t color);
     void resetStripe(void);
+    void shiftColorStripe(uint16_t color_degree_frame_step, int16_t animation_frames);
 
     // segments
     void setSegments(uint32_t color, uint32_t active_segments);

@@ -51,6 +51,12 @@ void SegmentedStrip::resetStripe() {
   setStripe(OFF);
 }
 
+void SegmentedStrip::shiftColorStripe(uint16_t color_degree_frame_step, int16_t animation_frames) {
+  uint32_t frame_step = frame_counter / animation_frames;
+  uint16_t temp_color_degree = frame_step*color_degree_frame_step;
+  uint32_t temp_color = color(temp_color_degree);
+  setStripe(temp_color);
+}
 
 // segments specific methods
 /**
