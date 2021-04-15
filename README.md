@@ -7,7 +7,7 @@ https://www.instructables.com/NeoPixel-Party-Bike-Music-Reactive-Animations-With
 [3. Code](#3-code)  
 [4. Input](#4-input)  
 [5. Case](#5-case)  
-
+[6. Animations](#6-animations)
 
 ---
 # 1. Hardware Setup
@@ -664,37 +664,7 @@ Protocols can be switched off and on by definining macros before the line #incud
 ![](images/case_dimensions_2.png)  
 
 
----
-# ToDo  
-- add animations using setSegmentsPixel (i.e. shift n pixels forward & backwards)  
-- animation: shift n_pixel smooth into and out of segment  
-- add statemachine selecting current animation 
-- set state using infrared/ble  
-```cpp
-typedef struct {
-    uint8_t r;
-    uint8_t g;
-    uint8_t b;
-} color;
-```  
-
-HUE Color:  
-- replace color implementation  
-- set brightness dynamically  
-- add color gradients like fastled for each segment i.e. animation  
-  &rarr; use hue/saturation/value  
-  
-- shift red white  
-- shift blue white  
-- shift red blue  
-- select color +/-  
-- limit min/max saturation/degree  
-- smooth shift pattern  
-- sinus wave
-- static patterns: 
-
-
-**Animations:**
+# 6. Animations
 ```cpp
 // 1. blink complete segments
 // blink all Segments
@@ -878,6 +848,21 @@ segmentStrip2.animateSegmentsRainbow(0, -24, segmentStrip2.getAllSegments(), 24,
 // animateSegmentsRainbow
 segmentStrip1.animateSegmentsRainbow(0, 24, segmentStrip1.getAllSegments(), -24, 20);
 segmentStrip2.animateSegmentsRainbow(0, 24, segmentStrip2.getAllSegments(), -24, 20);
-
-
 ```
+
+
+---
+# ToDo  
+simple:  
+- static patterns
+- use selected foreground/background colors
+ - shift red white  
+- shift blue white  
+- shift red blue  
+
+complex:
+- limit min/max saturation/degree  
+- smooth shift pattern  
+- sinus wave
+- set state using infrared/ble
+- add color gradients like fastled for each segment i.e. animation
