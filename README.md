@@ -689,3 +689,195 @@ HUE Color:
 - shift red blue  
 - select color +/-  
 - limit min/max saturation/degree  
+- smooth shift pattern  
+- sinus wave
+- static patterns: 
+
+
+**Animations:**
+```cpp
+// 1. blink complete segments
+// blink all Segments
+segmentStrip1.blinkSegments(segmentStrip1.RED(), segmentStrip1.getAllSegments(), 200);
+segmentStrip2.blinkSegments(segmentStrip2.RED(), segmentStrip2.getAllSegments(), 200);
+
+// blink even Segments
+segmentStrip1.blinkSegments(segmentStrip1.RED(), segmentStrip1.getEvenSegments(), 200);
+segmentStrip2.blinkSegments(segmentStrip2.RED(), segmentStrip2.getEvenSegments(), 200);
+
+// blink odd Segments
+segmentStrip1.blinkSegments(segmentStrip1.RED(), segmentStrip1.getOddSegments(), 200);
+segmentStrip2.blinkSegments(segmentStrip2.RED(), segmentStrip2.getOddSegments(), 200);
+
+// blink first 3 Segments
+segmentStrip1.blinkSegments(segmentStrip1.RED(), segmentStrip1.getFirstSegments(3), 200);
+segmentStrip2.blinkSegments(segmentStrip2.RED(), segmentStrip2.getFirstSegments(3), 200);
+
+// blink last 3 Segments
+segmentStrip1.blinkSegments(segmentStrip1.RED(), segmentStrip1.getLastSegments(3), 200);
+segmentStrip2.blinkSegments(segmentStrip2.RED(), segmentStrip2.getLastSegments(3), 200);
+
+// blink all Segments (background)
+segmentStrip1.blinkAllSegments(segmentStrip1.RED(), segmentStrip1.BLUE(), 200);
+segmentStrip2.blinkAllSegments(segmentStrip2.RED(), segmentStrip2.BLUE(), 200);
+
+// blink even Segments (background)
+segmentStrip1.blinkEvenSegments(segmentStrip1.RED(), segmentStrip1.BLUE(), 200);
+segmentStrip2.blinkEvenSegments(segmentStrip2.RED(), segmentStrip2.BLUE(), 200);
+
+// blink odd Segments (background)
+segmentStrip1.blinkOddSegments(segmentStrip1.BLUE(), segmentStrip1.RED(), 200);
+segmentStrip2.blinkOddSegments(segmentStrip2.BLUE(), segmentStrip2.RED(), 200);
+
+// blink first 3 Segments (background)
+segmentStrip1.blinkFirstSegments(segmentStrip1.RED(), segmentStrip1.BLUE(), 3, 200);
+segmentStrip2.blinkFirstSegments(segmentStrip2.RED(), segmentStrip2.BLUE(), 3, 200);
+
+// blink last 3 Segments (background)
+segmentStrip1.blinkLastSegments(segmentStrip1.RED(), segmentStrip1.BLUE(), 3, 200);
+segmentStrip2.blinkLastSegments(segmentStrip2.RED(), segmentStrip2.BLUE(), 3, 200);
+
+// blink 25/75  duty cycle -> repeat after 200 ticks: 50 ticks color1, remaining 150 ticks color2
+segmentStrip1.blinkSegments(segmentStrip1.RED(), segmentStrip1.BLUE(), segmentStrip1.getAllSegments(), 200, 50);
+segmentStrip2.blinkSegments(segmentStrip2.RED(), segmentStrip2.BLUE(), segmentStrip2.getAllSegments(), 200, 50);
+
+// blink alternating on each side
+segmentStrip1.blinkAllSegments(segmentStrip1.RED(), segmentStrip1.BLUE(), 200);
+segmentStrip2.blinkAllSegments(segmentStrip2.BLUE(), segmentStrip2.RED(), 200);
+
+
+// 2. shift complete segments
+// animate Segments (background)
+segmentStrip1.shiftSegments(segmentStrip1.RED(), segmentStrip1.BLUE(), segmentStrip1.getAllSegments(), 0x1, 1, 250, 50);
+segmentStrip2.shiftSegments(segmentStrip2.RED(), segmentStrip2.BLUE(), segmentStrip2.getAllSegments(), 0x1, 1, 250, 50);
+
+// animate Segments (background, reversed)
+segmentStrip1.shiftSegments(segmentStrip1.RED(), segmentStrip1.BLUE(), segmentStrip1.getAllSegments(), segmentStrip1.getLastSegments(1), -1, 250, 50);
+segmentStrip2.shiftSegments(segmentStrip2.RED(), segmentStrip2.BLUE(), segmentStrip2.getAllSegments(), segmentStrip2.getLastSegments(1), -1, 250, 50);
+
+// animate segments without background
+segmentStrip1.shiftSegments(segmentStrip1.RED(), segmentStrip1.getAllSegments(), 0x1, 1, 300, 60); 
+segmentStrip2.shiftSegments(segmentStrip2.RED(), segmentStrip2.getAllSegments(), 0x1, 1, 300, 60);
+
+// animate segments without background (reversed)
+segmentStrip1.shiftSegments(segmentStrip1.RED(), segmentStrip1.getAllSegments(), segmentStrip1.getLastSegments(1), -1, 300, 60); 
+segmentStrip2.shiftSegments(segmentStrip2.RED(), segmentStrip2.getAllSegments(), segmentStrip2.getLastSegments(1), -1, 300, 60);
+
+
+// 3. blink pixel pattern of segments
+// all segments, all pixels
+segmentStrip1.blinkPattern(segmentStrip1.RED(), segmentStrip1.BLUE(), segmentStrip1.getAllSegments(), segmentStrip1.getAllPixels(), 200);  
+segmentStrip2.blinkPattern(segmentStrip2.RED(), segmentStrip2.BLUE(), segmentStrip2.getAllSegments(), segmentStrip2.getAllPixels(), 200);
+
+// all segments, first pixel
+segmentStrip1.blinkPattern(segmentStrip1.RED(), segmentStrip1.BLUE(), segmentStrip1.getAllSegments(), 1 << 0, 200);  
+segmentStrip2.blinkPattern(segmentStrip2.RED(), segmentStrip2.BLUE(), segmentStrip2.getAllSegments(), 1 << 0, 200);  // all segments: 0x1 = first pixel
+
+// all segments, last pixel 
+segmentStrip1.blinkPattern(segmentStrip1.RED(), segmentStrip1.BLUE(), segmentStrip1.getAllSegments(), 1 << (segmentStrip1.getLongestSegment() - 1), 200);  
+segmentStrip2.blinkPattern(segmentStrip2.RED(), segmentStrip2.BLUE(), segmentStrip2.getAllSegments(), 1 << (segmentStrip2.getLongestSegment() - 1), 200);
+
+// blink all segments, even pixels
+segmentStrip1.blinkPattern(segmentStrip1.RED(), segmentStrip1.BLUE(), segmentStrip1.getAllSegments(), segmentStrip1.getEvenPixels(), 200);
+segmentStrip2.blinkPattern(segmentStrip2.RED(), segmentStrip2.BLUE(), segmentStrip2.getAllSegments(), segmentStrip2.getEvenPixels(), 200);
+
+// blink all segments, odd pixels
+segmentStrip1.blinkPattern(segmentStrip1.RED(), segmentStrip1.BLUE(), segmentStrip1.getAllSegments(), segmentStrip1.getOddPixels(), 200);
+segmentStrip2.blinkPattern(segmentStrip2.RED(), segmentStrip2.BLUE(), segmentStrip2.getAllSegments(), segmentStrip2.getOddPixels(), 200);
+
+// blink all segments, first 8 pixels
+segmentStrip1.blinkPattern(segmentStrip1.RED(), segmentStrip1.BLUE(), segmentStrip1.getAllSegments(), segmentStrip1.getFirstPixels(8), 200);
+segmentStrip2.blinkPattern(segmentStrip2.RED(), segmentStrip2.BLUE(), segmentStrip2.getAllSegments(), segmentStrip2.getFirstPixels(8), 200);
+  
+// blink all segments, last 8 pixels
+segmentStrip1.blinkPattern(segmentStrip1.RED(), segmentStrip1.BLUE(), segmentStrip1.getAllSegments(), segmentStrip1.getLastPixels(8), 200);
+segmentStrip2.blinkPattern(segmentStrip2.RED(), segmentStrip2.BLUE(), segmentStrip2.getAllSegments(), segmentStrip2.getLastPixels(8), 200);
+
+// blink all segments, inner pixels
+segmentStrip1.blinkPattern(segmentStrip1.RED(), segmentStrip1.BLUE(), segmentStrip1.getAllSegments(), 0x03E0, 200); 
+segmentStrip2.blinkPattern(segmentStrip2.RED(), segmentStrip2.BLUE(), segmentStrip2.getAllSegments(), 0x03E0, 200); 
+
+// blink 25/75  duty cycle -> repeat after 200 ticks: 50 ticks color1, remaining 150 ticks color2
+segmentStrip1.blinkPattern(segmentStrip1.RED(), segmentStrip1.BLUE(), segmentStrip1.getAllSegments(), segmentStrip1.getAllPixels(), 200, 50);
+segmentStrip2.blinkPattern(segmentStrip2.RED(), segmentStrip2.BLUE(), segmentStrip2.getAllSegments(), segmentStrip2.getAllPixels(), 200, 50);
+
+
+// 4. shift pixel pattern of segments
+// shift three pixels in and out (background)
+segmentStrip1.shiftPatternInit(segmentStrip1.RED(), segmentStrip1.BLUE(), segmentStrip1.getAllSegments(), segmentStrip1.getFirstPixels(3), -3, 1, 360, 20);  // 360 / 20 = 18 steps
+segmentStrip2.shiftPatternInit(segmentStrip2.RED(), segmentStrip2.BLUE(), segmentStrip2.getAllSegments(), segmentStrip2.getFirstPixels(3), -3, 1, 360, 20); 
+
+// shift three pixels in and out (reversed, background) 
+segmentStrip1.shiftPatternInit(segmentStrip1.RED(), segmentStrip1.BLUE(), segmentStrip1.getAllSegments(), segmentStrip1.getLastPixels(3), 3, -1, 360, 20);  // 360 / 20 = 18 steps
+segmentStrip2.shiftPatternInit(segmentStrip2.RED(), segmentStrip2.BLUE(), segmentStrip2.getAllSegments(), segmentStrip2.getLastPixels(3), 3, -1, 360, 20);
+
+// shift pattern in and out
+segmentStrip1.shiftPatternInit(segmentStrip1.RED(), segmentStrip1.getAllSegments(), segmentStrip1.getFirstPixels(3), -3, 1, 360, 20);  // 360 / 20 = 18 steps
+segmentStrip2.shiftPatternInit(segmentStrip2.RED(), segmentStrip2.getAllSegments(), segmentStrip2.getFirstPixels(3), -3, 1, 360, 20); 
+
+// shift pattern in and out (reversed)
+segmentStrip1.shiftPatternInit(segmentStrip1.RED(), segmentStrip1.getAllSegments(), segmentStrip1.getLastPixels(3), 3, -1, 360, 20);  // 360 / 20 = 18 steps
+segmentStrip2.shiftPatternInit(segmentStrip2.RED(), segmentStrip2.getAllSegments(), segmentStrip2.getLastPixels(3), 3, -1, 360, 20); 
+
+
+// 5. play with colors
+// shift only color degree per led
+segmentStrip1.setColorSteps(0, 24, segmentStrip1.getAllSegments());
+segmentStrip2.setColorSteps(360, -24, segmentStrip2.getAllSegments());
+
+// shift only saturation per led
+// segmentStrip1.setColorSteps(uint16_t color_degree_start, uint8_t saturation_start, uint8_t saturation_step, uint32_t active_segments);
+segmentStrip1.setColorSteps(0, 255, -5, segmentStrip1.getAllSegments());
+segmentStrip2.setColorSteps(0, 180, 5, segmentStrip1.getAllSegments());
+
+// shift color degree and saturation per led
+// segmentStrip1.setColorSteps(uint16_t color_degree_start, uint16_t color_degree_led_step, uint8_t saturation_start, uint8_t saturation_step, uint32_t active_segments);
+segmentStrip1.setColorSteps(0, 24, 255, -5, segmentStrip1.getAllSegments());
+segmentStrip2.setColorSteps(360, -24, 180, 5, segmentStrip2.getAllSegments());
+
+// shift only color degree per led and frame
+// void shiftColorSteps(uint16_t color_degree_start, uint16_t color_degree_step, uint32_t active_segments, uint16_t color_degree_frame_step, int16_t animation_frames);
+segmentStrip1.shiftColorSteps(0, 6, segmentStrip1.getAllSegments(), 1, 1);
+segmentStrip2.shiftColorSteps(360, -6, segmentStrip1.getAllSegments(), 1, 1);
+
+// shift only saturation per led and frame
+// void shiftColorSteps(uint16_t color_degree_start, uint8_t saturation_start, uint8_t saturation_step, uint32_t active_segments, uint8_t saturation_frame_step, int16_t animation_frames);
+segmentStrip1.shiftColorSteps(0, 255, -5, segmentStrip1.getAllSegments(), -1, 1);
+segmentStrip2.shiftColorSteps(0, 180, 5, segmentStrip1.getAllSegments(), 1, 1);
+
+// shift color degree and saturation per led and frame
+// void shiftColorSteps(uint16_t color_degree_start, uint16_t color_degree_step, uint8_t saturation_start, uint8_t saturation_step, uint32_t active_segments, uint16_t color_degree_frame_step, uint8_t saturation_frame_step, uint16_t animation_frames);
+segmentStrip1.shiftColorSteps(0, 24, 255, -1, segmentStrip1.getAllSegments(), 24, 0, 1);
+segmentStrip2.shiftColorSteps(360, -24, 180, 1, segmentStrip1.getAllSegments(), 24, 0, 1);
+
+// color segments (increasing) shift only color degree per led and frame
+segmentStrip1.shiftColorSteps(0, 3, segmentStrip1.getAllSegments(), 1, 4);
+segmentStrip2.shiftColorSteps(0, 3, segmentStrip1.getAllSegments(), 1, 4);
+
+// color segments (decreasing) shift only color degree per led and frame
+segmentStrip1.shiftColorSteps(0, 3, segmentStrip1.getAllSegments(), -1, 4);
+segmentStrip2.shiftColorSteps(0, 3, segmentStrip1.getAllSegments(), -1, 4);
+
+// 6. combined animations
+// animateRainbowStripe
+segmentStrip1.animateRainbowStripe(0, 1, 5);
+segmentStrip2.animateRainbowStripe(0, 1, 5);
+
+// animateRainbowLEDs
+segmentStrip1.animateRainbowLEDs(0, 2, 1, 5);
+segmentStrip2.animateRainbowLEDs(0, 2, 1, 5);
+
+// animateSegmentsRainbow
+segmentStrip1.animateSegmentsRainbow(0, 24, segmentStrip1.getAllSegments(), 24, 20);
+segmentStrip2.animateSegmentsRainbow(0, 24, segmentStrip2.getAllSegments(), 24, 20);
+
+// animateSegmentsRainbow
+segmentStrip1.animateSegmentsRainbow(0, -24, segmentStrip1.getAllSegments(), 24, 20);
+segmentStrip2.animateSegmentsRainbow(0, -24, segmentStrip2.getAllSegments(), 24, 20);
+
+// animateSegmentsRainbow
+segmentStrip1.animateSegmentsRainbow(0, 24, segmentStrip1.getAllSegments(), -24, 20);
+segmentStrip2.animateSegmentsRainbow(0, 24, segmentStrip2.getAllSegments(), -24, 20);
+
+
+```

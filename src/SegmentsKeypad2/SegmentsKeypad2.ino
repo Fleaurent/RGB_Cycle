@@ -38,7 +38,7 @@ byte colPins[COLS] = {8, 7, 6, 5};
 
 Keypad customKeypad = Keypad(makeKeymap(hexaKeys), rowPins, colPins, ROWS, COLS); 
 
-char animationMode = '1';
+char animationMode = '0';
 char animationSet  = 'A';
 //////////////////////////////
 
@@ -161,18 +161,27 @@ void updateKeypad(void) {
 void applyAsteriks(void) {
   switch(animationSet) {
     case 'A':
+      // A: decrease color background
+      segmentStrip1.decreaseColorDegreeBackground(20);
+      segmentStrip2.decreaseColorDegreeBackground(20);
+      break;
     case 'B':
-    case 'C':
-      // A/B/C: decrease brightness
+      // B: decrease brightness
       // segmentStrip1.decreaseBrightness(10);
       // segmentStrip2.decreaseBrightness(10);
       segmentStrip1.decreaseBrightnessStep();
       segmentStrip2.decreaseBrightnessStep();
       Serial.print(segmentStrip1.getBrightness());
       break;
+    case 'C':
+      // C: decrease color foreground
+      segmentStrip1.decreaseColorDegreeForeground(20);
+      segmentStrip2.decreaseColorDegreeForeground(20);
+      break;
     case 'D':
       // D: decrease delay
       segmentStrip1.decreaseDelay(1);
+      segmentStrip2.decreaseDelay(1);
       Serial.print(segmentStrip1.getDelay());
       break;
     default:
@@ -184,18 +193,27 @@ void applyAsteriks(void) {
 void applyHashkey(void) {
   switch(animationSet) {
     case 'A':
+      // A: increase color background
+      segmentStrip1.increaseColorDegreeBackground(20);
+      segmentStrip2.increaseColorDegreeBackground(20);
+      break;
     case 'B':
-    case 'C':
-      // A/B/C: increase brightness
+      // B: increase brightness
       // segmentStrip1.increaseBrightness(10);
       // segmentStrip2.increaseBrightness(10);
       segmentStrip1.increaseBrightnessStep();
       segmentStrip2.increaseBrightnessStep();
       Serial.print(segmentStrip1.getBrightness());
       break;
+    case 'C':
+      // C: increase color foreground
+      segmentStrip1.increaseColorDegreeForeground(20);
+      segmentStrip2.increaseColorDegreeForeground(20);
+      break;
     case 'D':
       // D: increase delay
       segmentStrip1.increaseDelay(1);
+      segmentStrip2.increaseDelay(1);
       Serial.print(segmentStrip1.getDelay());
       break;
     default:
@@ -235,241 +253,121 @@ void applyPattern(void) {
  - animate rolling on 1-4 segment
 */
 void applyPatternA(void) {
-  // 1. blink complete segments
-  /*
-    // blink all Segments (background)
-    segmentStrip1.blinkAllSegments(segmentStrip1.RED(), segmentStrip1.BLUE(), 200);
-    segmentStrip2.blinkAllSegments(segmentStrip2.RED(), segmentStrip2.BLUE(), 200);
-
-    // blink even Segments (background)
-    segmentStrip1.blinkEvenSegments(segmentStrip1.RED(), segmentStrip1.BLUE(), 200);
-    segmentStrip2.blinkEvenSegments(segmentStrip2.RED(), segmentStrip2.BLUE(), 200);
-
-    // blink odd Segments (background)
-    segmentStrip1.blinkOddSegments(segmentStrip1.BLUE(), segmentStrip1.RED(), 200);
-    segmentStrip2.blinkOddSegments(segmentStrip2.BLUE(), segmentStrip2.RED(), 200);
-
-    // blink first 3 Segments (background)
-    segmentStrip1.blinkFirstSegments(segmentStrip1.RED(), segmentStrip1.BLUE(), 3, 200);
-    segmentStrip2.blinkFirstSegments(segmentStrip2.RED(), segmentStrip2.BLUE(), 3, 200);
-
-    // blink last 3 Segments (background)
-    segmentStrip1.blinkLastSegments(segmentStrip1.RED(), segmentStrip1.BLUE(), 3, 200);
-    segmentStrip2.blinkLastSegments(segmentStrip2.RED(), segmentStrip2.BLUE(), 3, 200);
-
-    // animate Segments (background)
-    segmentStrip1.shiftSegments(segmentStrip1.RED(), segmentStrip1.BLUE(), segmentStrip1.getAllSegments(), 0x1, 1, 250, 50);
-    segmentStrip2.shiftSegments(segmentStrip2.RED(), segmentStrip2.BLUE(), segmentStrip2.getAllSegments(), 0x1, 1, 250, 50);
-
-    // animate Segments (background, reversed)
-    segmentStrip1.shiftSegments(segmentStrip1.RED(), segmentStrip1.BLUE(), segmentStrip1.getAllSegments(), segmentStrip1.getLastSegments(1), -1, 250, 50);
-    segmentStrip2.shiftSegments(segmentStrip2.RED(), segmentStrip2.BLUE(), segmentStrip2.getAllSegments(), segmentStrip2.getLastSegments(1), -1, 250, 50);
-  */
   switch(animationMode) {
     case '0':
       // reset all Segments
-      segmentStrip1.resetStripe();
-      segmentStrip2.resetStripe();
+      // segmentStrip1.resetStripe();
+      // segmentStrip2.resetStripe();
+      segmentStrip1.setStripeBackground();
+      segmentStrip2.setStripeBackground();
       break;
     case '1':
-      // blink all Segments
-      segmentStrip1.blinkSegments(segmentStrip1.RED(), segmentStrip1.getAllSegments(), 200);
-      segmentStrip2.blinkSegments(segmentStrip2.RED(), segmentStrip2.getAllSegments(), 200);
+      // shift pattern back and forth
+      shiftPatternForwardBackwards(720, 360);
       break;
     case '2':
-      // blink even Segments
-      segmentStrip1.blinkSegments(segmentStrip1.RED(), segmentStrip1.getEvenSegments(), 200);
-      segmentStrip2.blinkSegments(segmentStrip2.RED(), segmentStrip2.getEvenSegments(), 200);
+      // shift pattern back and forth (background)
+      shiftPatternForwardBackwardsBackground(720, 360);
       break;
     case '3':
-      // blink odd Segments
-      segmentStrip1.blinkSegments(segmentStrip1.RED(), segmentStrip1.getOddSegments(), 200);
-      segmentStrip2.blinkSegments(segmentStrip2.RED(), segmentStrip2.getOddSegments(), 200);
+      // shift color complete stripe (increasing)
+      colorComplete(1, 5);
       break;
     case '4':
-      // blink first 3 Segments
-      segmentStrip1.blinkSegments(segmentStrip1.RED(), segmentStrip1.getFirstSegments(3), 200);
-      segmentStrip2.blinkSegments(segmentStrip2.RED(), segmentStrip2.getFirstSegments(3), 200);
+      // shift color complete stripe (decreasing)
+      colorComplete(-1, 5);
       break;
     case '5':
-      // blink last 3 Segments
-      segmentStrip1.blinkSegments(segmentStrip1.RED(), segmentStrip1.getLastSegments(3), 200);
-      segmentStrip2.blinkSegments(segmentStrip2.RED(), segmentStrip2.getLastSegments(3), 200);
+      // color wheel (increasing)
+      colorWheel(1, 1);
+      // colorWheel(1, 2); // slower
       break;
     case '6':
-      // blink 25/75  duty cycle -> repeat after 200 ticks: 50 ticks color1, remaining 150 ticks color2
-      segmentStrip1.blinkSegments(segmentStrip1.RED(), segmentStrip1.BLUE(), segmentStrip1.getAllSegments(), 200, 50);
-      segmentStrip2.blinkSegments(segmentStrip2.RED(), segmentStrip2.BLUE(), segmentStrip2.getAllSegments(), 200, 50);
+      // color wheel (decreasing)
+      colorWheel(-1, 1);
+      // colorWheel(-2, 1); // faster
       break;
     case '7':
-      // blink alternating on each side
-      segmentStrip1.blinkAllSegments(segmentStrip1.RED(), segmentStrip1.BLUE(), 200);
-      segmentStrip2.blinkAllSegments(segmentStrip2.BLUE(), segmentStrip2.RED(), 200);
+      // animateEvenOdd();
+      animateEvenOdd(600, 300);
       break;
     case '8':
-      // animate segments without background
-      segmentStrip1.shiftSegments(segmentStrip1.RED(), segmentStrip1.getAllSegments(), 0x1, 1, 300, 60); 
-      segmentStrip2.shiftSegments(segmentStrip2.RED(), segmentStrip2.getAllSegments(), 0x1, 1, 300, 60);
+      // animateEvenOddInit();
+      animateEvenOddInit(720, 360);
       break;
     case '9':
-      // animate segments without background (reversed)
-      segmentStrip1.shiftSegments(segmentStrip1.RED(), segmentStrip1.getAllSegments(), segmentStrip1.getLastSegments(1), -1, 300, 60); 
-      segmentStrip2.shiftSegments(segmentStrip2.RED(), segmentStrip2.getAllSegments(), segmentStrip2.getLastSegments(1), -1, 300, 60);
+      // animateEvenOddRainbow();
+      animateEvenOddRainbow(600, 300);
       break;
-    default:  // do nothing
+    default:  
+      // do nothing
       break;  
   }
 }
 
 void applyPatternB(void) {
-  // 2. blink pixel of segments
-  /*
-    // all segments, all pixels
-    segmentStrip1.blinkPattern(segmentStrip1.RED(), segmentStrip1.BLUE(), segmentStrip1.getAllSegments(), segmentStrip1.getAllPixels(), 200);  
-    segmentStrip2.blinkPattern(segmentStrip2.RED(), segmentStrip2.BLUE(), segmentStrip2.getAllSegments(), segmentStrip2.getAllPixels(), 200);
-
-    // all segments, first pixel
-    segmentStrip1.blinkPattern(segmentStrip1.RED(), segmentStrip1.BLUE(), segmentStrip1.getAllSegments(), 1 << 0, 200);  
-    segmentStrip2.blinkPattern(segmentStrip2.RED(), segmentStrip2.BLUE(), segmentStrip2.getAllSegments(), 1 << 0, 200);  // all segments: 0x1 = first pixel
-
-    // all segments, last pixel 
-    segmentStrip1.blinkPattern(segmentStrip1.RED(), segmentStrip1.BLUE(), segmentStrip1.getAllSegments(), 1 << (segmentStrip1.getLongestSegment() - 1), 200);  
-    segmentStrip2.blinkPattern(segmentStrip2.RED(), segmentStrip2.BLUE(), segmentStrip2.getAllSegments(), 1 << (segmentStrip2.getLongestSegment() - 1), 200);
-
-    // blink 25/75  duty cycle -> repeat after 200 ticks: 50 ticks color1, remaining 150 ticks color2
-    segmentStrip1.blinkPattern(segmentStrip1.RED(), segmentStrip1.BLUE(), segmentStrip1.getAllSegments(), segmentStrip1.getAllPixels(), 200, 50);
-    segmentStrip2.blinkPattern(segmentStrip2.RED(), segmentStrip2.BLUE(), segmentStrip2.getAllSegments(), segmentStrip2.getAllPixels(), 200, 50);
-
-    // shift three pixels in and out (background)
-    segmentStrip1.shiftPatternInit(segmentStrip1.RED(), segmentStrip1.BLUE(), segmentStrip1.getAllSegments(), segmentStrip1.getFirstPixels(3), -3, 1, 360, 20);  // 360 / 20 = 18 steps
-    segmentStrip2.shiftPatternInit(segmentStrip2.RED(), segmentStrip2.BLUE(), segmentStrip2.getAllSegments(), segmentStrip2.getFirstPixels(3), -3, 1, 360, 20); 
-
-    // shift three pixels in and out (reversed, background) 
-    segmentStrip1.shiftPatternInit(segmentStrip1.RED(), segmentStrip1.BLUE(), segmentStrip1.getAllSegments(), segmentStrip1.getLastPixels(3), 3, -1, 360, 20);  // 360 / 20 = 18 steps
-    segmentStrip2.shiftPatternInit(segmentStrip2.RED(), segmentStrip2.BLUE(), segmentStrip2.getAllSegments(), segmentStrip2.getLastPixels(3), 3, -1, 360, 20); 
-  */
   switch(animationMode) {
     case '0':
-      segmentStrip1.resetStripe();
-      segmentStrip2.resetStripe();
+      // reset all Segments
+      // segmentStrip1.resetStripe();
+      // segmentStrip2.resetStripe();
+      segmentStrip1.setStripeForeground();
+      segmentStrip2.setStripeForeground();
+      break;
       break;
     case '1':
-      // blink all segments, even pixels
-      segmentStrip1.blinkPattern(segmentStrip1.RED(), segmentStrip1.BLUE(), segmentStrip1.getAllSegments(), segmentStrip1.getEvenPixels(), 200);
-      segmentStrip2.blinkPattern(segmentStrip2.RED(), segmentStrip2.BLUE(), segmentStrip2.getAllSegments(), segmentStrip2.getEvenPixels(), 200);
       break;
     case '2':
-      // blink all segments, odd pixels
-      segmentStrip1.blinkPattern(segmentStrip1.RED(), segmentStrip1.BLUE(), segmentStrip1.getAllSegments(), segmentStrip1.getOddPixels(), 200);
-      segmentStrip2.blinkPattern(segmentStrip2.RED(), segmentStrip2.BLUE(), segmentStrip2.getAllSegments(), segmentStrip2.getOddPixels(), 200);
       break;
     case '3':
-      // blink all segments, first 8 pixels
-      segmentStrip1.blinkPattern(segmentStrip1.RED(), segmentStrip1.BLUE(), segmentStrip1.getAllSegments(), segmentStrip1.getFirstPixels(8), 200);
-      segmentStrip2.blinkPattern(segmentStrip2.RED(), segmentStrip2.BLUE(), segmentStrip2.getAllSegments(), segmentStrip2.getFirstPixels(8), 200);
       break;
     case '4':
-      // blink all segments, last 8 pixels
-      segmentStrip1.blinkPattern(segmentStrip1.RED(), segmentStrip1.BLUE(), segmentStrip1.getAllSegments(), segmentStrip1.getLastPixels(8), 200);
-      segmentStrip2.blinkPattern(segmentStrip2.RED(), segmentStrip2.BLUE(), segmentStrip2.getAllSegments(), segmentStrip2.getLastPixels(8), 200);
       break;
     case '5':
-      // blink all segments, inner pixels
-      segmentStrip1.blinkPattern(segmentStrip1.RED(), segmentStrip1.BLUE(), segmentStrip1.getAllSegments(), 0x03E0, 200); 
-      segmentStrip2.blinkPattern(segmentStrip2.RED(), segmentStrip2.BLUE(), segmentStrip2.getAllSegments(), 0x03E0, 200); 
       break;
     case '6':
-      // shift pattern in and out
-      segmentStrip1.shiftPatternInit(segmentStrip1.RED(), segmentStrip1.getAllSegments(), segmentStrip1.getFirstPixels(3), -3, 1, 360, 20);  // 360 / 20 = 18 steps
-      segmentStrip2.shiftPatternInit(segmentStrip2.RED(), segmentStrip2.getAllSegments(), segmentStrip2.getFirstPixels(3), -3, 1, 360, 20); 
       break;
     case '7':
-      // shift pattern in and out (reversed)
-      segmentStrip1.shiftPatternInit(segmentStrip1.RED(), segmentStrip1.getAllSegments(), segmentStrip1.getLastPixels(3), 3, -1, 360, 20);  // 360 / 20 = 18 steps
-      segmentStrip2.shiftPatternInit(segmentStrip2.RED(), segmentStrip2.getAllSegments(), segmentStrip2.getLastPixels(3), 3, -1, 360, 20); 
       break;
     case '8':
-      // shift pattern back and forth
-      shiftPatternForwardBackwards(720, 360);
       break;
     case '9':
-      // shift pattern back and forth (background)
-      shiftPatternForwardBackwardsBackground(720, 360);
       break;
-    default:  // do nothing
+    default:  
+      // do nothing
       break;  
   }
 }
 
 void applyPatternC(void) {
-  // 3. play with colors: 
-  /*
-    // shift only color degree per led
-    segmentStrip1.setColorSteps(0, 24, segmentStrip1.getAllSegments());
-    segmentStrip2.setColorSteps(360, -24, segmentStrip2.getAllSegments());
-
-    // shift only saturation per led
-    // segmentStrip1.setColorSteps(uint16_t color_degree_start, uint8_t saturation_start, uint8_t saturation_step, uint32_t active_segments);
-    segmentStrip1.setColorSteps(0, 255, -5, segmentStrip1.getAllSegments());
-    segmentStrip2.setColorSteps(0, 180, 5, segmentStrip1.getAllSegments());
-
-    // shift color degree and saturation per led
-    // segmentStrip1.setColorSteps(uint16_t color_degree_start, uint16_t color_degree_led_step, uint8_t saturation_start, uint8_t saturation_step, uint32_t active_segments);
-    segmentStrip1.setColorSteps(0, 24, 255, -5, segmentStrip1.getAllSegments());
-    segmentStrip2.setColorSteps(360, -24, 180, 5, segmentStrip2.getAllSegments());
-  */
-  // ToDo: animate different color combinations
-  
   switch(animationMode) {
     case '0':
-      segmentStrip1.resetStripe();
-      segmentStrip2.resetStripe();
+      // reset all Segments
+      // segmentStrip1.resetStripe();
+      // segmentStrip2.resetStripe();
+      segmentStrip1.setStripeForeground();
+      segmentStrip2.setStripeForeground();
       break;
     case '1':
-      // shift only color degree per led and frame
-      // void shiftColorSteps(uint16_t color_degree_start, uint16_t color_degree_step, uint32_t active_segments, uint16_t color_degree_frame_step, int16_t animation_frames);
-      segmentStrip1.shiftColorSteps(0, 6, segmentStrip1.getAllSegments(), 1, 1);
-      segmentStrip2.shiftColorSteps(360, -6, segmentStrip1.getAllSegments(), 1, 1);
       break;
     case '2':
-      // shift only saturation per led and frame
-      // void shiftColorSteps(uint16_t color_degree_start, uint8_t saturation_start, uint8_t saturation_step, uint32_t active_segments, uint8_t saturation_frame_step, int16_t animation_frames);
-      segmentStrip1.shiftColorSteps(0, 255, -5, segmentStrip1.getAllSegments(), -1, 1);
-      segmentStrip2.shiftColorSteps(0, 180, 5, segmentStrip1.getAllSegments(), 1, 1);
       break;
     case '3':
-      // shift color degree and saturation per led and frame
-      // void shiftColorSteps(uint16_t color_degree_start, uint16_t color_degree_step, uint8_t saturation_start, uint8_t saturation_step, uint32_t active_segments, uint16_t color_degree_frame_step, uint8_t saturation_frame_step, uint16_t animation_frames);
-      segmentStrip1.shiftColorSteps(0, 24, 255, -1, segmentStrip1.getAllSegments(), 24, 0, 1);
-      segmentStrip2.shiftColorSteps(360, -24, 180, 1, segmentStrip1.getAllSegments(), 24, 0, 1);
       break;
     case '4':
-      // color segments (increasing) shift only color degree per led and frame
-      segmentStrip1.shiftColorSteps(0, 3, segmentStrip1.getAllSegments(), 1, 4);
-      segmentStrip2.shiftColorSteps(0, 3, segmentStrip1.getAllSegments(), 1, 4);
       break;
     case '5':
-      // color segments (decreasing) shift only color degree per led and frame
-      segmentStrip1.shiftColorSteps(0, 3, segmentStrip1.getAllSegments(), -1, 4);
-      segmentStrip2.shiftColorSteps(0, 3, segmentStrip1.getAllSegments(), -1, 4);
       break;
     case '6':
-      // color wheel (increasing)
-      colorWheel(1, 1);
-      // colorWheel(1, 2); // slower
       break;
     case '7':
-      // color wheel (decreasing)
-      colorWheel(-1, 1);
-      // colorWheel(-2, 1); // faster
       break;
     case '8':
-      colorComplete(1, 5);
       break;
     case '9':
-      colorComplete(-1, 5);
       break;
-    default:  // do nothing
+    default:  
+      // do nothing
       break;  
   }
 }
@@ -483,40 +381,25 @@ void applyPatternD(void) {
       segmentStrip2.resetStripe();
       break;
     case '1':
-      segmentStrip1.animateRainbowStripe(0, 1, 5);
-      segmentStrip2.animateRainbowStripe(0, 1, 5);
       break;
     case '2':
-      segmentStrip1.animateRainbowLEDs(0, 2, 1, 5);
-      segmentStrip2.animateRainbowLEDs(0, 2, 1, 5);
       break;
     case '3':
-      segmentStrip1.animateSegmentsRainbow(0, 24, segmentStrip1.getAllSegments(), 24, 20);
-      segmentStrip2.animateSegmentsRainbow(0, 24, segmentStrip2.getAllSegments(), 24, 20);
       break;
     case '4':
-      segmentStrip1.animateSegmentsRainbow(0, -24, segmentStrip1.getAllSegments(), 24, 20);
-      segmentStrip2.animateSegmentsRainbow(0, -24, segmentStrip2.getAllSegments(), 24, 20);
       break;
     case '5':
-      segmentStrip1.animateSegmentsRainbow(0, 24, segmentStrip1.getAllSegments(), -24, 20);
-      segmentStrip2.animateSegmentsRainbow(0, 24, segmentStrip2.getAllSegments(), -24, 20);
       break;
     case '6':
-      // animateEvenOdd();
-      animateEvenOdd(600, 300);
       break;
     case '7':
-      // animateEvenOddInit();
-      animateEvenOddInit(720, 360);
       break;
     case '8':
-      // animateEvenOddRainbow();
-      animateEvenOddRainbow(600, 300);
       break;
     case '9':
       break;
-    default:  // do nothing
+    default:  
+      // do nothing
       break;  
   }
 }

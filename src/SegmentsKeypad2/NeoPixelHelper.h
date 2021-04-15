@@ -26,10 +26,14 @@ class SegmentedStrip : public Adafruit_NeoPixel {
     // complete strip
     void update(void);
     void setStripe(uint32_t color);
+    void setStripeForeground(void);
+    void setStripeBackground(void);
     void resetStripe(void);
-    void shiftColorStripe(uint16_t color_degree_frame_step, int16_t animation_frames);
+    
+    void shiftColorStripe(uint16_t color_degree_frame_step, uint16_t animation_frames);
 
     // segments
+    void setSegments(uint32_t active_segments);
     void setSegments(uint32_t color, uint32_t active_segments);
     void resetSegments(uint32_t active_segments);
     void setAllSegments(uint32_t color);  
@@ -46,31 +50,31 @@ class SegmentedStrip : public Adafruit_NeoPixel {
     void blinkFirstSegments(uint32_t color1, uint32_t color2, uint8_t n, uint16_t frames, uint16_t frame_color_switch=0);
     void blinkLastSegments(uint32_t color1, uint32_t color2, uint8_t n, uint16_t frames, uint16_t frame_color_switch=0);
 
-    void shiftSegments(uint32_t color, uint32_t active_segments, uint32_t init_segments, int8_t shift_segments, uint16_t frames, int16_t animation_frames);
-    void shiftSegments(uint32_t color1, uint32_t color2, uint32_t active_segments, uint32_t init_segments, int8_t shift_segments, uint16_t frames, int16_t animation_frames);
+    void shiftSegments(uint32_t color, uint32_t active_segments, uint32_t init_segments, int8_t shift_segments, uint16_t frames, uint16_t animation_frames);
+    void shiftSegments(uint32_t color1, uint32_t color2, uint32_t active_segments, uint32_t init_segments, int8_t shift_segments, uint16_t frames, uint16_t animation_frames);
 
     // segments pixel pattern
     void setPattern(uint32_t color, uint32_t active_segments, uint32_t active_pixel);
   
     void blinkPattern(uint32_t color1, uint32_t color2, uint32_t active_segments, uint32_t active_pixel, uint16_t frames, uint16_t frame_color_switch=0);
 
-    void shiftPattern(uint32_t color, uint32_t active_segments, uint32_t init_pixel, int8_t shift_pixel, uint16_t frames, int16_t animation_frames);
-    void shiftPattern(uint32_t color1, uint32_t color2, uint32_t active_segments, uint32_t init_pixel, int8_t shift_pixel, uint16_t frames, int16_t animation_frames);
-    void shiftPatternInit(uint32_t color, uint32_t active_segments, uint32_t pixel_pattern, int8_t init_shift_pixel, int8_t shift_pixel, uint16_t frames, int16_t animation_frames);
-    void shiftPatternInit(uint32_t color1, uint32_t color2, uint32_t active_segments, uint32_t pixel_pattern, int8_t init_shift_pixel, int8_t shift_pixel, uint16_t frames, int16_t animation_frames);
+    void shiftPattern(uint32_t color, uint32_t active_segments, uint32_t init_pixel, int8_t shift_pixel, uint16_t frames, uint16_t animation_frames);
+    void shiftPattern(uint32_t color1, uint32_t color2, uint32_t active_segments, uint32_t init_pixel, int8_t shift_pixel, uint16_t frames, uint16_t animation_frames);
+    void shiftPatternInit(uint32_t color, uint32_t active_segments, uint32_t pixel_pattern, int8_t init_shift_pixel, int8_t shift_pixel, uint16_t frames, uint16_t animation_frames);
+    void shiftPatternInit(uint32_t color1, uint32_t color2, uint32_t active_segments, uint32_t pixel_pattern, int8_t init_shift_pixel, int8_t shift_pixel, uint16_t frames, uint16_t animation_frames);
 
     // play with colors
     void setColorSteps(uint16_t color_degree_start, uint16_t color_degree_step, uint32_t active_segments);
     void setColorSteps(uint16_t color_degree_start, uint8_t saturation_start, uint8_t saturation_step, uint32_t active_segments);
     void setColorSteps(uint16_t color_degree_start, uint16_t color_degree_step, uint8_t saturation_start, uint8_t saturation_step, uint32_t active_segments);
     
-    void shiftColorSteps(uint16_t color_degree_start, uint16_t color_degree_step, uint32_t active_segments, uint16_t color_degree_frame_step, int16_t animation_frames);
-    void shiftColorSteps(uint16_t color_degree_start, uint8_t saturation_start, uint8_t saturation_step, uint32_t active_segments, uint8_t saturation_frame_step, int16_t animation_frames);
-    void shiftColorSteps(uint16_t color_degree_start, uint16_t color_degree_step, uint8_t saturation_start, uint8_t saturation_step, uint32_t active_segments, uint16_t color_degree_frame_step, uint8_t saturation_frame_step, int16_t animation_frames);
+    void shiftColorSteps(uint16_t color_degree_start, uint16_t color_degree_step, uint32_t active_segments, uint16_t color_degree_frame_step, uint16_t animation_frames);
+    void shiftColorSteps(uint16_t color_degree_start, uint8_t saturation_start, uint8_t saturation_step, uint32_t active_segments, uint8_t saturation_frame_step, uint16_t animation_frames);
+    void shiftColorSteps(uint16_t color_degree_start, uint16_t color_degree_step, uint8_t saturation_start, uint8_t saturation_step, uint32_t active_segments, uint16_t color_degree_frame_step, uint8_t saturation_frame_step, uint16_t animation_frames);
     
-    void animateSegmentsRainbow(uint16_t color_degree_start, uint16_t color_degree_led_step, uint32_t active_segments, uint16_t color_degree_frame_step, int16_t animation_frames);
-    void animateRainbowStripe(uint16_t color_degree_start, uint16_t color_degree_frame_step, int16_t animation_frames);
-    void animateRainbowLEDs(uint16_t color_degree_start, uint16_t color_degree_led_step, uint16_t color_degree_frame_step, int16_t animation_frames);
+    void animateSegmentsRainbow(uint16_t color_degree_start, uint16_t color_degree_led_step, uint32_t active_segments, uint16_t color_degree_frame_step, uint16_t animation_frames);
+    void animateRainbowStripe(uint16_t color_degree_start, uint16_t color_degree_frame_step, uint16_t animation_frames);
+    void animateRainbowLEDs(uint16_t color_degree_start, uint16_t color_degree_led_step, uint16_t color_degree_frame_step, uint16_t animation_frames);
 
     // colors
     uint32_t color(uint16_t degree);
@@ -89,6 +93,8 @@ class SegmentedStrip : public Adafruit_NeoPixel {
     uint8_t getLongestSegment();
     uint32_t getFrameCounter();
     uint8_t getBrightness();
+    uint16_t getColorDegreeForeground();
+    uint16_t getColorDegreeBackground();
     uint8_t getSaturation();
     uint8_t getDelay();
 
@@ -106,13 +112,17 @@ class SegmentedStrip : public Adafruit_NeoPixel {
     // public setters
     void resetFrameCounter(void);
     void setBrightness(uint8_t);
-    void increaseBrightness(uint8_t);
-    void decreaseBrightness(uint8_t);
+    void increaseBrightness(uint8_t b);
+    void decreaseBrightness(uint8_t b);
     void increaseBrightnessStep(void);
     void decreaseBrightnessStep(void);
-    void setSaturation(uint8_t);
-    void increaseDelay(uint8_t);
-    void decreaseDelay(uint8_t);
+    void increaseColorDegreeForeground(uint16_t c);
+    void decreaseColorDegreeForeground(uint16_t c);
+    void increaseColorDegreeBackground(uint16_t c);
+    void decreaseColorDegreeBackground(uint16_t c);
+    void setSaturation(uint8_t s);
+    void increaseDelay(uint8_t d);
+    void decreaseDelay(uint8_t d);
 
 
   private:
@@ -125,6 +135,8 @@ class SegmentedStrip : public Adafruit_NeoPixel {
     uint8_t brightnessSteps[11] = {0, 5, 10, 20, 30, 50, 75, 100, 150, 200, 255};
     uint8_t nBrightnessSteps = 10;  // -1: do not count 0!
     uint8_t brightnessStep = 5;
+    uint16_t colorDegreeForeground = 0;
+    uint16_t colorDegreeBackground = 0;
     uint8_t saturation = 255;
     uint8_t delay = 0;
 
