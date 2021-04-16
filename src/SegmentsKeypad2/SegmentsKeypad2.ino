@@ -407,39 +407,39 @@ void applyPatternD(void) {
 void testPattern(void) {
   // 1. blink complete segments
   // a) blink 50/50 duty cycle
-  // segmentStrip1.blinkSegments(segmentStrip1.RED(), segmentStrip1.BLUE(), 0x3FF, 200);
-  // segmentStrip1.blinkSegments(segmentStrip1.RED(), segmentStrip1.BLUE(), segmentStrip1.getAllSegments(), 200);
-  // segmentStrip1.blinkAllSegments(segmentStrip1.RED(), segmentStrip1.BLUE(), 200);
-  // segmentStrip1.blinkEvenSegments(segmentStrip1.RED(), segmentStrip1.BLUE(), 200);
-  // segmentStrip1.blinkOddSegments(segmentStrip1.BLUE(), segmentStrip1.RED(), 200);
-  // segmentStrip1.blinkFirstSegments(segmentStrip1.RED(), segmentStrip1.BLUE(), 5, 200);
-  // segmentStrip1.blinkLastSegments(segmentStrip1.RED(), segmentStrip1.BLUE(), 5, 200);
+  // segmentStrip1.blinkSegments(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground(), 0x3FF, 200);
+  // segmentStrip1.blinkSegments(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground(), segmentStrip1.getAllSegments(), 200);
+  // segmentStrip1.blinkAllSegments(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground(), 200);
+  // segmentStrip1.blinkEvenSegments(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground(), 200);
+  // segmentStrip1.blinkOddSegments(segmentStrip1.getColorBackground(), segmentStrip1.getColorForeground(), 200);
+  // segmentStrip1.blinkFirstSegments(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground(), 5, 200);
+  // segmentStrip1.blinkLastSegments(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground(), 5, 200);
 
   // b) blink 25/75  duty cycle -> repeat after 200 ticks: 50 ticks color1, remaining 150 ticks color2
-  // segmentStrip1.blinkSegments(segmentStrip1.RED(), segmentStrip1.BLUE(), 0x3FF, 200, 50);
+  // segmentStrip1.blinkSegments(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground(), 0x3FF, 200, 50);
   
   // 2. blink pixel of segments
-  // segmentStrip1.blinkPattern(segmentStrip1.RED(), segmentStrip1.BLUE(), 0x3FF, 0x7FFF, 200);  // all segments: 0x7FFF = all pixels
-  // segmentStrip1.blinkPattern(segmentStrip1.RED(), segmentStrip1.BLUE(), 0x3FF, 1 << 0, 200);  // all segments: 0x1 = first pixel
-  // segmentStrip1.blinkPattern(segmentStrip1.RED(), segmentStrip1.BLUE(), 0x3FF, 1 << 14, 200);  // all segments: 0x4000 = last pixel 
-  // segmentStrip1.blinkPattern(segmentStrip1.RED(), segmentStrip1.BLUE(), 0x3FF, 1 << (segmentStrip1.getLongestSegment() - 1), 200);  // all segments: 0x4000 = last pixel 
-  // segmentStrip1.blinkPattern(segmentStrip1.RED(), segmentStrip1.BLUE(), 0x3FF, 0x03C0, 200);  // all segments: 0x03C0 = inner 4 pixels
-  // segmentStrip1.blinkPattern(segmentStrip1.RED(), segmentStrip1.BLUE(), segmentStrip1.getOddSegments(), segmentStrip1.getOddPixels(), 200);
-  // segmentStrip1.blinkPattern(segmentStrip1.RED(), segmentStrip1.BLUE(), segmentStrip1.getEvenSegments(), segmentStrip1.getEvenPixels(), 200);
-  // segmentStrip1.blinkPattern(segmentStrip1.RED(), segmentStrip1.BLUE(), segmentStrip1.getAllSegments(), segmentStrip1.getAllPixels(), 200);
+  // segmentStrip1.blinkPattern(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground(), 0x3FF, 0x7FFF, 200);  // all segments: 0x7FFF = all pixels
+  // segmentStrip1.blinkPattern(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground(), 0x3FF, 1 << 0, 200);  // all segments: 0x1 = first pixel
+  // segmentStrip1.blinkPattern(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground(), 0x3FF, 1 << 14, 200);  // all segments: 0x4000 = last pixel 
+  // segmentStrip1.blinkPattern(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground(), 0x3FF, 1 << (segmentStrip1.getLongestSegment() - 1), 200);  // all segments: 0x4000 = last pixel 
+  // segmentStrip1.blinkPattern(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground(), 0x3FF, 0x03C0, 200);  // all segments: 0x03C0 = inner 4 pixels
+  // segmentStrip1.blinkPattern(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground(), segmentStrip1.getOddSegments(), segmentStrip1.getOddPixels(), 200);
+  // segmentStrip1.blinkPattern(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground(), segmentStrip1.getEvenSegments(), segmentStrip1.getEvenPixels(), 200);
+  // segmentStrip1.blinkPattern(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground(), segmentStrip1.getAllSegments(), segmentStrip1.getAllPixels(), 200);
 
   // b) blink 25/75  duty cycle -> repeat after 200 ticks: 50 ticks color1, remaining 150 ticks color2
-  // segmentStrip1.blinkPattern(segmentStrip1.RED(), segmentStrip1.BLUE(), segmentStrip1.getAllSegments(), segmentStrip1.getAllPixels(), 200, 50);
+  // segmentStrip1.blinkPattern(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground(), segmentStrip1.getAllSegments(), segmentStrip1.getAllPixels(), 200, 50);
 
   // 3. animations
-  // segmentStrip1.shiftSegments(segmentStrip1.RED(), segmentStrip1.getAllSegments(), 0x1, 1, 500, 50);  // 10 stripes
-  // segmentStrip1.shiftSegments(segmentStrip1.RED(), segmentStrip1.BLUE(), segmentStrip1.getAllSegments(), 0x1, 1, 500, 50);
-  // segmentStrip1.shiftSegments(segmentStrip1.RED(), segmentStrip1.BLUE(), segmentStrip1.getAllSegments(), segmentStrip1.getLastSegments(1), -1, 500, 50);
-  // segmentStrip1.shiftPattern(segmentStrip1.RED(), segmentStrip1.getAllSegments(), 0x7, 1, 300, 20);  // 15 LEDs per Stripe
-  // segmentStrip1.shiftPattern(segmentStrip1.RED(), segmentStrip1.BLUE(), segmentStrip1.getAllSegments(), 0x7, 1, 300, 20); 
-  // segmentStrip1.shiftPattern(segmentStrip1.RED(), segmentStrip1.BLUE(), segmentStrip1.getAllSegments(), segmentStrip1.getLastPixels(3), -1, 300, 20); 
-  // segmentStrip1.shiftPatternInit(segmentStrip1.RED(), segmentStrip1.BLUE(), segmentStrip1.getAllSegments(), segmentStrip1.getFirstPixels(3), -3, 1, 360, 20); 
-  // segmentStrip1.shiftPatternInit(segmentStrip1.RED(), segmentStrip1.BLUE(), segmentStrip1.getAllSegments(), segmentStrip1.getLastPixels(3), 3, -1, 360, 20); 
+  // segmentStrip1.shiftSegments(segmentStrip1.getColorForeground(), segmentStrip1.getAllSegments(), 0x1, 1, 500, 50);  // 10 stripes
+  // segmentStrip1.shiftSegments(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground(), segmentStrip1.getAllSegments(), 0x1, 1, 500, 50);
+  // segmentStrip1.shiftSegments(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground(), segmentStrip1.getAllSegments(), segmentStrip1.getLastSegments(1), -1, 500, 50);
+  // segmentStrip1.shiftPattern(segmentStrip1.getColorForeground(), segmentStrip1.getAllSegments(), 0x7, 1, 300, 20);  // 15 LEDs per Stripe
+  // segmentStrip1.shiftPattern(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground(), segmentStrip1.getAllSegments(), 0x7, 1, 300, 20); 
+  // segmentStrip1.shiftPattern(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground(), segmentStrip1.getAllSegments(), segmentStrip1.getLastPixels(3), -1, 300, 20); 
+  // segmentStrip1.shiftPatternInit(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground(), segmentStrip1.getAllSegments(), segmentStrip1.getFirstPixels(3), -3, 1, 360, 20); 
+  // segmentStrip1.shiftPatternInit(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground(), segmentStrip1.getAllSegments(), segmentStrip1.getLastPixels(3), 3, -1, 360, 20); 
 
   // 4. play with colors
   // segmentStrip1.animateRainbowStripe(0, 1, 5);
