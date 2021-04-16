@@ -457,7 +457,7 @@ void updateKeypad(void) {
   // 2. only update settings if key pressed
   if (customKey) {
     // 2.1 print keypad debug output:
-    Serial.print(segmentStrip.getFrameCounter());
+    Serial.print(segmentStrip1.getFrameCounter());
     Serial.print(' ');
     Serial.print(customKey);
     Serial.print(' ');
@@ -497,6 +497,10 @@ void updateKeypad(void) {
         break;
     }
 
+    // reset current pixels
+    segmentStrip1.resetStripe();
+    segmentStrip2.resetStripe();
+
     Serial.println();  // keypad debug output: end line
   }
 }
@@ -504,17 +508,28 @@ void updateKeypad(void) {
 void applyAsteriks(void) {
   switch(animationSet) {
     case 'A':
+      // A: decrease color foreground
+      segmentStrip1.decreaseColorDegreeForeground(COLORDEGREECHANGE);
+      segmentStrip2.decreaseColorDegreeForeground(COLORDEGREECHANGE);
+      break;
     case 'B':
+      // B: decrease brightness
+      // segmentStrip1.decreaseBrightness(10);
+      // segmentStrip2.decreaseBrightness(10);
+      segmentStrip1.decreaseBrightnessStep();
+      segmentStrip2.decreaseBrightnessStep();
+      Serial.print(segmentStrip1.getBrightness());
+      break;
     case 'C':
-      // A/B/C: decrease brightness
-      // segmentStrip.decreaseBrightness(10);
-      segmentStrip.decreaseBrightnessStep();
-      Serial.print(segmentStrip.getBrightness());
+      // C: decrease color background
+      segmentStrip1.decreaseColorDegreeBackground(COLORDEGREECHANGE);
+      segmentStrip2.decreaseColorDegreeBackground(COLORDEGREECHANGE);
       break;
     case 'D':
       // D: decrease delay
-      segmentStrip.decreaseDelay(1);
-      Serial.print(segmentStrip.getDelay());
+      segmentStrip1.decreaseDelay(DELAYCHANGE);
+      segmentStrip2.decreaseDelay(DELAYCHANGE);
+      Serial.print(segmentStrip1.getDelay());
       break;
     default:
       // do nothing
@@ -525,17 +540,28 @@ void applyAsteriks(void) {
 void applyHashkey(void) {
   switch(animationSet) {
     case 'A':
+      // A: increase color foreground
+      segmentStrip1.increaseColorDegreeForeground(COLORDEGREECHANGE);
+      segmentStrip2.increaseColorDegreeForeground(COLORDEGREECHANGE);
+      break;
     case 'B':
+      // B: increase brightness
+      // segmentStrip1.increaseBrightness(10);
+      // segmentStrip2.increaseBrightness(10);
+      segmentStrip1.increaseBrightnessStep();
+      segmentStrip2.increaseBrightnessStep();
+      Serial.print(segmentStrip1.getBrightness());
+      break;
     case 'C':
-      // A/B/C: increase brightness
-      // segmentStrip.increaseBrightness(10);
-      segmentStrip.increaseBrightnessStep();
-      Serial.print(segmentStrip.getBrightness());
+      // C: increase color background
+      segmentStrip1.increaseColorDegreeBackground(COLORDEGREECHANGE);
+      segmentStrip2.increaseColorDegreeBackground(COLORDEGREECHANGE);
       break;
     case 'D':
       // D: increase delay
-      segmentStrip.increaseDelay(1);
-      Serial.print(segmentStrip.getDelay());
+      segmentStrip1.increaseDelay(DELAYCHANGE);
+      segmentStrip2.increaseDelay(DELAYCHANGE);
+      Serial.print(segmentStrip1.getDelay());
       break;
     default:
       // do nothing

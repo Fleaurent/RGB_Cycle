@@ -40,6 +40,9 @@ Keypad customKeypad = Keypad(makeKeymap(hexaKeys), rowPins, colPins, ROWS, COLS)
 
 char animationMode = '0';
 char animationSet  = 'A';
+
+#define COLORDEGREECHANGE 15
+#define DELAYCHANGE 1
 //////////////////////////////
 
 
@@ -162,8 +165,8 @@ void applyAsteriks(void) {
   switch(animationSet) {
     case 'A':
       // A: decrease color foreground
-      segmentStrip1.decreaseColorDegreeForeground(15);
-      segmentStrip2.decreaseColorDegreeForeground(15);
+      segmentStrip1.decreaseColorDegreeForeground(COLORDEGREECHANGE);
+      segmentStrip2.decreaseColorDegreeForeground(COLORDEGREECHANGE);
       break;
     case 'B':
       // B: decrease brightness
@@ -175,13 +178,13 @@ void applyAsteriks(void) {
       break;
     case 'C':
       // C: decrease color background
-      segmentStrip1.decreaseColorDegreeBackground(15);
-      segmentStrip2.decreaseColorDegreeBackground(15);
+      segmentStrip1.decreaseColorDegreeBackground(COLORDEGREECHANGE);
+      segmentStrip2.decreaseColorDegreeBackground(COLORDEGREECHANGE);
       break;
     case 'D':
       // D: decrease delay
-      segmentStrip1.decreaseDelay(1);
-      segmentStrip2.decreaseDelay(1);
+      segmentStrip1.decreaseDelay(DELAYCHANGE);
+      segmentStrip2.decreaseDelay(DELAYCHANGE);
       Serial.print(segmentStrip1.getDelay());
       break;
     default:
@@ -194,8 +197,8 @@ void applyHashkey(void) {
   switch(animationSet) {
     case 'A':
       // A: increase color foreground
-      segmentStrip1.increaseColorDegreeForeground(15);
-      segmentStrip2.increaseColorDegreeForeground(15);
+      segmentStrip1.increaseColorDegreeForeground(COLORDEGREECHANGE);
+      segmentStrip2.increaseColorDegreeForeground(COLORDEGREECHANGE);
       break;
     case 'B':
       // B: increase brightness
@@ -207,13 +210,13 @@ void applyHashkey(void) {
       break;
     case 'C':
       // C: increase color background
-      segmentStrip1.increaseColorDegreeBackground(15);
-      segmentStrip2.increaseColorDegreeBackground(15);
+      segmentStrip1.increaseColorDegreeBackground(COLORDEGREECHANGE);
+      segmentStrip2.increaseColorDegreeBackground(COLORDEGREECHANGE);
       break;
     case 'D':
       // D: increase delay
-      segmentStrip1.increaseDelay(1);
-      segmentStrip2.increaseDelay(1);
+      segmentStrip1.increaseDelay(DELAYCHANGE);
+      segmentStrip2.increaseDelay(DELAYCHANGE);
       Serial.print(segmentStrip1.getDelay());
       break;
     default:
