@@ -299,8 +299,8 @@ void applyPatternA(void) {
       animateEvenOddInit(720, 360);
       break;
     case '9':
-      // animateEvenOddRainbow();
-      animateEvenOddRainbow(600, 300);
+      // animateSegmentsRainbow();
+      animateSegmentsRainbow(600, 300);
       break;
     default:  
       // do nothing
@@ -456,8 +456,8 @@ void testPattern(void) {
   // animateEvenOdd(600, 300);
   // animateEvenOddInit();
   // animateEvenOddInit(720, 360);
-  // animateEvenOddRainbow();
-  animateEvenOddRainbow(600, 300);
+  // animateSegmentsRainbow();
+  animateSegmentsRainbow(600, 300);
 }
 
 
@@ -512,28 +512,28 @@ void animateEvenOddInit(uint32_t frames, uint32_t frameswitch) {
   }
 }
 
-void animateEvenOddRainbow(void) {
+void animateSegmentsRainbow(void) {
   // 1. shift pattern forward, jump back
-  segmentStrip1.animateSegmentsRainbow(0, 24, segmentStrip1.getEvenSegments(), 24, 20);
-  segmentStrip1.animateSegmentsRainbow(0, -24, segmentStrip1.getOddSegments(), 24, 20);
-  segmentStrip2.animateSegmentsRainbow(0, 24, segmentStrip2.getEvenSegments(), 24, 20);
-  segmentStrip2.animateSegmentsRainbow(0, -24, segmentStrip2.getOddSegments(), 24, 20);
+  // segmentStrip1.animateSegmentsRainbow(0, 24, segmentStrip1.getEvenSegments(), 24, 20);
+  // segmentStrip1.animateSegmentsRainbow(0, -24, segmentStrip1.getOddSegments(), 24, 20);
+  // segmentStrip2.animateSegmentsRainbow(0, 24, segmentStrip2.getEvenSegments(), 24, 20);
+  // segmentStrip2.animateSegmentsRainbow(0, -24, segmentStrip2.getOddSegments(), 24, 20);
+  segmentStrip1.animateSegmentsRainbow(0, 24, segmentStrip1.getAllSegments(), 24, 20);
+  segmentStrip2.animateSegmentsRainbow(0, 24, segmentStrip2.getAllSegments(), 24, 20);
 }
 
-void animateEvenOddRainbow(uint32_t frames, uint32_t frameswitch) {
+void animateSegmentsRainbow(uint32_t frames, uint32_t frameswitch) {
   // 1. shift pattern forward
   if(segmentStrip1.getFrameCounter() % frames < frameswitch) {
-    segmentStrip1.animateSegmentsRainbow(0, 24, segmentStrip1.getEvenSegments(), 6, 5);
-    segmentStrip1.animateSegmentsRainbow(0, 24, segmentStrip1.getOddSegments(), -6, 5);
-	  segmentStrip2.animateSegmentsRainbow(0, 24, segmentStrip2.getEvenSegments(), 6, 5);
-    segmentStrip2.animateSegmentsRainbow(0, 24, segmentStrip2.getOddSegments(), -6, 5);
+    segmentStrip1.animateSegmentsRainbow(0, 24, segmentStrip1.getAllSegments(), 6, 5);
+    segmentStrip2.animateSegmentsRainbow(0, 24, segmentStrip2.getAllSegments(), 6, 5);
+    // segmentStrip2.animateSegmentsRainbow(0, 24, segmentStrip2.getAllSegments(), -6, 5);
   }
   else {
     // 2. shift pattern backwards
-    segmentStrip1.animateSegmentsRainbow(0, 24, segmentStrip1.getEvenSegments(), -6, 5);
-    segmentStrip1.animateSegmentsRainbow(0, 24, segmentStrip1.getOddSegments(), 6, 5);
-	segmentStrip2.animateSegmentsRainbow(0, 24, segmentStrip2.getEvenSegments(), -6, 5);
-    segmentStrip2.animateSegmentsRainbow(0, 24, segmentStrip2.getOddSegments(), 6, 5);
+    segmentStrip1.animateSegmentsRainbow(0, 24, segmentStrip1.getAllSegments(), -6, 5);
+    segmentStrip2.animateSegmentsRainbow(0, 24, segmentStrip2.getAllSegments(), -6, 5);
+    // segmentStrip1.animateSegmentsRainbow(0, 24, segmentStrip1.getAllSegments(), 6, 5);
   }
 }
 
