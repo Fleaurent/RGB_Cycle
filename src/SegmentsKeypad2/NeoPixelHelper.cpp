@@ -44,13 +44,13 @@ void SegmentedStrip::setStripe(uint32_t color) {
 
 /** set all pixels of the strip to the foreground color */
 void SegmentedStrip::setStripeForeground() {
-  uint32_t temp_color = color(colorDegreeForeground);
+  uint32_t temp_color = getColorForeground();
   setStripe(temp_color);
 }
 
 /** set all pixels of the strip to the background color */
 void SegmentedStrip::setStripeBackground() {
-  uint32_t temp_color = color(colorDegreeBackground);
+  uint32_t temp_color = getColorBackground();
   setStripe(temp_color);
 }
 
@@ -77,7 +77,7 @@ void SegmentedStrip::shiftColorStripe(uint16_t color_degree_frame_step, uint16_t
 
 // segments specific methods
 void SegmentedStrip::setSegments(uint32_t active_segments) {
-  uint32_t temp_color = color(colorDegreeForeground);
+  uint32_t temp_color = getColorForeground();
   setSegments(temp_color, active_segments);
 }
 
@@ -578,6 +578,14 @@ uint16_t SegmentedStrip::getColorDegreeForeground() {
 
 uint16_t SegmentedStrip::getColorDegreeBackground() {
   return colorDegreeBackground;
+}
+
+uint32_t SegmentedStrip::getColorForeground() {
+  return color(colorDegreeForeground);
+}
+
+uint32_t SegmentedStrip::getColorBackground() {
+  return color(colorDegreeBackground);
 }
 
 uint8_t SegmentedStrip::getSaturation() {

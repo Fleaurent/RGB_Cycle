@@ -161,9 +161,9 @@ void updateKeypad(void) {
 void applyAsteriks(void) {
   switch(animationSet) {
     case 'A':
-      // A: decrease color background
-      segmentStrip1.decreaseColorDegreeBackground(20);
-      segmentStrip2.decreaseColorDegreeBackground(20);
+      // A: decrease color foreground
+      segmentStrip1.decreaseColorDegreeForeground(15);
+      segmentStrip2.decreaseColorDegreeForeground(15);
       break;
     case 'B':
       // B: decrease brightness
@@ -174,9 +174,9 @@ void applyAsteriks(void) {
       Serial.print(segmentStrip1.getBrightness());
       break;
     case 'C':
-      // C: decrease color foreground
-      segmentStrip1.decreaseColorDegreeForeground(20);
-      segmentStrip2.decreaseColorDegreeForeground(20);
+      // C: decrease color background
+      segmentStrip1.decreaseColorDegreeBackground(15);
+      segmentStrip2.decreaseColorDegreeBackground(15);
       break;
     case 'D':
       // D: decrease delay
@@ -193,9 +193,9 @@ void applyAsteriks(void) {
 void applyHashkey(void) {
   switch(animationSet) {
     case 'A':
-      // A: increase color background
-      segmentStrip1.increaseColorDegreeBackground(20);
-      segmentStrip2.increaseColorDegreeBackground(20);
+      // A: increase color foreground
+      segmentStrip1.increaseColorDegreeForeground(15);
+      segmentStrip2.increaseColorDegreeForeground(15);
       break;
     case 'B':
       // B: increase brightness
@@ -206,9 +206,9 @@ void applyHashkey(void) {
       Serial.print(segmentStrip1.getBrightness());
       break;
     case 'C':
-      // C: increase color foreground
-      segmentStrip1.increaseColorDegreeForeground(20);
-      segmentStrip2.increaseColorDegreeForeground(20);
+      // C: increase color background
+      segmentStrip1.increaseColorDegreeBackground(15);
+      segmentStrip2.increaseColorDegreeBackground(15);
       break;
     case 'D':
       // D: increase delay
@@ -258,8 +258,8 @@ void applyPatternA(void) {
       // reset all Segments
       // segmentStrip1.resetStripe();
       // segmentStrip2.resetStripe();
-      segmentStrip1.setStripeBackground();
-      segmentStrip2.setStripeBackground();
+      segmentStrip1.setStripeForeground();
+      segmentStrip2.setStripeForeground();
       break;
     case '1':
       // shift pattern back and forth
@@ -345,8 +345,8 @@ void applyPatternC(void) {
       // reset all Segments
       // segmentStrip1.resetStripe();
       // segmentStrip2.resetStripe();
-      segmentStrip1.setStripeForeground();
-      segmentStrip2.setStripeForeground();
+      segmentStrip1.setStripeBackground();
+      segmentStrip2.setStripeBackground();
       break;
     case '1':
       break;
@@ -461,51 +461,51 @@ void testPattern(void) {
 /* combined animations */
 void animateEvenOdd(void) {
   // 1. shift pattern forward, jump back
-  segmentStrip1.shiftPattern(segmentStrip1.RED(), segmentStrip1.BLUE(), segmentStrip1.getEvenSegments(), segmentStrip1.getLastPixels(3), -1, 300, 20); 
-  segmentStrip1.shiftPattern(segmentStrip1.RED(), segmentStrip1.BLUE(), segmentStrip1.getOddSegments(), segmentStrip1.getFirstPixels(3), 1, 300, 20); 
-  segmentStrip2.shiftPattern(segmentStrip2.RED(), segmentStrip2.BLUE(), segmentStrip2.getEvenSegments(), segmentStrip2.getLastPixels(3), -1, 300, 20); 
-  segmentStrip2.shiftPattern(segmentStrip2.RED(), segmentStrip2.BLUE(), segmentStrip2.getOddSegments(), segmentStrip2.getFirstPixels(3), 1, 300, 20); 
+  segmentStrip1.shiftPattern(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground(), segmentStrip1.getEvenSegments(), segmentStrip1.getLastPixels(3), -1, 300, 20); 
+  segmentStrip1.shiftPattern(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground(), segmentStrip1.getOddSegments(), segmentStrip1.getFirstPixels(3), 1, 300, 20); 
+  segmentStrip2.shiftPattern(segmentStrip2.getColorForeground(), segmentStrip2.getColorBackground(), segmentStrip2.getEvenSegments(), segmentStrip2.getLastPixels(3), -1, 300, 20); 
+  segmentStrip2.shiftPattern(segmentStrip2.getColorForeground(), segmentStrip2.getColorBackground(), segmentStrip2.getOddSegments(), segmentStrip2.getFirstPixels(3), 1, 300, 20); 
 }
 
 void animateEvenOdd(uint32_t frames, uint32_t frameswitch) {
   // 1. shift pattern forward
   if(segmentStrip1.getFrameCounter() % frames < frameswitch) {
-    segmentStrip1.shiftPattern(segmentStrip1.RED(), segmentStrip1.BLUE(), segmentStrip1.getEvenSegments(), segmentStrip1.getLastPixels(3), -1, 300, 20); 
-    segmentStrip1.shiftPattern(segmentStrip1.RED(), segmentStrip1.BLUE(), segmentStrip1.getOddSegments(), segmentStrip1.getFirstPixels(3), 1, 300, 20); 
-	  segmentStrip2.shiftPattern(segmentStrip2.RED(), segmentStrip2.BLUE(), segmentStrip2.getEvenSegments(), segmentStrip2.getLastPixels(3), -1, 300, 20); 
-    segmentStrip2.shiftPattern(segmentStrip2.RED(), segmentStrip2.BLUE(), segmentStrip2.getOddSegments(), segmentStrip2.getFirstPixels(3), 1, 300, 20); 
+    segmentStrip1.shiftPattern(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground(), segmentStrip1.getEvenSegments(), segmentStrip1.getLastPixels(3), -1, 300, 20); 
+    segmentStrip1.shiftPattern(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground(), segmentStrip1.getOddSegments(), segmentStrip1.getFirstPixels(3), 1, 300, 20); 
+	  segmentStrip2.shiftPattern(segmentStrip2.getColorForeground(), segmentStrip2.getColorBackground(), segmentStrip2.getEvenSegments(), segmentStrip2.getLastPixels(3), -1, 300, 20); 
+    segmentStrip2.shiftPattern(segmentStrip2.getColorForeground(), segmentStrip2.getColorBackground(), segmentStrip2.getOddSegments(), segmentStrip2.getFirstPixels(3), 1, 300, 20); 
   }
   else {
     // 2. shift pattern backwards
-    segmentStrip1.shiftPattern(segmentStrip1.RED(), segmentStrip1.BLUE(), segmentStrip1.getEvenSegments(), segmentStrip1.getFirstPixels(3), 1, 300, 20); 
-    segmentStrip1.shiftPattern(segmentStrip1.RED(), segmentStrip1.BLUE(), segmentStrip1.getOddSegments(), segmentStrip1.getLastPixels(3), -1, 300, 20); 
-	  segmentStrip2.shiftPattern(segmentStrip2.RED(), segmentStrip2.BLUE(), segmentStrip2.getEvenSegments(), segmentStrip2.getFirstPixels(3), 1, 300, 20); 
-    segmentStrip2.shiftPattern(segmentStrip2.RED(), segmentStrip2.BLUE(), segmentStrip2.getOddSegments(), segmentStrip2.getLastPixels(3), -1, 300, 20); 
+    segmentStrip1.shiftPattern(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground(), segmentStrip1.getEvenSegments(), segmentStrip1.getFirstPixels(3), 1, 300, 20); 
+    segmentStrip1.shiftPattern(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground(), segmentStrip1.getOddSegments(), segmentStrip1.getLastPixels(3), -1, 300, 20); 
+	  segmentStrip2.shiftPattern(segmentStrip2.getColorForeground(), segmentStrip2.getColorBackground(), segmentStrip2.getEvenSegments(), segmentStrip2.getFirstPixels(3), 1, 300, 20); 
+    segmentStrip2.shiftPattern(segmentStrip2.getColorForeground(), segmentStrip2.getColorBackground(), segmentStrip2.getOddSegments(), segmentStrip2.getLastPixels(3), -1, 300, 20); 
   }
 }
 
 void animateEvenOddInit(void) {
   // 1. shift pattern forward, jump back
-  segmentStrip1.shiftPatternInit(segmentStrip1.RED(), segmentStrip1.BLUE(), segmentStrip1.getEvenSegments(), segmentStrip1.getFirstPixels(3), -3, 1, 360, 20); 
-  segmentStrip1.shiftPatternInit(segmentStrip1.RED(), segmentStrip1.BLUE(), segmentStrip1.getOddSegments(), segmentStrip1.getLastPixels(3), 3, -1, 360, 20);
-  segmentStrip2.shiftPatternInit(segmentStrip2.RED(), segmentStrip2.BLUE(), segmentStrip2.getEvenSegments(), segmentStrip2.getFirstPixels(3), -3, 1, 360, 20); 
-  segmentStrip2.shiftPatternInit(segmentStrip2.RED(), segmentStrip2.BLUE(), segmentStrip2.getOddSegments(), segmentStrip2.getLastPixels(3), 3, -1, 360, 20);
+  segmentStrip1.shiftPatternInit(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground(), segmentStrip1.getEvenSegments(), segmentStrip1.getFirstPixels(3), -3, 1, 360, 20); 
+  segmentStrip1.shiftPatternInit(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground(), segmentStrip1.getOddSegments(), segmentStrip1.getLastPixels(3), 3, -1, 360, 20);
+  segmentStrip2.shiftPatternInit(segmentStrip2.getColorForeground(), segmentStrip2.getColorBackground(), segmentStrip2.getEvenSegments(), segmentStrip2.getFirstPixels(3), -3, 1, 360, 20); 
+  segmentStrip2.shiftPatternInit(segmentStrip2.getColorForeground(), segmentStrip2.getColorBackground(), segmentStrip2.getOddSegments(), segmentStrip2.getLastPixels(3), 3, -1, 360, 20);
 }
 
 void animateEvenOddInit(uint32_t frames, uint32_t frameswitch) {
   // 1. shift pattern forward
   if(segmentStrip1.getFrameCounter() % frames < frameswitch) {
-    segmentStrip1.shiftPatternInit(segmentStrip1.RED(), segmentStrip1.BLUE(), segmentStrip1.getEvenSegments(), segmentStrip1.getFirstPixels(3), -3, 1, 360, 20); 
-    segmentStrip1.shiftPatternInit(segmentStrip1.RED(), segmentStrip1.BLUE(), segmentStrip1.getOddSegments(), segmentStrip1.getLastPixels(3), 3, -1, 360, 20); 
-	  segmentStrip2.shiftPatternInit(segmentStrip2.RED(), segmentStrip2.BLUE(), segmentStrip2.getEvenSegments(), segmentStrip2.getFirstPixels(3), -3, 1, 360, 20); 
-    segmentStrip2.shiftPatternInit(segmentStrip2.RED(), segmentStrip2.BLUE(), segmentStrip2.getOddSegments(), segmentStrip2.getLastPixels(3), 3, -1, 360, 20); 
+    segmentStrip1.shiftPatternInit(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground(), segmentStrip1.getEvenSegments(), segmentStrip1.getFirstPixels(3), -3, 1, 360, 20); 
+    segmentStrip1.shiftPatternInit(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground(), segmentStrip1.getOddSegments(), segmentStrip1.getLastPixels(3), 3, -1, 360, 20); 
+	  segmentStrip2.shiftPatternInit(segmentStrip2.getColorForeground(), segmentStrip2.getColorBackground(), segmentStrip2.getEvenSegments(), segmentStrip2.getFirstPixels(3), -3, 1, 360, 20); 
+    segmentStrip2.shiftPatternInit(segmentStrip2.getColorForeground(), segmentStrip2.getColorBackground(), segmentStrip2.getOddSegments(), segmentStrip2.getLastPixels(3), 3, -1, 360, 20); 
   }
   else {
     // 2. shift pattern backwards
-    segmentStrip1.shiftPatternInit(segmentStrip1.RED(), segmentStrip1.BLUE(), segmentStrip1.getEvenSegments(), segmentStrip1.getLastPixels(3), 3, -1, 360, 20);
-    segmentStrip1.shiftPatternInit(segmentStrip1.RED(), segmentStrip1.BLUE(), segmentStrip1.getOddSegments(), segmentStrip1.getFirstPixels(3), -3, 1, 360, 20); 
-	  segmentStrip2.shiftPatternInit(segmentStrip2.RED(), segmentStrip2.BLUE(), segmentStrip2.getEvenSegments(), segmentStrip2.getLastPixels(3), 3, -1, 360, 20);
-    segmentStrip2.shiftPatternInit(segmentStrip2.RED(), segmentStrip2.BLUE(), segmentStrip2.getOddSegments(), segmentStrip2.getFirstPixels(3), -3, 1, 360, 20);
+    segmentStrip1.shiftPatternInit(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground(), segmentStrip1.getEvenSegments(), segmentStrip1.getLastPixels(3), 3, -1, 360, 20);
+    segmentStrip1.shiftPatternInit(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground(), segmentStrip1.getOddSegments(), segmentStrip1.getFirstPixels(3), -3, 1, 360, 20); 
+	  segmentStrip2.shiftPatternInit(segmentStrip2.getColorForeground(), segmentStrip2.getColorBackground(), segmentStrip2.getEvenSegments(), segmentStrip2.getLastPixels(3), 3, -1, 360, 20);
+    segmentStrip2.shiftPatternInit(segmentStrip2.getColorForeground(), segmentStrip2.getColorBackground(), segmentStrip2.getOddSegments(), segmentStrip2.getFirstPixels(3), -3, 1, 360, 20);
   }
 }
 
@@ -537,26 +537,26 @@ void animateEvenOddRainbow(uint32_t frames, uint32_t frameswitch) {
 void shiftPatternForwardBackwards(uint32_t frames, uint32_t frameswitch) {
   if(segmentStrip1.getFrameCounter() % frames < frameswitch) {
     // 1. shift pattern forward
-    segmentStrip1.shiftPatternInit(segmentStrip1.RED(), segmentStrip1.getAllSegments(), segmentStrip1.getFirstPixels(3), -3, 1, 360, 20);  // 360 / 20 = 18 steps
-    segmentStrip2.shiftPatternInit(segmentStrip2.RED(), segmentStrip2.getAllSegments(), segmentStrip2.getFirstPixels(3), -3, 1, 360, 20); 
+    segmentStrip1.shiftPatternInit(segmentStrip1.getColorForeground(), segmentStrip1.getAllSegments(), segmentStrip1.getFirstPixels(3), -3, 1, 360, 20);  // 360 / 20 = 18 steps
+    segmentStrip2.shiftPatternInit(segmentStrip2.getColorForeground(), segmentStrip2.getAllSegments(), segmentStrip2.getFirstPixels(3), -3, 1, 360, 20); 
   }
   else {
     // 2. shift pattern backwards
-    segmentStrip1.shiftPatternInit(segmentStrip1.RED(), segmentStrip1.getAllSegments(), segmentStrip1.getLastPixels(3), 3, -1, 360, 20);  // 360 / 20 = 18 steps
-    segmentStrip2.shiftPatternInit(segmentStrip2.RED(), segmentStrip2.getAllSegments(), segmentStrip2.getLastPixels(3), 3, -1, 360, 20); 
+    segmentStrip1.shiftPatternInit(segmentStrip1.getColorForeground(), segmentStrip1.getAllSegments(), segmentStrip1.getLastPixels(3), 3, -1, 360, 20);  // 360 / 20 = 18 steps
+    segmentStrip2.shiftPatternInit(segmentStrip2.getColorForeground(), segmentStrip2.getAllSegments(), segmentStrip2.getLastPixels(3), 3, -1, 360, 20); 
   }
 }
 
 void shiftPatternForwardBackwardsBackground(uint32_t frames, uint32_t frameswitch) {
   if(segmentStrip1.getFrameCounter() % frames < frameswitch) {
     // 1. shift pattern forward
-    segmentStrip1.shiftPatternInit(segmentStrip1.RED(), segmentStrip1.BLUE(), segmentStrip1.getAllSegments(), segmentStrip1.getFirstPixels(3), -3, 1, 360, 20);  // 360 / 20 = 18 steps
-    segmentStrip2.shiftPatternInit(segmentStrip2.RED(), segmentStrip2.BLUE(), segmentStrip2.getAllSegments(), segmentStrip2.getFirstPixels(3), -3, 1, 360, 20); 
+    segmentStrip1.shiftPatternInit(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground(), segmentStrip1.getAllSegments(), segmentStrip1.getFirstPixels(3), -3, 1, 360, 20);  // 360 / 20 = 18 steps
+    segmentStrip2.shiftPatternInit(segmentStrip2.getColorForeground(), segmentStrip2.getColorBackground(), segmentStrip2.getAllSegments(), segmentStrip2.getFirstPixels(3), -3, 1, 360, 20); 
   }
   else {
     // 2. shift pattern backwards
-    segmentStrip1.shiftPatternInit(segmentStrip1.RED(), segmentStrip1.BLUE(), segmentStrip1.getAllSegments(), segmentStrip1.getLastPixels(3), 3, -1, 360, 20);  // 360 / 20 = 18 steps
-    segmentStrip2.shiftPatternInit(segmentStrip2.RED(), segmentStrip2.BLUE(), segmentStrip2.getAllSegments(), segmentStrip2.getLastPixels(3), 3, -1, 360, 20); 
+    segmentStrip1.shiftPatternInit(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground(), segmentStrip1.getAllSegments(), segmentStrip1.getLastPixels(3), 3, -1, 360, 20);  // 360 / 20 = 18 steps
+    segmentStrip2.shiftPatternInit(segmentStrip2.getColorForeground(), segmentStrip2.getColorBackground(), segmentStrip2.getAllSegments(), segmentStrip2.getLastPixels(3), 3, -1, 360, 20); 
   }
 }
 

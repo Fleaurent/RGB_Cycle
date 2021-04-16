@@ -95,6 +95,8 @@ class SegmentedStrip : public Adafruit_NeoPixel {
     uint8_t getBrightness();
     uint16_t getColorDegreeForeground();
     uint16_t getColorDegreeBackground();
+    uint32_t getColorForeground();
+    uint32_t getColorBackground();
     uint8_t getSaturation();
     uint8_t getDelay();
 
