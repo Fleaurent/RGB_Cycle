@@ -33,8 +33,8 @@ char hexaKeys[ROWS][COLS] = {
   {'*', '0', '#', 'D'}
 };
 
-byte rowPins[ROWS] = {5, 6, 7, 8};  // {12, 11, 10, 9}; 
-byte colPins[COLS] = {9, 10, 11, 12};  // {8, 7, 6, 5};
+byte rowPins[ROWS] = {12, 11, 10, 9};  // {5, 6, 7, 8};
+byte colPins[COLS] = {8, 7, 6, 5};  // {9, 10, 11, 12};
 
 Keypad customKeypad = Keypad(makeKeymap(hexaKeys), rowPins, colPins, ROWS, COLS); 
 
@@ -274,32 +274,32 @@ void applyPatternA(void) {
       break;
     case '3':
       // shift color complete stripe (increasing)
-      colorComplete(1, 5);
+      colorComplete(1, 5, 360);
       break;
     case '4':
       // shift color complete stripe (decreasing)
-      colorComplete(-1, 5);
+      colorComplete(-1, 5, 360);
       break;
     case '5':
       // color wheel (increasing)
-      colorWheel(1, 1);
-      // colorWheel(1, 2); // slower
+      colorWheel(1, 1, 360);
+      // colorWheel(1, 2, 360); // slower
       break;
     case '6':
       // color wheel (decreasing)
-      colorWheel(-1, 1);
-      // colorWheel(-2, 1); // faster
+      colorWheel(-1, 1, 360);
+      // colorWheel(-2, 1, 360); // faster
       break;
     case '7':
       // animateEvenOdd();
-      animateEvenOdd(600, 300);
-      break;
-    case '8':
+      // animateEvenOdd(600, 300);
       // animateEvenOddInit();
       animateEvenOddInit(720, 360);
       break;
+    case '8':
+      animateSegmentsRainbow();
+      break;
     case '9':
-      // animateSegmentsRainbow();
       animateSegmentsRainbow(600, 300);
       break;
     default:  
@@ -445,11 +445,11 @@ void testPattern(void) {
   // segmentStrip1.shiftPatternInit(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground(), segmentStrip1.getAllSegments(), segmentStrip1.getLastPixels(3), 3, -1, 360, 20); 
 
   // 4. play with colors
-  // segmentStrip1.animateRainbowStripe(0, 1, 5);
-  // segmentStrip1.animateRainbowLEDs(0, 2, 1, 5);
-  // segmentStrip1.animateSegmentsRainbow(0, 24, segmentStrip1.getAllSegments(), 24, 20);
-  // segmentStrip1.animateSegmentsRainbow(0, -24, segmentStrip1.getAllSegments(), 24, 20);
-  // segmentStrip1.animateSegmentsRainbow(0, 24, segmentStrip1.getAllSegments(), -24, 20);
+  // segmentStrip1.animateRainbowStripe(0, 1, 5, 15);
+  // segmentStrip1.animateRainbowLEDs(0, 2, 1, 5, 15);
+  // segmentStrip1.animateSegmentsRainbow(0, 24, segmentStrip1.getAllSegments(), 24, 20, 15);
+  // segmentStrip1.animateSegmentsRainbow(0, -24, segmentStrip1.getAllSegments(), 24, 20, 15);
+  // segmentStrip1.animateSegmentsRainbow(0, 24, segmentStrip1.getAllSegments(), -24, 20, 15);
 
   // 5. combined animations
   // animateEvenOdd();
@@ -514,26 +514,26 @@ void animateEvenOddInit(uint32_t frames, uint32_t frameswitch) {
 
 void animateSegmentsRainbow(void) {
   // 1. shift pattern forward, jump back
-  // segmentStrip1.animateSegmentsRainbow(0, 24, segmentStrip1.getEvenSegments(), 24, 20);
-  // segmentStrip1.animateSegmentsRainbow(0, -24, segmentStrip1.getOddSegments(), 24, 20);
-  // segmentStrip2.animateSegmentsRainbow(0, 24, segmentStrip2.getEvenSegments(), 24, 20);
-  // segmentStrip2.animateSegmentsRainbow(0, -24, segmentStrip2.getOddSegments(), 24, 20);
-  segmentStrip1.animateSegmentsRainbow(0, 24, segmentStrip1.getAllSegments(), 24, 20);
-  segmentStrip2.animateSegmentsRainbow(0, 24, segmentStrip2.getAllSegments(), 24, 20);
+  // segmentStrip1.animateSegmentsRainbow(0, 24, segmentStrip1.getEvenSegments(), 6, 5, 60);
+  // segmentStrip1.animateSegmentsRainbow(0, -24, segmentStrip1.getOddSegments(), 6, 5, 60);
+  // segmentStrip2.animateSegmentsRainbow(0, 24, segmentStrip2.getEvenSegments(), 6, 5, 60);
+  // segmentStrip2.animateSegmentsRainbow(0, -24, segmentStrip2.getOddSegments(), 6, 5, 60);
+  segmentStrip1.animateSegmentsRainbow(0, 24, segmentStrip1.getAllSegments(), 6, 5, 60);
+  segmentStrip2.animateSegmentsRainbow(0, 24, segmentStrip2.getAllSegments(), 6, 5, 60);
 }
 
 void animateSegmentsRainbow(uint32_t frames, uint32_t frameswitch) {
   // 1. shift pattern forward
   if(segmentStrip1.getFrameCounter() % frames < frameswitch) {
-    segmentStrip1.animateSegmentsRainbow(0, 24, segmentStrip1.getAllSegments(), 6, 5);
-    segmentStrip2.animateSegmentsRainbow(0, 24, segmentStrip2.getAllSegments(), 6, 5);
-    // segmentStrip2.animateSegmentsRainbow(0, 24, segmentStrip2.getAllSegments(), -6, 5);
+    segmentStrip1.animateSegmentsRainbow(0, 24, segmentStrip1.getAllSegments(), 6, 5, 60);
+    segmentStrip2.animateSegmentsRainbow(0, 24, segmentStrip2.getAllSegments(), 6, 5, 60);
+    // segmentStrip2.animateSegmentsRainbow(0, 24, segmentStrip2.getAllSegments(), -6, 5, 60);
   }
   else {
     // 2. shift pattern backwards
-    segmentStrip1.animateSegmentsRainbow(0, 24, segmentStrip1.getAllSegments(), -6, 5);
-    segmentStrip2.animateSegmentsRainbow(0, 24, segmentStrip2.getAllSegments(), -6, 5);
-    // segmentStrip1.animateSegmentsRainbow(0, 24, segmentStrip1.getAllSegments(), 6, 5);
+    segmentStrip1.animateSegmentsRainbow(0, 24, segmentStrip1.getAllSegments(), -6, 5, 60);
+    segmentStrip2.animateSegmentsRainbow(0, 24, segmentStrip2.getAllSegments(), -6, 5, 60);
+    // segmentStrip1.animateSegmentsRainbow(0, 24, segmentStrip1.getAllSegments(), 6, 5, 60);
   }
 }
 
@@ -568,15 +568,15 @@ void shiftPatternForwardBackwardsBackground(uint32_t frames, uint32_t frameswitc
  * @param   color_degree_frame_step color_degree added to all leds every frame_step 
  * @param   animation_frames number of frames the led colors are held constant
  */
-void colorWheel(uint16_t color_degree_frame_step, int16_t animation_frames) {
-  segmentStrip1.shiftColorSteps(0, 6, 0b00001, color_degree_frame_step, animation_frames);
-  segmentStrip1.shiftColorSteps(90, 6, 0b00010, color_degree_frame_step, animation_frames);
-  segmentStrip1.shiftColorSteps(180, 6, 0b00100, color_degree_frame_step, animation_frames);
-  segmentStrip1.shiftColorSteps(270, 6, 0b01000, color_degree_frame_step, animation_frames);
-  segmentStrip2.shiftColorSteps(0, 6, 0b00001, color_degree_frame_step, animation_frames);
-  segmentStrip2.shiftColorSteps(90, 6, 0b00010, color_degree_frame_step, animation_frames);
-  segmentStrip2.shiftColorSteps(180, 6, 0b00100, color_degree_frame_step, animation_frames);
-  segmentStrip2.shiftColorSteps(270, 6, 0b01000, color_degree_frame_step, animation_frames);
+void colorWheel(uint16_t color_degree_frame_step, uint16_t color_const_frames, int16_t animation_frames) {
+  segmentStrip1.shiftColorSteps(0, 6, 0b00001, color_degree_frame_step, color_const_frames, animation_frames);
+  segmentStrip1.shiftColorSteps(90, 6, 0b00010, color_degree_frame_step, color_const_frames, animation_frames);
+  segmentStrip1.shiftColorSteps(180, 6, 0b00100, color_degree_frame_step, color_const_frames, animation_frames);
+  segmentStrip1.shiftColorSteps(270, 6, 0b01000, color_degree_frame_step, color_const_frames, animation_frames);
+  segmentStrip2.shiftColorSteps(0, 6, 0b00001, color_degree_frame_step, color_const_frames, animation_frames);
+  segmentStrip2.shiftColorSteps(90, 6, 0b00010, color_degree_frame_step, color_const_frames, animation_frames);
+  segmentStrip2.shiftColorSteps(180, 6, 0b00100, color_degree_frame_step, color_const_frames, animation_frames);
+  segmentStrip2.shiftColorSteps(270, 6, 0b01000, color_degree_frame_step, color_const_frames, animation_frames);
 }
 
 /**
@@ -584,7 +584,7 @@ void colorWheel(uint16_t color_degree_frame_step, int16_t animation_frames) {
  * @param   color_degree_frame_step color_degree added to all leds every frame_step 
  * @param   animation_frames number of frames the led colors are held constant
  */
-void colorComplete(uint16_t color_degree_frame_step, int16_t animation_frames) {
-  segmentStrip1.shiftColorStripe(color_degree_frame_step, animation_frames);
-  segmentStrip2.shiftColorStripe(color_degree_frame_step, animation_frames);
+void colorComplete(uint16_t color_degree_frame_step, uint16_t color_const_frames, int16_t animation_frames) {
+  segmentStrip1.shiftColorStripe(color_degree_frame_step, color_const_frames, animation_frames);
+  segmentStrip2.shiftColorStripe(color_degree_frame_step, color_const_frames, animation_frames);
 }

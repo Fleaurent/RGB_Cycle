@@ -66,10 +66,11 @@ void SegmentedStrip::resetStripe() {
 /**
  * @brief   set all pixels of the strip to the same color, shift them each frame by the provided factor
  * @param   color_degree_frame_step color_degree added to all leds every frame_step 
- * @param   animation_frames number of frames the led colors are held constant
+ * @param   color_const_frames number of frames the led colors are held constant
+ * @param   animation_frames number of frames before the animation repeats
  */
-void SegmentedStrip::shiftColorStripe(uint16_t color_degree_frame_step, uint16_t animation_frames) {
-  uint32_t frame_step = frame_counter / animation_frames;
+void SegmentedStrip::shiftColorStripe(uint16_t color_degree_frame_step, uint16_t color_const_frames, uint16_t animation_frames) {
+  uint16_t frame_step = (frame_counter / color_const_frames) % animation_frames;
   uint16_t temp_color_degree = frame_step*color_degree_frame_step;
   uint32_t temp_color = color(temp_color_degree);
   setStripe(temp_color);
@@ -409,10 +410,11 @@ void SegmentedStrip::setColorSteps(uint16_t color_degree_start, uint16_t color_d
  * @param   color_degree_step color_degree added to each subsequent led
  * @param   active_segments update only the specified segments 
  * @param   color_degree_frame_step color_degree added to all leds every frame_step 
- * @param   animation_frames number of frames the led colors are held constant
+ * @param   color_const_frames number of frames the led colors are held constant
+ * @param   animation_frames number of frames before the animation repeats
  */
-void SegmentedStrip::shiftColorSteps(uint16_t color_degree_start, uint16_t color_degree_step, uint32_t active_segments, uint16_t color_degree_frame_step, uint16_t animation_frames) {
-  uint32_t frame_step = frame_counter / animation_frames;
+void SegmentedStrip::shiftColorSteps(uint16_t color_degree_start, uint16_t color_degree_step, uint32_t active_segments, uint16_t color_degree_frame_step, uint16_t color_const_frames, uint16_t animation_frames) {
+  uint16_t frame_step = (frame_counter / color_const_frames) % animation_frames;
   uint16_t temp_color_degree_start = color_degree_start + frame_step*color_degree_frame_step;
   setColorSteps(temp_color_degree_start, color_degree_step, active_segments);
 }
@@ -424,10 +426,11 @@ void SegmentedStrip::shiftColorSteps(uint16_t color_degree_start, uint16_t color
  * @param   saturation_step saturation added to each subsequent led
  * @param   active_segments update only the specified segments 
  * @param   saturation_frame_step saturation added to all leds every frame_step 
- * @param   animation_frames number of frames the led colors are held constant
+ * @param   color_const_frames number of frames the led colors are held constant
+ * @param   animation_frames number of frames before the animation repeats
  */
-void SegmentedStrip::shiftColorSteps(uint16_t color_degree_start, uint8_t saturation_start, uint8_t saturation_step, uint32_t active_segments, uint8_t saturation_frame_step, uint16_t animation_frames) {
-  uint32_t frame_step = frame_counter / animation_frames;
+void SegmentedStrip::shiftColorSteps(uint16_t color_degree_start, uint8_t saturation_start, uint8_t saturation_step, uint32_t active_segments, uint8_t saturation_frame_step, uint16_t color_const_frames, uint16_t animation_frames) {
+  uint16_t frame_step = (frame_counter / color_const_frames) % animation_frames;
   uint8_t temp_saturation_start = saturation_start + frame_step*saturation_frame_step;
   setColorSteps(color_degree_start, temp_saturation_start, saturation_step, active_segments);
 }
@@ -441,10 +444,11 @@ void SegmentedStrip::shiftColorSteps(uint16_t color_degree_start, uint8_t satura
  * @param   active_segments update only the specified segments 
  * @param   color_degree_frame_step color_degree added to all leds every frame_step 
  * @param   saturation_frame_step saturation added to all leds every frame_step 
- * @param   animation_frames number of frames the led colors are held constant
+ * @param   color_const_frames number of frames the led colors are held constant
+ * @param   animation_frames number of frames before the animation repeats
  */
-void SegmentedStrip::shiftColorSteps(uint16_t color_degree_start, uint16_t color_degree_step, uint8_t saturation_start, uint8_t saturation_step, uint32_t active_segments, uint16_t color_degree_frame_step, uint8_t saturation_frame_step, uint16_t animation_frames) {
-  uint32_t frame_step = frame_counter / animation_frames;
+void SegmentedStrip::shiftColorSteps(uint16_t color_degree_start, uint16_t color_degree_step, uint8_t saturation_start, uint8_t saturation_step, uint32_t active_segments, uint16_t color_degree_frame_step, uint8_t saturation_frame_step, uint16_t color_const_frames, uint16_t animation_frames) {
+  uint16_t frame_step = (frame_counter / color_const_frames) % animation_frames;
   uint8_t temp_saturation_start = saturation_start + frame_step*saturation_frame_step;
   uint16_t temp_color_degree_start = color_degree_start + frame_step*color_degree_frame_step;
   setColorSteps(temp_color_degree_start, color_degree_step, temp_saturation_start, saturation_step, active_segments);
@@ -457,10 +461,11 @@ void SegmentedStrip::shiftColorSteps(uint16_t color_degree_start, uint16_t color
  * @param   color_degree_led_step color_degree added to each subsequent led
  * @param   active_segments update only the specified segments 
  * @param   color_degree_frame_step color_degree the first led gets increased every frame_step 
- * @param   animation_frames number of frames the led colors are held constant
+ * @param   color_const_frames number of frames the led colors are held constant
+ * @param   animation_frames number of frames before the animation repeats
  */
-void SegmentedStrip::animateSegmentsRainbow(uint16_t color_degree_start, uint16_t color_degree_led_step, uint32_t active_segments, uint16_t color_degree_frame_step, uint16_t animation_frames) {
-  uint32_t frame_step = frame_counter / animation_frames;
+void SegmentedStrip::animateSegmentsRainbow(uint16_t color_degree_start, uint16_t color_degree_led_step, uint32_t active_segments, uint16_t color_degree_frame_step, uint16_t color_const_frames, uint16_t animation_frames) {
+  uint16_t frame_step = (frame_counter / color_const_frames) % animation_frames;
   uint16_t color_degree = color_degree_start + frame_step*color_degree_frame_step;
   setColorSteps(color_degree, color_degree_led_step, active_segments);
 }
@@ -469,12 +474,13 @@ void SegmentedStrip::animateSegmentsRainbow(uint16_t color_degree_start, uint16_
  * @brief   set all leds of the strip to different colors, led colors are shifted per frame for the animation
  * @param   color_degree_start color_degree of all leds
  * @param   color_degree_frame_step color_degree all led gets increased every frame_step
- * @param   animation_frames number of frames the colors are held constant
+ * @param   color_const_frames number of frames the colors are held constant
+ * @param   animation_frames number of frames before the animation repeats
  */
-void SegmentedStrip::animateRainbowStripe(uint16_t color_degree_start, uint16_t color_degree_frame_step, uint16_t animation_frames) {
-  uint32_t frame_step = frame_counter / animation_frames;
-  uint32_t color_degree = color(color_degree_start + frame_step*color_degree_frame_step);
-  fill(color_degree, 0, numLEDs);
+void SegmentedStrip::animateRainbowStripe(uint16_t color_degree_start, uint16_t color_degree_frame_step, uint16_t color_const_frames, uint16_t animation_frames) {
+  uint16_t frame_step = (frame_counter / color_const_frames) % animation_frames;
+  uint32_t temp_color = color(color_degree_start + frame_step*color_degree_frame_step);
+  fill(temp_color, 0, numLEDs);
 }
 
 /**
@@ -482,13 +488,14 @@ void SegmentedStrip::animateRainbowStripe(uint16_t color_degree_start, uint16_t 
  * @param   color_degree_start color_degree of the first led
  * @param   color_degree_led_step color_degree added to each subsequent led
  * @param   color_degree_frame_step color_degree the first led gets increased every frame_step 
- * @param   animation_frames number of frames the led colors are held constant
+ * @param   color_const_frames number of frames the colors are held constant
+ * @param   animation_frames number of frames before the animation repeats
  */
-void SegmentedStrip::animateRainbowLEDs(uint16_t color_degree_start, uint16_t color_degree_led_step, uint16_t color_degree_frame_step, uint16_t animation_frames) {
-  uint32_t frame_step = frame_counter / animation_frames;
+void SegmentedStrip::animateRainbowLEDs(uint16_t color_degree_start, uint16_t color_degree_led_step, uint16_t color_degree_frame_step, uint16_t color_const_frames, uint16_t animation_frames) {
+  uint16_t frame_step = (frame_counter / color_const_frames) % animation_frames;
   for(uint16_t led_i = 0; led_i < numLEDs; led_i++) {
-    uint32_t color_degree_led_i = color(color_degree_start + frame_step*color_degree_frame_step + led_i*color_degree_led_step);
-    setPixelColor(led_i, color_degree_led_i);
+    uint32_t temp_color_led_i = color(color_degree_start + frame_step*color_degree_frame_step + led_i*color_degree_led_step);
+    setPixelColor(led_i, temp_color_led_i);
   }
 }
 
