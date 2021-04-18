@@ -317,7 +317,6 @@ void applyPatternB(void) {
       segmentStrip1.setStripeForeground();
       segmentStrip2.setStripeForeground();
       break;
-      break;
     case '1':
       break;
     case '2':
