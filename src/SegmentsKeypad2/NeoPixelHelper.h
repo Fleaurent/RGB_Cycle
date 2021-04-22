@@ -7,6 +7,7 @@
 
 #define HUE_DEGREE 182
 #define OFF Adafruit_NeoPixel::Color(0, 0, 0)
+#define MAX_DELAY 65000
 
 struct Segment {
   uint8_t first;
@@ -98,7 +99,7 @@ class SegmentedStrip : public Adafruit_NeoPixel {
     uint32_t getColorForeground();
     uint32_t getColorBackground();
     uint8_t getSaturation();
-    uint8_t getDelay();
+    uint16_t getDelay();
 
     uint32_t getAllSegments();
     uint32_t getEvenSegments();
@@ -123,8 +124,8 @@ class SegmentedStrip : public Adafruit_NeoPixel {
     void increaseColorDegreeBackground(uint16_t c);
     void decreaseColorDegreeBackground(uint16_t c);
     void setSaturation(uint8_t s);
-    void increaseDelay(uint8_t d);
-    void decreaseDelay(uint8_t d);
+    void increaseDelay(uint16_t d);
+    void decreaseDelay(uint16_t d);
 
 
   private:
@@ -140,7 +141,7 @@ class SegmentedStrip : public Adafruit_NeoPixel {
     uint16_t colorDegreeForeground = 0;  // red
     uint16_t colorDegreeBackground = 240;  // blue
     uint8_t saturation = 255;
-    uint8_t delay = 0;
+    uint16_t delay = 0;
 
     uint8_t MAX_NUMBER_SEGMENTS       = 32;
     uint8_t MAX_NUMBER_SEGMENT_PIXELS = 32;

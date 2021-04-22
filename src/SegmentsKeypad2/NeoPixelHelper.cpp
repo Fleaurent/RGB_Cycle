@@ -599,7 +599,7 @@ uint8_t SegmentedStrip::getSaturation() {
   return saturation;
 }
 
-uint8_t SegmentedStrip::getDelay() {
+uint16_t SegmentedStrip::getDelay() {
   return delay;
 }
 
@@ -716,17 +716,17 @@ void SegmentedStrip::setSaturation(uint8_t s) {
   saturation = s;
 }
 
-void SegmentedStrip::increaseDelay(uint8_t d) {
-  if((uint16_t)delay + d > 255){
-    delay = 255;
+void SegmentedStrip::increaseDelay(uint16_t d) {
+  if((uint32_t)delay + d > MAX_DELAY){
+    delay = MAX_DELAY;
   }
   else {
     delay += d;
   }
 }
 
-void SegmentedStrip::decreaseDelay(uint8_t d) {
-  if((int16_t)delay - d < 0){
+void SegmentedStrip::decreaseDelay(uint16_t d) {
+  if((int32_t)delay - d < 0){
     delay = 0;
   }
   else {

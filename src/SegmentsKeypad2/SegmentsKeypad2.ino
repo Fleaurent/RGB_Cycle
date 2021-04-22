@@ -77,7 +77,7 @@ void loop() {
   /* 3. update strip at the end of the loop */
   segmentStrip1.update();
   segmentStrip2.update();
-  // delay(segmentStrip.getDelay());
+  delay(segmentStrip1.getDelay());
 
   /* optional: blink led */
   blink();
@@ -265,42 +265,37 @@ void applyPatternA(void) {
       segmentStrip2.setStripeForeground();
       break;
     case '1':
-      // shift pattern back and forth
-      shiftPatternForwardBackwards(720, 360);
+      // shift pattern back and forth (foreground+background)
+      shiftPatternForwardBackwards(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground());
       break;
     case '2':
-      // shift pattern back and forth (background)
-      shiftPatternForwardBackwardsBackground(720, 360);
+      // shift pattern back and forth (foreground only)
+      shiftPatternForwardBackwards(segmentStrip1.getColorForeground(), OFF);
       break;
     case '3':
-      // shift color complete stripe (increasing)
-      colorComplete(1, 5, 360);
+      // shift pattern back and forth (only background)
+      shiftPatternForwardBackwards(OFF, segmentStrip1.getColorBackground());
       break;
     case '4':
-      // shift color complete stripe (decreasing)
-      colorComplete(-1, 5, 360);
-      break;
-    case '5':
-      // color wheel (increasing)
-      colorWheel(1, 1, 360);
-      // colorWheel(1, 2, 360); // slower
-      break;
-    case '6':
-      // color wheel (decreasing)
-      colorWheel(-1, 1, 360);
-      // colorWheel(-2, 1, 360); // faster
-      break;
-    case '7':
       // animateEvenOdd();
       // animateEvenOdd(600, 300);
       // animateEvenOddInit();
       animateEvenOddInit(720, 360);
       break;
+    case '5':
+      
+      break;
+    case '6':
+      
+      break;
+    case '7':
+      
+      break;
     case '8':
-      animateSegmentsRainbow();
+      
       break;
     case '9':
-      animateSegmentsRainbow(600, 300);
+      
       break;
     default:  
       // do nothing
@@ -379,20 +374,34 @@ void applyPatternD(void) {
   // ToDo: animate increasing speed?
   switch(animationMode) {
     case '0':
-      segmentStrip1.resetStripe();
-      segmentStrip2.resetStripe();
+      segmentStrip1.blinkPattern(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground(), 0x3FF, 0x7FFF, 100);  // all segments: 0x7FFF = all pixels
+      segmentStrip2.blinkPattern(segmentStrip2.getColorForeground(), segmentStrip2.getColorBackground(), 0x3FF, 0x7FFF, 100);  // all segments: 0x7FFF = all pixels
+      // segmentStrip1.resetStripe();
+      // segmentStrip2.resetStripe();
       break;
     case '1':
+      // shift color complete stripe (increasing)
+      colorComplete(1, 5, 360);
       break;
     case '2':
+      // shift color complete stripe (decreasing)
+      colorComplete(-1, 5, 360);
       break;
     case '3':
+      // color wheel (increasing)
+      colorWheel(1, 1, 360);
+      // colorWheel(1, 2, 360); // slower
       break;
     case '4':
+      // color wheel (decreasing)
+      colorWheel(-1, 1, 360);
+      // colorWheel(-2, 1, 360); // faster
       break;
     case '5':
+      animateSegmentsRainbow();
       break;
     case '6':
+      animateSegmentsRainbow(600, 300);
       break;
     case '7':
       break;
@@ -406,6 +415,11 @@ void applyPatternD(void) {
   }
 }
 
+
+/* animations */
+/**
+ * @brief   test methods provided directly by NeoPixelHelper
+ */
 void testPattern(void) {
   // 1. blink complete segments
   // a) blink 50/50 duty cycle
@@ -459,8 +473,55 @@ void testPattern(void) {
   animateSegmentsRainbow(600, 300);
 }
 
+/**
+ * @brief   shift simple pattern across the each segment of the complete stripe forward an backwards
+ * @param   foreground_color main color shifted across the segments 
+ * @param   background_color background color filling all other leds
+ */
+void shiftPatternForwardBackwards(uint32_t foreground_color, uint32_t background_color) {
+  const uint32_t frames = 720;
+  const uint32_t frameswitch = 360;
 
-/* combined animations */
+  if(segmentStrip1.getFrameCounter() % frames < frameswitch) {
+    // 1. shift pattern forward
+    segmentStrip1.shiftPatternInit(foreground_color, background_color, segmentStrip1.getAllSegments(), segmentStrip1.getFirstPixels(3), -3, 1, 360, 20);  // 360 / 20 = 18 steps
+    segmentStrip2.shiftPatternInit(foreground_color, background_color, segmentStrip2.getAllSegments(), segmentStrip2.getFirstPixels(3), -3, 1, 360, 20); 
+  }
+  else {
+    // 2. shift pattern backwards
+    segmentStrip1.shiftPatternInit(foreground_color, background_color, segmentStrip1.getAllSegments(), segmentStrip1.getLastPixels(3), 3, -1, 360, 20);  // 360 / 20 = 18 steps
+    segmentStrip2.shiftPatternInit(foreground_color, background_color, segmentStrip2.getAllSegments(), segmentStrip2.getLastPixels(3), 3, -1, 360, 20); 
+  }
+}
+
+/**
+ * @brief   spin color wheel on inner 4 Segments
+ * @param   color_degree_frame_step color_degree added to all leds every frame_step 
+ * @param   animation_frames number of frames the led colors are held constant
+ */
+void colorWheel(uint16_t color_degree_frame_step, uint16_t color_const_frames, int16_t animation_frames) {
+  segmentStrip1.shiftColorSteps(0, 6, 0b00001, color_degree_frame_step, color_const_frames, animation_frames);
+  segmentStrip1.shiftColorSteps(90, 6, 0b00010, color_degree_frame_step, color_const_frames, animation_frames);
+  segmentStrip1.shiftColorSteps(180, 6, 0b00100, color_degree_frame_step, color_const_frames, animation_frames);
+  segmentStrip1.shiftColorSteps(270, 6, 0b01000, color_degree_frame_step, color_const_frames, animation_frames);
+  segmentStrip2.shiftColorSteps(0, 6, 0b00001, color_degree_frame_step, color_const_frames, animation_frames);
+  segmentStrip2.shiftColorSteps(90, 6, 0b00010, color_degree_frame_step, color_const_frames, animation_frames);
+  segmentStrip2.shiftColorSteps(180, 6, 0b00100, color_degree_frame_step, color_const_frames, animation_frames);
+  segmentStrip2.shiftColorSteps(270, 6, 0b01000, color_degree_frame_step, color_const_frames, animation_frames);
+}
+
+/**
+ * @brief   color complete stripe in the same color
+ * @param   color_degree_frame_step color_degree added to all leds every frame_step 
+ * @param   animation_frames number of frames the led colors are held constant
+ */
+void colorComplete(uint16_t color_degree_frame_step, uint16_t color_const_frames, int16_t animation_frames) {
+  segmentStrip1.shiftColorStripe(color_degree_frame_step, color_const_frames, animation_frames);
+  segmentStrip2.shiftColorStripe(color_degree_frame_step, color_const_frames, animation_frames);
+}
+
+
+// evaluate
 void animateEvenOdd(void) {
   // 1. shift pattern forward, jump back
   segmentStrip1.shiftPattern(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground(), segmentStrip1.getEvenSegments(), segmentStrip1.getLastPixels(3), -1, 300, 20); 
@@ -534,56 +595,4 @@ void animateSegmentsRainbow(uint32_t frames, uint32_t frameswitch) {
     segmentStrip2.animateSegmentsRainbow(0, 24, segmentStrip2.getAllSegments(), -6, 5, 60);
     // segmentStrip1.animateSegmentsRainbow(0, 24, segmentStrip1.getAllSegments(), 6, 5, 60);
   }
-}
-
-void shiftPatternForwardBackwards(uint32_t frames, uint32_t frameswitch) {
-  if(segmentStrip1.getFrameCounter() % frames < frameswitch) {
-    // 1. shift pattern forward
-    segmentStrip1.shiftPatternInit(segmentStrip1.getColorForeground(), segmentStrip1.getAllSegments(), segmentStrip1.getFirstPixels(3), -3, 1, 360, 20);  // 360 / 20 = 18 steps
-    segmentStrip2.shiftPatternInit(segmentStrip2.getColorForeground(), segmentStrip2.getAllSegments(), segmentStrip2.getFirstPixels(3), -3, 1, 360, 20); 
-  }
-  else {
-    // 2. shift pattern backwards
-    segmentStrip1.shiftPatternInit(segmentStrip1.getColorForeground(), segmentStrip1.getAllSegments(), segmentStrip1.getLastPixels(3), 3, -1, 360, 20);  // 360 / 20 = 18 steps
-    segmentStrip2.shiftPatternInit(segmentStrip2.getColorForeground(), segmentStrip2.getAllSegments(), segmentStrip2.getLastPixels(3), 3, -1, 360, 20); 
-  }
-}
-
-void shiftPatternForwardBackwardsBackground(uint32_t frames, uint32_t frameswitch) {
-  if(segmentStrip1.getFrameCounter() % frames < frameswitch) {
-    // 1. shift pattern forward
-    segmentStrip1.shiftPatternInit(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground(), segmentStrip1.getAllSegments(), segmentStrip1.getFirstPixels(3), -3, 1, 360, 20);  // 360 / 20 = 18 steps
-    segmentStrip2.shiftPatternInit(segmentStrip2.getColorForeground(), segmentStrip2.getColorBackground(), segmentStrip2.getAllSegments(), segmentStrip2.getFirstPixels(3), -3, 1, 360, 20); 
-  }
-  else {
-    // 2. shift pattern backwards
-    segmentStrip1.shiftPatternInit(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground(), segmentStrip1.getAllSegments(), segmentStrip1.getLastPixels(3), 3, -1, 360, 20);  // 360 / 20 = 18 steps
-    segmentStrip2.shiftPatternInit(segmentStrip2.getColorForeground(), segmentStrip2.getColorBackground(), segmentStrip2.getAllSegments(), segmentStrip2.getLastPixels(3), 3, -1, 360, 20); 
-  }
-}
-
-/**
- * @brief   spin color wheel on inner 4 Segments
- * @param   color_degree_frame_step color_degree added to all leds every frame_step 
- * @param   animation_frames number of frames the led colors are held constant
- */
-void colorWheel(uint16_t color_degree_frame_step, uint16_t color_const_frames, int16_t animation_frames) {
-  segmentStrip1.shiftColorSteps(0, 6, 0b00001, color_degree_frame_step, color_const_frames, animation_frames);
-  segmentStrip1.shiftColorSteps(90, 6, 0b00010, color_degree_frame_step, color_const_frames, animation_frames);
-  segmentStrip1.shiftColorSteps(180, 6, 0b00100, color_degree_frame_step, color_const_frames, animation_frames);
-  segmentStrip1.shiftColorSteps(270, 6, 0b01000, color_degree_frame_step, color_const_frames, animation_frames);
-  segmentStrip2.shiftColorSteps(0, 6, 0b00001, color_degree_frame_step, color_const_frames, animation_frames);
-  segmentStrip2.shiftColorSteps(90, 6, 0b00010, color_degree_frame_step, color_const_frames, animation_frames);
-  segmentStrip2.shiftColorSteps(180, 6, 0b00100, color_degree_frame_step, color_const_frames, animation_frames);
-  segmentStrip2.shiftColorSteps(270, 6, 0b01000, color_degree_frame_step, color_const_frames, animation_frames);
-}
-
-/**
- * @brief   color complete stripe in the same color
- * @param   color_degree_frame_step color_degree added to all leds every frame_step 
- * @param   animation_frames number of frames the led colors are held constant
- */
-void colorComplete(uint16_t color_degree_frame_step, uint16_t color_const_frames, int16_t animation_frames) {
-  segmentStrip1.shiftColorStripe(color_degree_frame_step, color_const_frames, animation_frames);
-  segmentStrip2.shiftColorStripe(color_degree_frame_step, color_const_frames, animation_frames);
 }
