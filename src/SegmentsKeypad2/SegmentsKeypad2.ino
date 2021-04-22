@@ -283,19 +283,19 @@ void applyPatternA(void) {
       animateEvenOddInit(720, 360);
       break;
     case '5':
-      
+      shiftPattern1(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground());
       break;
     case '6':
-      
+      shiftPattern2(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground());
       break;
     case '7':
-      
+      shiftPattern3(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground());
       break;
     case '8':
-      
+      shiftPattern4(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground());
       break;
     case '9':
-      
+      shiftPattern5(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground());
       break;
     default:  
       // do nothing
@@ -520,6 +520,35 @@ void colorComplete(uint16_t color_degree_frame_step, uint16_t color_const_frames
   segmentStrip2.shiftColorStripe(color_degree_frame_step, color_const_frames, animation_frames);
 }
 
+/**
+ * @brief   shift simple pattern across the each segment of the complete stripe
+ * @param   foreground_color main color shifted across the segments 
+ * @param   background_color background color filling all other leds
+ */
+void shiftPattern1(uint32_t foreground_color, uint32_t background_color) {
+  segmentStrip1.shiftPatternInit(foreground_color, background_color, segmentStrip1.getAllSegments(), 0b11011011011011011, -2, 1, 60, 20);  // 60 / 20 = 3 steps
+  segmentStrip2.shiftPatternInit(foreground_color, background_color, segmentStrip2.getAllSegments(), 0b11011011011011011, -2, 1, 60, 20); 
+}
+
+void shiftPattern2(uint32_t foreground_color, uint32_t background_color) {
+  segmentStrip1.shiftPatternInit(foreground_color, background_color, segmentStrip1.getAllSegments(), 0b110011001100110011, -3, 1, 80, 20);  // 80 / 20 = 4 steps
+  segmentStrip2.shiftPatternInit(foreground_color, background_color, segmentStrip2.getAllSegments(), 0b110011001100110011, -3, 1, 80, 20); 
+}
+
+void shiftPattern3(uint32_t foreground_color, uint32_t background_color) {
+  segmentStrip1.shiftPatternInit(foreground_color, background_color, segmentStrip1.getAllSegments(), 0b1110111011101110111, -4, 1, 100, 20);  // 100 / 20 = 5 steps
+  segmentStrip2.shiftPatternInit(foreground_color, background_color, segmentStrip2.getAllSegments(), 0b1110111011101110111, -4, 1, 100, 20); 
+}
+
+void shiftPattern4(uint32_t foreground_color, uint32_t background_color) {
+  segmentStrip1.shiftPatternInit(foreground_color, background_color, segmentStrip1.getAllSegments(), 0b11100111001110011100, -5, 1, 120, 20);  // 120 / 20 = 6 steps
+  segmentStrip2.shiftPatternInit(foreground_color, background_color, segmentStrip2.getAllSegments(), 0b11100111001110011100, -5, 1, 120, 20); 
+}
+
+void shiftPattern5(uint32_t foreground_color, uint32_t background_color) {
+  segmentStrip1.shiftPatternInit(foreground_color, background_color, segmentStrip1.getAllSegments(), 0b111100111100111110011, -6, 1, 140, 20);  // 140 / 20 = 7 steps
+  segmentStrip2.shiftPatternInit(foreground_color, background_color, segmentStrip2.getAllSegments(), 0b111100111100111110011, -6, 1, 140, 20); 
+}
 
 // evaluate
 void animateEvenOdd(void) {
