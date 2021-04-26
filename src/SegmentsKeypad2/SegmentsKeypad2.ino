@@ -313,14 +313,19 @@ void applyPatternB(void) {
       segmentStrip2.setStripeForeground();
       break;
     case '1':
+      shiftPatternComplete1(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground());
       break;
     case '2':
+      shiftPatternComplete2(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground());
       break;
     case '3':
+      shiftPatternComplete3(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground());
       break;
     case '4':
+      shiftPatternComplete4(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground());
       break;
     case '5':
+      shiftPatternComplete5(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground());
       break;
     case '6':
       break;
@@ -521,33 +526,166 @@ void colorComplete(uint16_t color_degree_frame_step, uint16_t color_const_frames
 }
 
 /**
- * @brief   shift simple pattern across the each segment of the complete stripe
+ * @brief   shift simple pattern across each segment of the complete stripe
  * @param   foreground_color main color shifted across the segments 
  * @param   background_color background color filling all other leds
  */
 void shiftPattern1(uint32_t foreground_color, uint32_t background_color) {
-  segmentStrip1.shiftPatternInit(foreground_color, background_color, segmentStrip1.getAllSegments(), 0b11011011011011011, -2, 1, 60, 20);  // 60 / 20 = 3 steps
-  segmentStrip2.shiftPatternInit(foreground_color, background_color, segmentStrip2.getAllSegments(), 0b11011011011011011, -2, 1, 60, 20); 
+  segmentStrip1.shiftPatternInit(foreground_color, background_color, segmentStrip1.getAllSegments(), 0b11011011011011011, -2, 1, 90, 30);  // 60 / 20 = 3 steps
+  segmentStrip2.shiftPatternInit(foreground_color, background_color, segmentStrip2.getAllSegments(), 0b11011011011011011, -2, 1, 90, 30); 
 }
 
 void shiftPattern2(uint32_t foreground_color, uint32_t background_color) {
-  segmentStrip1.shiftPatternInit(foreground_color, background_color, segmentStrip1.getAllSegments(), 0b110011001100110011, -3, 1, 80, 20);  // 80 / 20 = 4 steps
-  segmentStrip2.shiftPatternInit(foreground_color, background_color, segmentStrip2.getAllSegments(), 0b110011001100110011, -3, 1, 80, 20); 
+  segmentStrip1.shiftPatternInit(foreground_color, background_color, segmentStrip1.getAllSegments(), 0b110011001100110011, -3, 1, 120, 30);  // 80 / 20 = 4 steps
+  segmentStrip2.shiftPatternInit(foreground_color, background_color, segmentStrip2.getAllSegments(), 0b110011001100110011, -3, 1, 120, 30); 
 }
 
 void shiftPattern3(uint32_t foreground_color, uint32_t background_color) {
-  segmentStrip1.shiftPatternInit(foreground_color, background_color, segmentStrip1.getAllSegments(), 0b1110111011101110111, -4, 1, 100, 20);  // 100 / 20 = 5 steps
-  segmentStrip2.shiftPatternInit(foreground_color, background_color, segmentStrip2.getAllSegments(), 0b1110111011101110111, -4, 1, 100, 20); 
+  segmentStrip1.shiftPatternInit(foreground_color, background_color, segmentStrip1.getAllSegments(), 0b1110111011101110111, -3, 1, 120, 30);  // 80 / 20 = 4 steps
+  segmentStrip2.shiftPatternInit(foreground_color, background_color, segmentStrip2.getAllSegments(), 0b1110111011101110111, -3, 1, 120, 30); 
 }
 
 void shiftPattern4(uint32_t foreground_color, uint32_t background_color) {
-  segmentStrip1.shiftPatternInit(foreground_color, background_color, segmentStrip1.getAllSegments(), 0b11100111001110011100, -5, 1, 120, 20);  // 120 / 20 = 6 steps
-  segmentStrip2.shiftPatternInit(foreground_color, background_color, segmentStrip2.getAllSegments(), 0b11100111001110011100, -5, 1, 120, 20); 
+  segmentStrip1.shiftPatternInit(foreground_color, background_color, segmentStrip1.getAllSegments(), 0b11100111001110011100, -4, 1, 150, 30);  // 100 / 20 = 5 steps
+  segmentStrip2.shiftPatternInit(foreground_color, background_color, segmentStrip2.getAllSegments(), 0b11100111001110011100, -4, 1, 150, 30); 
 }
 
 void shiftPattern5(uint32_t foreground_color, uint32_t background_color) {
-  segmentStrip1.shiftPatternInit(foreground_color, background_color, segmentStrip1.getAllSegments(), 0b111100111100111110011, -6, 1, 140, 20);  // 140 / 20 = 7 steps
-  segmentStrip2.shiftPatternInit(foreground_color, background_color, segmentStrip2.getAllSegments(), 0b111100111100111110011, -6, 1, 140, 20); 
+  segmentStrip1.shiftPatternInit(foreground_color, background_color, segmentStrip1.getAllSegments(), 0b111100111100111110011, -5, 1, 180, 30);  // 120 / 20 = 6 steps
+  segmentStrip2.shiftPatternInit(foreground_color, background_color, segmentStrip2.getAllSegments(), 0b111100111100111110011, -5, 1, 180, 30); 
+}
+
+/**
+ * @brief   shift pattern across the complete stripe
+ * @param   foreground_color main color shifted across the segments 
+ * @param   background_color background color filling all other leds
+ */
+void shiftPatternComplete1(uint32_t foreground_color, uint32_t background_color) {
+  segmentStrip1.shiftPatternInit(foreground_color, background_color, segmentStrip1.getAllSegments(), 0b111111111111111, -15, 1, 320, 20);  // 150 / 10 = 15 steps
+  segmentStrip2.shiftPatternInit(foreground_color, background_color, segmentStrip2.getAllSegments(), 0b111111111111111, -15, 1, 320, 20); 
+}
+
+void shiftPatternComplete2(uint32_t foreground_color, uint32_t background_color) {
+  segmentStrip1.shiftPatternInit(foreground_color, background_color, segmentStrip1.getAllSegments(), 0b111111111111111, -15, 1, 600, 20);  // 150 / 10 = 15 steps
+  segmentStrip2.shiftPatternInit(foreground_color, background_color, segmentStrip2.getAllSegments(), 0b111111111111111, -15, 1, 600, 20); 
+}
+
+void shiftPatternComplete3(uint32_t foreground_color, uint32_t background_color) {
+  const uint32_t frames = 600;
+  const uint32_t frameswitch = 300;
+
+  if(segmentStrip1.getFrameCounter() % frames < frameswitch) {
+    segmentStrip1.shiftPatternInit(foreground_color, background_color, segmentStrip1.getAllSegments(), 0b111111111111111, -15, 1, 300, 20);  // 150 / 10 = 15 steps
+    segmentStrip2.shiftPatternInit(foreground_color, background_color, segmentStrip2.getAllSegments(), 0b111111111111111, -15, 1, 300, 20); 
+  }
+  else {
+    segmentStrip1.shiftPatternInit(foreground_color, background_color, segmentStrip1.getAllSegments(), 0b111111111111111, 0, -1, 300, 20);  // 150 / 10 = 15 steps
+    segmentStrip2.shiftPatternInit(foreground_color, background_color, segmentStrip2.getAllSegments(), 0b111111111111111, 0, -1, 300, 20); 
+  }
+}
+
+void shiftPatternComplete4(uint32_t foreground_color, uint32_t background_color) {
+  const uint32_t frames = 640;
+  const uint32_t frameswitch1 = 160;
+  const uint32_t frameswitch2 = 320;
+  const uint32_t frameswitch3 = 480;
+
+  if(segmentStrip1.getFrameCounter() % frames < frameswitch1) {
+    // a) shift primary color in
+    segmentStrip1.shiftPatternInit(foreground_color, background_color, 0b10001, 0b111111111111111, -15, 1, 160, 10);
+    segmentStrip2.shiftPatternInit(foreground_color, background_color, 0b10001, 0b111111111111111, -15, 1, 160, 10); 
+    // b) shift primary color out
+    segmentStrip1.shiftPatternInit(foreground_color, background_color, 0b01000, 0b111111111111111, 0, 1, 160, 10);
+    segmentStrip2.shiftPatternInit(foreground_color, background_color, 0b01000, 0b111111111111111, 0, 1, 160, 10); 
+  }
+  else if(segmentStrip1.getFrameCounter() % frames < frameswitch2) {
+    // a) shift primary color in
+    segmentStrip1.shiftPatternInit(foreground_color, background_color, 0b00010, 0b111111111111111, -15, 1, 160, 10); 
+    segmentStrip2.shiftPatternInit(foreground_color, background_color, 0b00010, 0b111111111111111, -15, 1, 160, 10); 
+    // b) shift primary color out
+    segmentStrip1.shiftPatternInit(foreground_color, background_color, 0b10001, 0b111111111111111, 0, 1, 160, 10);
+    segmentStrip2.shiftPatternInit(foreground_color, background_color, 0b10001, 0b111111111111111, 0, 1, 160, 10);
+  }
+  else if(segmentStrip1.getFrameCounter() % frames < frameswitch3) {
+    // a) shift primary color in
+    segmentStrip1.shiftPatternInit(foreground_color, background_color, 0b00100, 0b111111111111111, -15, 1, 160, 10); 
+    segmentStrip2.shiftPatternInit(foreground_color, background_color, 0b00100, 0b111111111111111, -15, 1, 160, 10); 
+    // b) shift primary color out
+    segmentStrip1.shiftPatternInit(foreground_color, background_color, 0b00010, 0b111111111111111, 0, 1, 160, 10); 
+    segmentStrip2.shiftPatternInit(foreground_color, background_color, 0b00010, 0b111111111111111, 0, 1, 160, 10);
+  }
+  else {
+    // a) shift primary color in
+    segmentStrip1.shiftPatternInit(foreground_color, background_color, 0b01000, 0b111111111111111, -15, 1, 160, 10); 
+    segmentStrip2.shiftPatternInit(foreground_color, background_color, 0b01000, 0b111111111111111, -15, 1, 160, 10); 
+    // b) shift primary color out
+    segmentStrip1.shiftPatternInit(foreground_color, background_color, 0b00100, 0b111111111111111, 0, 1, 160, 10); 
+    segmentStrip2.shiftPatternInit(foreground_color, background_color, 0b00100, 0b111111111111111, 0, 1, 160, 10); 
+  }
+}
+
+void shiftPatternComplete5(uint32_t foreground_color, uint32_t background_color) {
+  const uint32_t frames = 1600;
+  const uint32_t frameswitch1 = 160;
+  const uint32_t frameswitch2 = 320;
+  const uint32_t frameswitch3 = 480;
+  const uint32_t frameswitch4 = 640;
+  const uint32_t frameswitch5 = 800;
+  const uint32_t frameswitch6 = 960;
+  const uint32_t frameswitch7 = 1120;
+  const uint32_t frameswitch8 = 1280;
+  const uint32_t frameswitch9 = 1440;
+
+  if(segmentStrip1.getFrameCounter() % frames < frameswitch1) {
+    // a) shift primary color in
+    segmentStrip1.shiftPatternInit(foreground_color, background_color, 0b00001, 0b111111111111111, -15, 1, 160, 10);
+    segmentStrip2.shiftPatternInit(foreground_color, background_color, 0b00001, 0b111111111111111, -15, 1, 160, 10); 
+  }
+  else if(segmentStrip1.getFrameCounter() % frames < frameswitch2) {
+    // a) shift primary color in
+    segmentStrip1.shiftPatternInit(foreground_color, background_color, 0b00010, 0b111111111111111, -15, 1, 160, 10); 
+    segmentStrip2.shiftPatternInit(foreground_color, background_color, 0b00010, 0b111111111111111, -15, 1, 160, 10); 
+  }
+  else if(segmentStrip1.getFrameCounter() % frames < frameswitch3) {
+    // a) shift primary color in
+    segmentStrip1.shiftPatternInit(foreground_color, background_color, 0b00100, 0b111111111111111, -15, 1, 160, 10); 
+    segmentStrip2.shiftPatternInit(foreground_color, background_color, 0b00100, 0b111111111111111, -15, 1, 160, 10); 
+  }
+  else if(segmentStrip1.getFrameCounter() % frames < frameswitch4) {
+    // a) shift primary color in
+    segmentStrip1.shiftPatternInit(foreground_color, background_color, 0b01000, 0b111111111111111, -15, 1, 160, 10); 
+    segmentStrip2.shiftPatternInit(foreground_color, background_color, 0b01000, 0b111111111111111, -15, 1, 160, 10);  
+  }
+  else if(segmentStrip1.getFrameCounter() % frames < frameswitch5) {
+    // a) shift primary color in
+    segmentStrip1.shiftPatternInit(foreground_color, background_color, 0b10000, 0b111111111111111, -15, 1, 160, 10); 
+    segmentStrip2.shiftPatternInit(foreground_color, background_color, 0b10000, 0b111111111111111, -15, 1, 160, 10); 
+  }
+  else if(segmentStrip1.getFrameCounter() % frames < frameswitch6) {
+    // b) shift primary color out
+    segmentStrip1.shiftPatternInit(foreground_color, background_color, 0b00001, 0b111111111111111, 0, 1, 160, 10);
+    segmentStrip2.shiftPatternInit(foreground_color, background_color, 0b00001, 0b111111111111111, 0, 1, 160, 10);
+  }
+  else if(segmentStrip1.getFrameCounter() % frames < frameswitch7) {
+    // b) shift primary color out
+    segmentStrip1.shiftPatternInit(foreground_color, background_color, 0b00010, 0b111111111111111, 0, 1, 160, 10);
+    segmentStrip2.shiftPatternInit(foreground_color, background_color, 0b00010, 0b111111111111111, 0, 1, 160, 10);
+  }
+  else if(segmentStrip1.getFrameCounter() % frames < frameswitch8) {
+    // b) shift primary color out
+    segmentStrip1.shiftPatternInit(foreground_color, background_color, 0b00100, 0b111111111111111, 0, 1, 160, 10);
+    segmentStrip2.shiftPatternInit(foreground_color, background_color, 0b00100, 0b111111111111111, 0, 1, 160, 10);
+  }
+  else if(segmentStrip1.getFrameCounter() % frames < frameswitch9) {
+    // b) shift primary color out
+    segmentStrip1.shiftPatternInit(foreground_color, background_color, 0b01000, 0b111111111111111, 0, 1, 160, 10);
+    segmentStrip2.shiftPatternInit(foreground_color, background_color, 0b01000, 0b111111111111111, 0, 1, 160, 10);
+  }
+  else {
+    // b) shift primary color out
+    segmentStrip1.shiftPatternInit(foreground_color, background_color, 0b10000, 0b111111111111111, 0, 1, 160, 10);
+    segmentStrip2.shiftPatternInit(foreground_color, background_color, 0b10000, 0b111111111111111, 0, 1, 160, 10);
+  }
 }
 
 // evaluate
