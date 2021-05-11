@@ -353,18 +353,23 @@ void applyPatternC(void) {
     case '1':
       break;
     case '2':
+      blinkGo();
       break;
     case '3':
       break;
     case '4':
+      blinkLeft();
       break;
     case '5':
+      blinkWarning();
       break;
     case '6':
+      blinkRight();
       break;
     case '7':
       break;
     case '8':
+      blinkStop();
       break;
     case '9':
       break;
@@ -686,6 +691,32 @@ void shiftPatternComplete5(uint32_t foreground_color, uint32_t background_color)
     segmentStrip1.shiftPatternInit(foreground_color, background_color, 0b10000, 0b111111111111111, 0, 1, 160, 10);
     segmentStrip2.shiftPatternInit(foreground_color, background_color, 0b10000, 0b111111111111111, 0, 1, 160, 10);
   }
+}
+
+/**
+ * @brief   simple blink pattern to show the desired way
+ */
+void blinkGo() {
+  segmentStrip1.blinkAllSegments(segmentStrip1.GREEN(), OFF, 200, 120);
+  segmentStrip2.blinkAllSegments(segmentStrip2.GREEN(), OFF, 200, 120);
+}
+
+void blinkLeft() {
+  segmentStrip1.blinkAllSegments(segmentStrip1.YELLOW(), OFF, 200, 120);
+}
+
+void blinkRight() {
+  segmentStrip2.blinkAllSegments(segmentStrip2.YELLOW(), OFF, 200, 120);
+}
+
+void blinkWarning() {
+  segmentStrip1.blinkAllSegments(segmentStrip1.YELLOW(), OFF, 200, 120);
+  segmentStrip2.blinkAllSegments(segmentStrip2.YELLOW(), OFF, 200, 120);
+}
+
+void blinkStop() {
+  segmentStrip1.blinkAllSegments(segmentStrip1.RED(), OFF, 200, 120);
+  segmentStrip2.blinkAllSegments(segmentStrip2.RED(), OFF, 200, 120);
 }
 
 // evaluate
