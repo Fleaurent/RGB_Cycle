@@ -21,8 +21,8 @@
    2: setLEDsSegmentsOutIn (foreground+background)
    3: setLEDsSegmentsUpDown (foreground+background)
    4: setLEDsSegmentsDownUp (foreground+background)
-   5: 
-   6: shiftPatternAllSegmentsForward (foreground+background)
+   5: shiftPatternAllSegmentsForward (foreground+background)
+   6: shiftPatternAllSegmentsForward (foreground only)
    7: shiftPatternAllSegmentsBackward (foreground+background)
    8: setLEDsAllSegmentsForward (foreground+background)
    9: setLEDsAllSegmentsBackward (foreground+background)
@@ -31,13 +31,13 @@
    -: decrease brightness
   
   C: simple blink patterns
-   1: car
+   1: green
    2: blinkGo
    3: white
    4: blinkLeft
    5: blinkWarning
    6: blinkRight
-   7: off
+   7: car
    8: blinkStop
    9: red
    0: show secondary color
@@ -402,10 +402,13 @@ void applyPatternB(void) {
       // setLEDsSegmentsDownUp(OFF, segmentStrip1.getColorBackground());
       break;
     case '5':
-      break;
-    case '6':
       shiftPatternAllSegmentsForward(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground());
       // shiftPatternAllSegmentsForward(segmentStrip1.getColorForeground(), OFF);
+      // shiftPatternAllSegmentsForward(OFF, segmentStrip1.getColorBackground());
+      break;
+    case '6':
+      // shiftPatternAllSegmentsForward(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground());
+      shiftPatternAllSegmentsForward(segmentStrip1.getColorForeground(), OFF);
       // shiftPatternAllSegmentsForward(OFF, segmentStrip1.getColorBackground());
       break;
     case '7':
@@ -448,7 +451,7 @@ void applyPatternC(void) {
       segmentStrip2.setStripeBackground();
       break;
     case '1':
-      car();
+      green();
       break;
     case '2':
       blinkGo();
@@ -466,7 +469,7 @@ void applyPatternC(void) {
       blinkRight();
       break;
     case '7':
-      // OFF
+      car();
       break;
     case '8':
       blinkStop();
@@ -1046,4 +1049,9 @@ void white() {
 void red() {
   segmentStrip1.setSegments(segmentStrip1.RED(), segmentStrip1.getAllSegments());
   segmentStrip2.setSegments(segmentStrip2.RED(), segmentStrip2.getAllSegments());
+}
+
+void green() {
+  segmentStrip1.setSegments(segmentStrip1.GREEN(), segmentStrip1.getAllSegments());
+  segmentStrip2.setSegments(segmentStrip2.GREEN(), segmentStrip2.getAllSegments());
 }
