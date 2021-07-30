@@ -31,15 +31,15 @@
    -: decrease brightness
   
   C:
-   1:
-   2:
-   3:
-   4:
-   5:
-   6:
-   7:
-   8:
-   9:
+   1: blinkLeftFront
+   2: blinkGo
+   3: blinkRightFront
+   4: blinkLeft
+   5: blinkWarning
+   6: blinkRight
+   7: blinkLeftRear
+   8: blinkStop
+   9: blinkRightRear
    0: show secondary color
    +: increase secondary color
    -: decrease secondary color
@@ -430,6 +430,14 @@ void applyPatternB(void) {
 }
 
 
+/*
+ PatternC:  
+ - blinkGo
+ - blinkLeft
+ - blinkWarning
+ - blinkRight
+ - blinkStop
+*/
 void applyPatternC(void) {
   switch(animationMode) {
     case '0':
@@ -440,11 +448,13 @@ void applyPatternC(void) {
       segmentStrip2.setStripeBackground();
       break;
     case '1':
+      blinkLeftFront();
       break;
     case '2':
       blinkGo();
       break;
     case '3':
+      blinkRightFront();
       break;
     case '4':
       blinkLeft();
@@ -456,11 +466,13 @@ void applyPatternC(void) {
       blinkRight();
       break;
     case '7':
+      blinkLeftRear();
       break;
     case '8':
       blinkStop();
       break;
     case '9':
+      blinkRightRear();
       break;
     default:  
       // do nothing
@@ -953,26 +965,42 @@ void setLEDsAllSegmentsBackward(uint32_t foreground_color, uint32_t background_c
  * @brief   simple blink pattern to show the desired way
  */
 void blinkGo() {
-  segmentStrip1.blinkAllSegments(segmentStrip1.GREEN(), OFF, 200, 120);
-  segmentStrip2.blinkAllSegments(segmentStrip2.GREEN(), OFF, 200, 120);
+  segmentStrip1.blinkAllSegments(segmentStrip1.GREEN(), OFF, 180, 90);
+  segmentStrip2.blinkAllSegments(segmentStrip2.GREEN(), OFF, 180, 90);
 }
 
 void blinkLeft() {
-  segmentStrip1.blinkAllSegments(segmentStrip1.YELLOW(), OFF, 200, 120);
+  segmentStrip1.blinkAllSegments(segmentStrip1.YELLOW(), OFF, 180, 90);
+}
+
+void blinkLeftFront() {
+  segmentStrip1.blinkSegments(segmentStrip1.YELLOW(), OFF, 0b10000, 180, 90);
+}
+
+void blinkLeftRear() {
+  segmentStrip1.blinkSegments(segmentStrip1.YELLOW(), OFF, 0b00011, 180, 90);
 }
 
 void blinkRight() {
-  segmentStrip2.blinkAllSegments(segmentStrip2.YELLOW(), OFF, 200, 120);
+  segmentStrip2.blinkAllSegments(segmentStrip2.YELLOW(), OFF, 180, 90);
+}
+
+void blinkRightFront() {
+  segmentStrip2.blinkSegments(segmentStrip1.YELLOW(), OFF, 0b10000, 180, 90);
+}
+
+void blinkRightRear() {
+  segmentStrip2.blinkSegments(segmentStrip1.YELLOW(), OFF, 0b00011, 180, 90);
 }
 
 void blinkWarning() {
-  segmentStrip1.blinkAllSegments(segmentStrip1.YELLOW(), OFF, 200, 120);
-  segmentStrip2.blinkAllSegments(segmentStrip2.YELLOW(), OFF, 200, 120);
+  segmentStrip1.blinkAllSegments(segmentStrip1.YELLOW(), OFF, 180, 90);
+  segmentStrip2.blinkAllSegments(segmentStrip2.YELLOW(), OFF, 180, 90);
 }
 
 void blinkStop() {
-  segmentStrip1.blinkAllSegments(segmentStrip1.RED(), OFF, 200, 120);
-  segmentStrip2.blinkAllSegments(segmentStrip2.RED(), OFF, 200, 120);
+  segmentStrip1.blinkAllSegments(segmentStrip1.RED(), OFF, 180, 90);
+  segmentStrip2.blinkAllSegments(segmentStrip2.RED(), OFF, 180, 90);
 }
 
 // evaluate
