@@ -2,7 +2,7 @@
   Critical Mass 07.2021
 
   Keypad:
-  A:
+  A: shift simple patterns
    1: shift pattern forward (foreground+background)
    2: shift pattern forward (foreground only)
    3: shift pattern forward (background only)
@@ -16,7 +16,7 @@
    +: increase primary color
    -: decrease primary color
   
-  B:
+  B: set LEDs one by one (over Segments/complete stripe)
    1: setLEDsSegmentsInOut (foreground+background)
    2: setLEDsSegmentsOutIn (foreground+background)
    3: setLEDsSegmentsUpDown (foreground+background)
@@ -30,35 +30,35 @@
    +: increase brightness
    -: decrease brightness
   
-  C:
-   1: blinkLeftFront
+  C: simple blink patterns
+   1: car
    2: blinkGo
-   3: blinkRightFront
+   3: white
    4: blinkLeft
    5: blinkWarning
    6: blinkRight
-   7: blinkLeftRear
+   7: off
    8: blinkStop
-   9: blinkRightRear
+   9: red
    0: show secondary color
    +: increase secondary color
    -: decrease secondary color
   
-  D:
-   1:
-   2:
-   3:
-   4:
-   5:
-   6:
-   7:
-   8:
-   9:
+  D: complex patterns (rainbow)
+   1: shift color complete stripe (increasing)
+   2: shift color complete stripe (decreasing)
+   3: color wheel (increasing)
+   4: color wheel (decreasing)
+   5: animateSegmentsRainbow
+   6: animateSegmentsRainbow(600, 300)
+   7: OFF
+   8: OFF
+   9: OFF
    0: blink secondary/primary color
    +: increase delay
    -: decrease delay
-
 */
+
 //////////////////////////////
 /* 1. Segmented RGB Strip */
 #include "NeoPixelHelper.h"
@@ -448,13 +448,13 @@ void applyPatternC(void) {
       segmentStrip2.setStripeBackground();
       break;
     case '1':
-      blinkLeftFront();
+      car();
       break;
     case '2':
       blinkGo();
       break;
     case '3':
-      blinkRightFront();
+      white();
       break;
     case '4':
       blinkLeft();
@@ -466,13 +466,13 @@ void applyPatternC(void) {
       blinkRight();
       break;
     case '7':
-      blinkLeftRear();
+      // OFF
       break;
     case '8':
       blinkStop();
       break;
     case '9':
-      blinkRightRear();
+      red();
       break;
     default:  
       // do nothing
@@ -480,6 +480,10 @@ void applyPatternC(void) {
   }
 }
 
+/*
+ PatternC:  
+ - complex patterns
+*/
 void applyPatternD(void) {
   // 4. combined animations
   // ToDo: animate increasing speed?
@@ -515,73 +519,18 @@ void applyPatternD(void) {
       animateSegmentsRainbow(600, 300);
       break;
     case '7':
+      // OFF
       break;
     case '8':
+      // OFF
       break;
     case '9':
+      // OFF
       break;
     default:  
       // do nothing
       break;  
   }
-}
-
-
-/* animations */
-/**
- * @brief   test methods provided directly by NeoPixelHelper
- */
-void testPattern(void) {
-  // 1. blink complete segments
-  // a) blink 50/50 duty cycle
-  // segmentStrip1.blinkSegments(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground(), 0x3FF, 200);
-  // segmentStrip1.blinkSegments(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground(), segmentStrip1.getAllSegments(), 200);
-  // segmentStrip1.blinkAllSegments(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground(), 200);
-  // segmentStrip1.blinkEvenSegments(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground(), 200);
-  // segmentStrip1.blinkOddSegments(segmentStrip1.getColorBackground(), segmentStrip1.getColorForeground(), 200);
-  // segmentStrip1.blinkFirstSegments(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground(), 5, 200);
-  // segmentStrip1.blinkLastSegments(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground(), 5, 200);
-
-  // b) blink 25/75  duty cycle -> repeat after 200 ticks: 50 ticks color1, remaining 150 ticks color2
-  // segmentStrip1.blinkSegments(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground(), 0x3FF, 200, 50);
-  
-  // 2. blink pixel of segments
-  // segmentStrip1.blinkPattern(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground(), 0x3FF, 0x7FFF, 200);  // all segments: 0x7FFF = all pixels
-  // segmentStrip1.blinkPattern(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground(), 0x3FF, 1 << 0, 200);  // all segments: 0x1 = first pixel
-  // segmentStrip1.blinkPattern(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground(), 0x3FF, 1 << 14, 200);  // all segments: 0x4000 = last pixel 
-  // segmentStrip1.blinkPattern(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground(), 0x3FF, 1 << (segmentStrip1.getLongestSegment() - 1), 200);  // all segments: 0x4000 = last pixel 
-  // segmentStrip1.blinkPattern(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground(), 0x3FF, 0x03C0, 200);  // all segments: 0x03C0 = inner 4 pixels
-  // segmentStrip1.blinkPattern(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground(), segmentStrip1.getOddSegments(), segmentStrip1.getOddPixels(), 200);
-  // segmentStrip1.blinkPattern(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground(), segmentStrip1.getEvenSegments(), segmentStrip1.getEvenPixels(), 200);
-  // segmentStrip1.blinkPattern(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground(), segmentStrip1.getAllSegments(), segmentStrip1.getAllPixels(), 200);
-
-  // b) blink 25/75  duty cycle -> repeat after 200 ticks: 50 ticks color1, remaining 150 ticks color2
-  // segmentStrip1.blinkPattern(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground(), segmentStrip1.getAllSegments(), segmentStrip1.getAllPixels(), 200, 50);
-
-  // 3. animations
-  // segmentStrip1.shiftSegments(segmentStrip1.getColorForeground(), segmentStrip1.getAllSegments(), 0x1, 1, 500, 50);  // 10 stripes
-  // segmentStrip1.shiftSegments(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground(), segmentStrip1.getAllSegments(), 0x1, 1, 500, 50);
-  // segmentStrip1.shiftSegments(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground(), segmentStrip1.getAllSegments(), segmentStrip1.getLastSegments(1), -1, 500, 50);
-  // segmentStrip1.shiftPattern(segmentStrip1.getColorForeground(), segmentStrip1.getAllSegments(), 0x7, 1, 300, 20);  // 15 LEDs per Stripe
-  // segmentStrip1.shiftPattern(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground(), segmentStrip1.getAllSegments(), 0x7, 1, 300, 20); 
-  // segmentStrip1.shiftPattern(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground(), segmentStrip1.getAllSegments(), segmentStrip1.getLastPixels(3), -1, 300, 20); 
-  // segmentStrip1.shiftPatternInit(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground(), segmentStrip1.getAllSegments(), segmentStrip1.getFirstPixels(3), -3, 1, 360, 20); 
-  // segmentStrip1.shiftPatternInit(segmentStrip1.getColorForeground(), segmentStrip1.getColorBackground(), segmentStrip1.getAllSegments(), segmentStrip1.getLastPixels(3), 3, -1, 360, 20); 
-
-  // 4. play with colors
-  // segmentStrip1.animateRainbowStripe(0, 1, 5, 15);
-  // segmentStrip1.animateRainbowLEDs(0, 2, 1, 5, 15);
-  // segmentStrip1.animateSegmentsRainbow(0, 24, segmentStrip1.getAllSegments(), 24, 20, 15);
-  // segmentStrip1.animateSegmentsRainbow(0, -24, segmentStrip1.getAllSegments(), 24, 20, 15);
-  // segmentStrip1.animateSegmentsRainbow(0, 24, segmentStrip1.getAllSegments(), -24, 20, 15);
-
-  // 5. combined animations
-  // animateEvenOdd();
-  // animateEvenOdd(600, 300);
-  // animateEvenOddInit();
-  // animateEvenOddInit(720, 360);
-  // animateSegmentsRainbow();
-  animateSegmentsRainbow(600, 300);
 }
 
 /**
@@ -637,11 +586,11 @@ void shiftPatternForwardBackwards(uint32_t foreground_color, uint32_t background
  * @param   animation_frames number of frames the led colors are held constant
  */
 void colorWheel(uint16_t color_degree_frame_step, uint16_t color_const_frames, int16_t animation_frames) {
-  segmentStrip1.shiftColorSteps(0, 6, 0b00001, color_degree_frame_step, color_const_frames, animation_frames);
+  segmentStrip1.shiftColorSteps(0, 6, 0b10001, color_degree_frame_step, color_const_frames, animation_frames);
   segmentStrip1.shiftColorSteps(90, 6, 0b00010, color_degree_frame_step, color_const_frames, animation_frames);
   segmentStrip1.shiftColorSteps(180, 6, 0b00100, color_degree_frame_step, color_const_frames, animation_frames);
   segmentStrip1.shiftColorSteps(270, 6, 0b01000, color_degree_frame_step, color_const_frames, animation_frames);
-  segmentStrip2.shiftColorSteps(0, 6, 0b00001, color_degree_frame_step, color_const_frames, animation_frames);
+  segmentStrip2.shiftColorSteps(0, 6, 0b10001, color_degree_frame_step, color_const_frames, animation_frames);
   segmentStrip2.shiftColorSteps(90, 6, 0b00010, color_degree_frame_step, color_const_frames, animation_frames);
   segmentStrip2.shiftColorSteps(180, 6, 0b00100, color_degree_frame_step, color_const_frames, animation_frames);
   segmentStrip2.shiftColorSteps(270, 6, 0b01000, color_degree_frame_step, color_const_frames, animation_frames);
@@ -1077,4 +1026,24 @@ void animateSegmentsRainbow(uint32_t frames, uint32_t frameswitch) {
     segmentStrip2.animateSegmentsRainbow(0, 24, segmentStrip2.getAllSegments(), -6, 5, 60);
     // segmentStrip1.animateSegmentsRainbow(0, 24, segmentStrip1.getAllSegments(), 6, 5, 60);
   }
+}
+
+void car() {
+  // front white
+  segmentStrip1.setSegments(segmentStrip1.WHITE(), 0b10000);
+  segmentStrip2.setSegments(segmentStrip2.WHITE(), 0b10000);
+
+  // rear red
+  segmentStrip1.setSegments(segmentStrip1.RED(), 0b00110);
+  segmentStrip2.setSegments(segmentStrip2.RED(), 0b00110);
+}
+
+void white() {
+  segmentStrip1.setSegments(segmentStrip1.WHITE(), segmentStrip1.getAllSegments());
+  segmentStrip2.setSegments(segmentStrip2.WHITE(), segmentStrip2.getAllSegments());
+}
+
+void red() {
+  segmentStrip1.setSegments(segmentStrip1.RED(), segmentStrip1.getAllSegments());
+  segmentStrip2.setSegments(segmentStrip2.RED(), segmentStrip2.getAllSegments());
 }
