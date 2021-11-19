@@ -2,46 +2,49 @@
 https://learn.adafruit.com/adafruit-neopixel-uberguide/  
 https://www.instructables.com/NeoPixel-Party-Bike-Music-Reactive-Animations-With/  
 
-[1. Hardware Setup](#1-hardware-setup)  
-[2. Measurements](#2-measurements)  
-[3. Code](#3-code)  
-[4. Input](#4-input)  
-[5. Case](#5-case)  
-[6. Animations](#6-animations)
+[1. Hardware](#1-hardware)  
+[2. Software](#2-software)  
+[3. Input](#3-input)  
+[4. Animations](#4-animations)  
 
----
-# 1. Hardware Setup
-Board: Arduino Nano  
-install correct driver for the CH340 serial communication chip  
+
+___  
+# 1. Hardware  
+## 1.1 Microcontroller  
+Arduino Nano = ATmega328P  
+- install correct driver for the CH340 serial communication chip  
 &rarr; https://learn.sparkfun.com/tutorials/how-to-install-ch340-drivers/all  
+- use old Bootloader  
+  &rarr; Port should be available in the Arduino IDE  
+- similar to Arduino Uno  
+  &rarr; 5V pins
 
-Processor: ATmega328P Old Bootloader  
-&rarr; Port should be available  
-
-same as Arduino Uno  
-&rarr; 5V pins
-
-RGB Stripes:  
-- **ws2812b** (3 Wire, PWM)  
-- APA102 (4 Wire, SPI)  
-
-best practices:  
+___  
+## 1.2 RGB Stripes
+ 
+ **Best Practices:**  
 - add a large capacitor (>1000uF) between +/- of the power source  
 - add a 300-500Ohm Restistor to the data line  
 
-ToDo: add led strip light diffuser  
+**ToDo:**  
+add led strip light diffuser  
 - [Flexible Diffusing Sleeve](https://www.alibaba.com/product-detail/Flexible-Diffusing-Sleeve-for-LED-Strip_60735604546.html)  
 - https://s.click.aliexpress.com/e/ctKFn7htp  
 - aliexpress.com/item/4000095850068.html  
 
----
-# 2. Measurements  
-## 2.1 WS2812B   
+### 1.2.1 WS2812B   
 https://learn.adafruit.com/adafruit-neopixel-uberguide/arduino-library-use  
 
-**Power Demand:**  
-150 LEDS: every LED ~40ma  
-+ each NeoPixel requires about 3 bytes of RAM: 450Bytes  
+#### **Communication:**
+3 Wire, PWM  
+
+#### **Power Demand:**
+
+Strip with 150 WS2812B RGB LEDS:  
+- every LED draws up to ~40ma @5V  
+  &rarr; max. 6A @5V  
+- every LED requires ~3 bytes of RAM using NeoPixel  
+  &rarr; ~450Bytes    
 
 | COLOR/BRIGHTNESS | 10   | 50   | 100  | 150 | 200 | 250 |  
 |------------------|------|------|------|-----|-----|-----|  
@@ -53,26 +56,41 @@ https://learn.adafruit.com/adafruit-neopixel-uberguide/arduino-library-use
 | CYAN             | 0.23 | 0.77 | 1.44 | 2.0 | 2.4 | 2.6 |  
 | WHITE            | 0.3  | 1.1  | 2.0  | 2.5 | 2.9 | 3.1 |  
 
-**Timings Salae:**  
-transmit data takes ~30us per LED  
-&rarr; updating 150 LEDs takes ~0.8ms set and ~4.5ms transmit = ~5.3ms per show() command   
-&rarr; ~190 updates per second!!!  
+#### **Timing:**  
+data transmission takes ~30us per LED  
+updating all 150 LEDs takes ~0.8ms set and ~4.5ms transmit = ~5.3ms per show() command   
+&rarr; ~190 updates/frames per second!   
 
-optimize code: call show() only when all LED updated!  
-
-## 2.2 AP102  
-60 LEDs: 100ma!!!
+code optimization:  
+call show() only when all LEDs updated!  
 
 
---- 
-# 3. Code
-Libraries:  
-- APA102
-- NeoPixelBus by Makuna  
-- **Adafruit NeoPixel**  
+### 1.2.2 APA102  
 
+#### **Communication:**  
+4 Wire, SPI  
 
-## 3.1 Adafruit NeoPixel Basics
+#### **Power Demand:**  
+Strip with 60 LEDs: 100ma @5V!  
+
+___
+## 1.3 Case
+- Arduino power source:  
+  usb-micro cable from power bank into the case  
+- Input = keypad:  
+  Flat Cables from top of case into the case (centered: 5*23mm)  
+- RGB Stripe:  
+  a) data: adapter cable from stripe into the case(data+GND)  
+  b) power: usb-cable from power bank to stripe (VCC+GND)  
+
+![](images/case_dimensions_1.png)  
+![](images/case_dimensions_2.png)  
+![](images/case_base_body.png)  
+![](images/case_cover.png)  
+
+___  
+# 2. Software
+## 2.1 Adafruit NeoPixel  
 https://adafruit.github.io/Adafruit_NeoPixel/html/index.html  
 
 1. basic setup
@@ -126,17 +144,18 @@ uint32_t color = strip.getPixelColor(11);
 uint16_t n = strip.numPixels();
 ```
 
-## 3.2 FastLED Basics
+___
+## 2.2 FastLED  
 http://fastled.io/  
 
 FUNCTION-BASED ANIMATION SEQUENCES:  
 https://gist.github.com/hsiboy/f9ef711418b40e259b06  
 
+___
+## 2.3 Colors  
 
-## 3.3 Colors  
-
-### 3.3.1 Simple RGB Colors
-a) fixed brightness:  
+### 2.3.1 Simple RGB Colors
+**a) fixed brightness:**  
 ```cpp
 #define BRIGHTNESS 150
 #define OFF Adafruit_NeoPixel::Color(0, 0, 0)
@@ -149,7 +168,7 @@ a) fixed brightness:
 #define WHITE Adafruit_NeoPixel::Color(BRIGHTNESS, BRIGHTNESS, BRIGHTNESS)
 ```
 
-b) macro brightness:  
+**b) macro brightness:**  
 ```cpp
 #define RED(brightness) Adafruit_NeoPixel::Color(brightness, 0, 0)
 #define GREEN(brightness) Adafruit_NeoPixel::Color(0, brightness, 0)
@@ -160,7 +179,7 @@ b) macro brightness:
 #define WHITE(brightness) Adafruit_NeoPixel::Color(brightness, brightness, brightness)
 ```
 
-### 3.3.2 HSV Colors
+### 2.3.2 HSV Colors
 https://alloyui.com/examples/color-picker/hsv.html  
 &rarr; google color picker: HSV    
 
@@ -176,8 +195,8 @@ uint32_t Adafruit_NeoPixel::ColorHSV	(
 uint32_t Adafruit_NeoPixel::gamma32	(	uint32_t 	x	);	
 ```
 
-Parameters:
-- **hue**  	
+### Parameters:  
+- **hue**  
   An unsigned 16-bit value, 0 to 65535, representing one full loop of the color wheel, which allows 16-bit hues to "roll over" while still doing the expected thing (and allowing more precision than the wheel() function that was common to prior NeoPixel examples).
 - **sat =	Saturation**  
   8-bit value, 0 (min or pure grayscale) to 255 (max or pure hue). Default of 255 if unspecified.
@@ -238,11 +257,11 @@ Diffusing the LEDs also really seems to help when using low-saturation colors.
 #define MAGENTA    300*HUE_DEGREE
 ```
 
-
 **brightness steps:**  
 0 5 10 20 30 50 75 100 150 200 255  
 
-## 3.4 NeoPixelHelper
+___
+## 2.4 NeoPixelHelper
 additional library to split strip into multiple Segments  
 &rarr; built on top of Adafruit_NeoPixel  
 
@@ -402,9 +421,9 @@ class SegmentedStrip : public Adafruit_NeoPixel {
 ```
 
 
----
-# 4. Input
-## 4.1 Keypad
+___  
+# 3. Input
+## 3.1 Keypad
 
 https://www.circuitbasics.com/how-to-set-up-a-keypad-on-an-arduino/  
 
@@ -605,9 +624,9 @@ void applyPattern(void) {
 }
 ```
 
----
-## 4.2 BLE
-### 4.2.1 BLE Roles
+___  
+## 3.2 BLE
+### 3.2.1 BLE Roles
 https://embedded.fm/blog/ble-roles  
 https://web.archive.org/web/20160930015609/http://projects.mbientlab.com:80/bluetooth-low-energy-basics/  
 
@@ -640,13 +659,12 @@ A device can switch between a Master and Slave but it cannot be both at the same
 A device can be a Server and Client at the same time.  
 
 
-### 4.2.1 Arduino Nano 33 BLE
+### 3.2.2 Arduino Nano 33 BLE
 https://www.arduino.cc/en/Guide/NANO33BLE  
 ToDo!  
 
-
----
-## 4.3 Infrared
+___
+## 3.3 Infrared
 Sensor: TSOP4838  
 Arduino Library: [IRemote](https://github.com/Arduino-IRremote/Arduino-IRremote)  
 [project homepage](https://arduino-irremote.github.io/Arduino-IRremote/)  
@@ -692,20 +710,8 @@ Protocols can be switched off and on by definining macros before the line #incud
 ```
 
 
----
-# 5. Case
-- power arduino: usb-micro cable from power bank into the case  
-- keypad: Flat Cables from top of case into the case (centered: 5*23mm)  
-- Stripe:  
-  a) data: adapter cable from stripe into the case(data+GND)  
-  b) power: usb-cable from power bank to stripe (VCC+GND)  
-
-![](images/case.png)  
-![](images/case_dimensions_1.png)  
-![](images/case_dimensions_2.png)  
-
-
-# 6. Animations
+___
+# 4. Animations  
 ```cpp
 // 1. blink complete segments
 // blink all Segments
