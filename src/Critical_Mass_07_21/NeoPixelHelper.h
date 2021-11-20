@@ -1,4 +1,7 @@
-/* https://github.com/adafruit/Adafruit_NeoPixel/blob/master/Adafruit_NeoPixel.cpp */
+/**
+  @file NeoPixelHelper.h
+  https://github.com/adafruit/Adafruit_NeoPixel/blob/master/Adafruit_NeoPixel.cpp 
+  */
 
 #ifndef NEOPIXELHELPER_H
 #define NEOPIXELHELPER_H

@@ -1,4 +1,7 @@
-# RGB Bicycle  
+@project_name RGB Cycle Project  
+@mainpage RGB Cycle Main Page  
+
+# RGB Cycle  
 https://learn.adafruit.com/adafruit-neopixel-uberguide/  
 https://www.instructables.com/NeoPixel-Party-Bike-Music-Reactive-Animations-With/  
 
@@ -7,7 +10,14 @@ https://www.instructables.com/NeoPixel-Party-Bike-Music-Reactive-Animations-With
 [3. Input](#3-input)  
 [4. Animations](#4-animations)  
 
-
+https://stackoverflow.com/questions/35500277/doxygen-for-ino-files-arduino  
+```ini
+INPUT = src/Critical_Mass_07_21 doxygen_pages/ README.md
+HTML_EXTRA_STYLESHEET  = doxygen_pages/doxygen-awesome.css
+FILE_PATTERNS = [...] *.ino
+EXTENSION_MAPPING = ino=c
+/**@file sketch_1.ino */  
+```
 ___  
 # 1. Hardware  
 ## 1.1 Microcontroller  
@@ -671,7 +681,7 @@ Arduino Library: [IRemote](https://github.com/Arduino-IRremote/Arduino-IRremote)
 [wiki](https://github.com/Arduino-IRremote/Arduino-IRremote/wiki)  
 [Problem: IRemote and NeoPixel](http://marc.merlins.org/perso/arduino/post_2017-04-03_Arduino-328P-Uno-Teensy3_1-ESP8266-ESP32-IR-and-Neopixels.html)  
 
-Protocols can be switched off and on by definining macros before the line #incude <IRremote.h>  
+Protocols can be switched off and on by definining macros before the line #include <IRremote.h>  
 `#define DECODE_NEC`  
 
 **remote control codes:**  

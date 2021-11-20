@@ -1,3 +1,5 @@
 drivers
 .theia
 .vscode/
+.env
+html/
