@@ -1,5 +1,4 @@
-@project_name RGB Cycle Project  
-@mainpage RGB Cycle Main Page  
+@mainpage RGB Cycle Main Page
 
 # RGB Cycle  
 https://learn.adafruit.com/adafruit-neopixel-uberguide/  
@@ -7,17 +6,11 @@ https://www.instructables.com/NeoPixel-Party-Bike-Music-Reactive-Animations-With
 
 [1. Hardware](#1-hardware)  
 [2. Software](#2-software)  
-[3. Input](#3-input)  
-[4. Animations](#4-animations)  
+[3. Input Devices](#3-input-devices)  
+[4. NeoPixelHelper](#4-neopixelhelper)  
+[5. GitHub Pages](#5-github-pages)  
 
-https://stackoverflow.com/questions/35500277/doxygen-for-ino-files-arduino  
-```ini
-INPUT = src/Critical_Mass_07_21 doxygen_pages/ README.md
-HTML_EXTRA_STYLESHEET  = doxygen_pages/doxygen-awesome.css
-FILE_PATTERNS = [...] *.ino
-EXTENSION_MAPPING = ino=c
-/**@file sketch_1.ino */  
-```
+
 ___  
 # 1. Hardware  
 ## 1.1 Microcontroller  
@@ -97,6 +90,7 @@ ___
 ![](images/case_dimensions_2.png)  
 ![](images/case_base_body.png)  
 ![](images/case_cover.png)  
+
 
 ___  
 # 2. Software
@@ -270,169 +264,9 @@ Diffusing the LEDs also really seems to help when using low-saturation colors.
 **brightness steps:**  
 0 5 10 20 30 50 75 100 150 200 255  
 
-___
-## 2.4 NeoPixelHelper
-additional library to split strip into multiple Segments  
-&rarr; built on top of Adafruit_NeoPixel  
-
-```cpp
-#include <Adafruit_NeoPixel.h>
-
-#define HUE_DEGREE 182
-#define OFF Adafruit_NeoPixel::Color(0, 0, 0)
-
-struct Segment {
-  uint8_t first;
-  uint8_t count;
-};
-
-class SegmentedStrip : public Adafruit_NeoPixel {
-  public:
-    // constructor
-    SegmentedStrip(uint16_t n, uint16_t p, neoPixelType t, uint8_t segment_starts[], uint8_t n_segments);
-
-    // public attributes
-    // numLEDs -> given by parent class
-
-    // public methods
-    // defaults always go in the header file!
-    // complete strip
-    void update(void);
-    void setStripe(uint32_t color);
-    void setStripeForeground(void);
-    void setStripeBackground(void);
-    void resetStripe(void);
-    
-    void shiftColorStripe(uint16_t color_degree_frame_step, uint16_t animation_frames);
-
-    // segments
-    void setSegments(uint32_t active_segments);
-    void setSegments(uint32_t color, uint32_t active_segments);
-    void resetSegments(uint32_t active_segments);
-    void setAllSegments(uint32_t color);  
-    void setEvenSegments(uint32_t color);  
-    void setOddSegments(uint32_t color);  
-    void setFirstSegments(uint32_t color, uint8_t n);
-    void setLastSegments(uint32_t color, uint8_t n);
-
-    void blinkSegments(uint32_t color, uint32_t active_segments, uint16_t frames, uint16_t frame_color_switch=0);
-    void blinkSegments(uint32_t color1, uint32_t color2, uint32_t active_segments, uint16_t frames, uint16_t frame_color_switch=0);
-    void blinkAllSegments(uint32_t color1, uint32_t color2, uint16_t frames, uint16_t frame_color_switch=0);
-    void blinkEvenSegments(uint32_t color1, uint32_t color2, uint16_t frames, uint16_t frame_color_switch=0);
-    void blinkOddSegments(uint32_t color1, uint32_t color2, uint16_t frames, uint16_t frame_color_switch=0);
-    void blinkFirstSegments(uint32_t color1, uint32_t color2, uint8_t n, uint16_t frames, uint16_t frame_color_switch=0);
-    void blinkLastSegments(uint32_t color1, uint32_t color2, uint8_t n, uint16_t frames, uint16_t frame_color_switch=0);
-
-    void shiftSegments(uint32_t color, uint32_t active_segments, uint32_t init_segments, int8_t shift_segments, uint16_t frames, uint16_t animation_frames);
-    void shiftSegments(uint32_t color1, uint32_t color2, uint32_t active_segments, uint32_t init_segments, int8_t shift_segments, uint16_t frames, uint16_t animation_frames);
-
-    // segments pixel pattern
-    void setPattern(uint32_t color, uint32_t active_segments, uint32_t active_pixel);
-  
-    void blinkPattern(uint32_t color1, uint32_t color2, uint32_t active_segments, uint32_t active_pixel, uint16_t frames, uint16_t frame_color_switch=0);
-
-    void shiftPattern(uint32_t color, uint32_t active_segments, uint32_t init_pixel, int8_t shift_pixel, uint16_t frames, uint16_t animation_frames);
-    void shiftPattern(uint32_t color1, uint32_t color2, uint32_t active_segments, uint32_t init_pixel, int8_t shift_pixel, uint16_t frames, uint16_t animation_frames);
-    void shiftPatternInit(uint32_t color, uint32_t active_segments, uint32_t pixel_pattern, int8_t init_shift_pixel, int8_t shift_pixel, uint16_t frames, uint16_t animation_frames);
-    void shiftPatternInit(uint32_t color1, uint32_t color2, uint32_t active_segments, uint32_t pixel_pattern, int8_t init_shift_pixel, int8_t shift_pixel, uint16_t frames, uint16_t animation_frames);
-
-    // play with colors
-    void setColorSteps(uint16_t color_degree_start, uint16_t color_degree_step, uint32_t active_segments);
-    void setColorSteps(uint16_t color_degree_start, uint8_t saturation_start, uint8_t saturation_step, uint32_t active_segments);
-    void setColorSteps(uint16_t color_degree_start, uint16_t color_degree_step, uint8_t saturation_start, uint8_t saturation_step, uint32_t active_segments);
-    
-    void shiftColorSteps(uint16_t color_degree_start, uint16_t color_degree_step, uint32_t active_segments, uint16_t color_degree_frame_step, uint16_t animation_frames);
-    void shiftColorSteps(uint16_t color_degree_start, uint8_t saturation_start, uint8_t saturation_step, uint32_t active_segments, uint8_t saturation_frame_step, uint16_t animation_frames);
-    void shiftColorSteps(uint16_t color_degree_start, uint16_t color_degree_step, uint8_t saturation_start, uint8_t saturation_step, uint32_t active_segments, uint16_t color_degree_frame_step, uint8_t saturation_frame_step, uint16_t animation_frames);
-    
-    void animateSegmentsRainbow(uint16_t color_degree_start, uint16_t color_degree_led_step, uint32_t active_segments, uint16_t color_degree_frame_step, uint16_t animation_frames);
-    void animateRainbowStripe(uint16_t color_degree_start, uint16_t color_degree_frame_step, uint16_t animation_frames);
-    void animateRainbowLEDs(uint16_t color_degree_start, uint16_t color_degree_led_step, uint16_t color_degree_frame_step, uint16_t animation_frames);
-
-    // colors
-    uint32_t color(uint16_t degree);
-    uint32_t color(uint16_t degree, uint8_t saturation);
-    uint32_t WHITE(void);
-    uint32_t RED(void);
-    uint32_t YELLOW(void);
-    uint32_t GREEN(void);
-    uint32_t CYAN(void);
-    uint32_t BLUE(void);
-    uint32_t MAGENTA(void);
-
-    // public getters
-    Segment* getSegments();
-    uint8_t getNSegments();
-    uint8_t getLongestSegment();
-    uint32_t getFrameCounter();
-    uint8_t getBrightness();
-    uint16_t getColorDegreeForeground();
-    uint16_t getColorDegreeBackground();
-    uint32_t getColorForeground();
-    uint32_t getColorBackground();
-    uint8_t getSaturation();
-    uint8_t getDelay();
-
-    uint32_t getAllSegments();
-    uint32_t getEvenSegments();
-    uint32_t getOddSegments();
-    uint32_t getFirstSegments(uint8_t n);
-    uint32_t getLastSegments(uint8_t n);
-    uint32_t getAllPixels();
-    uint32_t getEvenPixels();
-    uint32_t getOddPixels();
-    uint32_t getFirstPixels(uint8_t n);
-    uint32_t getLastPixels(uint8_t n);
-    
-    // public setters
-    void resetFrameCounter(void);
-    void setBrightness(uint8_t);
-    void increaseBrightness(uint8_t b);
-    void decreaseBrightness(uint8_t b);
-    void increaseBrightnessStep(void);
-    void decreaseBrightnessStep(void);
-    void increaseColorDegreeForeground(uint16_t c);
-    void decreaseColorDegreeForeground(uint16_t c);
-    void increaseColorDegreeBackground(uint16_t c);
-    void decreaseColorDegreeBackground(uint16_t c);
-    void setSaturation(uint8_t s);
-    void increaseDelay(uint8_t d);
-    void decreaseDelay(uint8_t d);
-
-
-  private:
-    // private attributes
-    Segment *segments;  // extract array of Segments elements from array of segment_starts
-    uint8_t n_segments;
-    uint8_t longest_segment;  // n_pixels in the longest segment
-    uint32_t frame_counter = 0;
-    uint8_t brightness = 100;
-    uint8_t brightnessSteps[11] = {0, 5, 10, 20, 30, 50, 75, 100, 150, 200, 255};
-    uint8_t nBrightnessSteps = 10;  // -1: do not count 0!
-    uint8_t brightnessStep = 5;
-    uint16_t colorDegreeForeground = 0;
-    uint16_t colorDegreeBackground = 0;
-    uint8_t saturation = 255;
-    uint8_t delay = 0;
-
-    uint8_t MAX_NUMBER_SEGMENTS       = 32;
-    uint8_t MAX_NUMBER_SEGMENT_PIXELS = 32;
-    uint32_t ALL_SEGMENTS;  // binary representations
-    uint32_t EVEN_SEGMENTS;
-    uint32_t ODD_SEGMENTS;
-    uint32_t ALL_PIXELS;  // given by longest_segment!!!
-    uint32_t EVEN_PIXELS;
-    uint32_t ODD_PIXELS;
-
-    // private methods
-    void update_segments(uint8_t segment_starts[]);
-    void update_longest_segment();
-};
-```
-
 
 ___  
-# 3. Input
+# 3. Input Devices  
 ## 3.1 Keypad
 
 https://www.circuitbasics.com/how-to-set-up-a-keypad-on-an-arduino/  
@@ -721,7 +555,170 @@ Protocols can be switched off and on by definining macros before the line #inclu
 
 
 ___
-# 4. Animations  
+# 4. NeoPixelHelper  
+## 4.1 NeoPixelHelper Library   
+additional library to split strip into multiple Segments  
+&rarr; built on top of Adafruit_NeoPixel  
+
+```cpp
+#include <Adafruit_NeoPixel.h>
+
+#define HUE_DEGREE 182
+#define OFF Adafruit_NeoPixel::Color(0, 0, 0)
+
+struct Segment {
+  uint8_t first;
+  uint8_t count;
+};
+
+class SegmentedStrip : public Adafruit_NeoPixel {
+  public:
+    // constructor
+    SegmentedStrip(uint16_t n, uint16_t p, neoPixelType t, uint8_t segment_starts[], uint8_t n_segments);
+
+    // public attributes
+    // numLEDs -> given by parent class
+
+    // public methods
+    // defaults always go in the header file!
+    // complete strip
+    void update(void);
+    void setStripe(uint32_t color);
+    void setStripeForeground(void);
+    void setStripeBackground(void);
+    void resetStripe(void);
+    
+    void shiftColorStripe(uint16_t color_degree_frame_step, uint16_t animation_frames);
+
+    // segments
+    void setSegments(uint32_t active_segments);
+    void setSegments(uint32_t color, uint32_t active_segments);
+    void resetSegments(uint32_t active_segments);
+    void setAllSegments(uint32_t color);  
+    void setEvenSegments(uint32_t color);  
+    void setOddSegments(uint32_t color);  
+    void setFirstSegments(uint32_t color, uint8_t n);
+    void setLastSegments(uint32_t color, uint8_t n);
+
+    void blinkSegments(uint32_t color, uint32_t active_segments, uint16_t frames, uint16_t frame_color_switch=0);
+    void blinkSegments(uint32_t color1, uint32_t color2, uint32_t active_segments, uint16_t frames, uint16_t frame_color_switch=0);
+    void blinkAllSegments(uint32_t color1, uint32_t color2, uint16_t frames, uint16_t frame_color_switch=0);
+    void blinkEvenSegments(uint32_t color1, uint32_t color2, uint16_t frames, uint16_t frame_color_switch=0);
+    void blinkOddSegments(uint32_t color1, uint32_t color2, uint16_t frames, uint16_t frame_color_switch=0);
+    void blinkFirstSegments(uint32_t color1, uint32_t color2, uint8_t n, uint16_t frames, uint16_t frame_color_switch=0);
+    void blinkLastSegments(uint32_t color1, uint32_t color2, uint8_t n, uint16_t frames, uint16_t frame_color_switch=0);
+
+    void shiftSegments(uint32_t color, uint32_t active_segments, uint32_t init_segments, int8_t shift_segments, uint16_t frames, uint16_t animation_frames);
+    void shiftSegments(uint32_t color1, uint32_t color2, uint32_t active_segments, uint32_t init_segments, int8_t shift_segments, uint16_t frames, uint16_t animation_frames);
+
+    // segments pixel pattern
+    void setPattern(uint32_t color, uint32_t active_segments, uint32_t active_pixel);
+  
+    void blinkPattern(uint32_t color1, uint32_t color2, uint32_t active_segments, uint32_t active_pixel, uint16_t frames, uint16_t frame_color_switch=0);
+
+    void shiftPattern(uint32_t color, uint32_t active_segments, uint32_t init_pixel, int8_t shift_pixel, uint16_t frames, uint16_t animation_frames);
+    void shiftPattern(uint32_t color1, uint32_t color2, uint32_t active_segments, uint32_t init_pixel, int8_t shift_pixel, uint16_t frames, uint16_t animation_frames);
+    void shiftPatternInit(uint32_t color, uint32_t active_segments, uint32_t pixel_pattern, int8_t init_shift_pixel, int8_t shift_pixel, uint16_t frames, uint16_t animation_frames);
+    void shiftPatternInit(uint32_t color1, uint32_t color2, uint32_t active_segments, uint32_t pixel_pattern, int8_t init_shift_pixel, int8_t shift_pixel, uint16_t frames, uint16_t animation_frames);
+
+    // play with colors
+    void setColorSteps(uint16_t color_degree_start, uint16_t color_degree_step, uint32_t active_segments);
+    void setColorSteps(uint16_t color_degree_start, uint8_t saturation_start, uint8_t saturation_step, uint32_t active_segments);
+    void setColorSteps(uint16_t color_degree_start, uint16_t color_degree_step, uint8_t saturation_start, uint8_t saturation_step, uint32_t active_segments);
+    
+    void shiftColorSteps(uint16_t color_degree_start, uint16_t color_degree_step, uint32_t active_segments, uint16_t color_degree_frame_step, uint16_t animation_frames);
+    void shiftColorSteps(uint16_t color_degree_start, uint8_t saturation_start, uint8_t saturation_step, uint32_t active_segments, uint8_t saturation_frame_step, uint16_t animation_frames);
+    void shiftColorSteps(uint16_t color_degree_start, uint16_t color_degree_step, uint8_t saturation_start, uint8_t saturation_step, uint32_t active_segments, uint16_t color_degree_frame_step, uint8_t saturation_frame_step, uint16_t animation_frames);
+    
+    void animateSegmentsRainbow(uint16_t color_degree_start, uint16_t color_degree_led_step, uint32_t active_segments, uint16_t color_degree_frame_step, uint16_t animation_frames);
+    void animateRainbowStripe(uint16_t color_degree_start, uint16_t color_degree_frame_step, uint16_t animation_frames);
+    void animateRainbowLEDs(uint16_t color_degree_start, uint16_t color_degree_led_step, uint16_t color_degree_frame_step, uint16_t animation_frames);
+
+    // colors
+    uint32_t color(uint16_t degree);
+    uint32_t color(uint16_t degree, uint8_t saturation);
+    uint32_t WHITE(void);
+    uint32_t RED(void);
+    uint32_t YELLOW(void);
+    uint32_t GREEN(void);
+    uint32_t CYAN(void);
+    uint32_t BLUE(void);
+    uint32_t MAGENTA(void);
+
+    // public getters
+    Segment* getSegments();
+    uint8_t getNSegments();
+    uint8_t getLongestSegment();
+    uint32_t getFrameCounter();
+    uint8_t getBrightness();
+    uint16_t getColorDegreeForeground();
+    uint16_t getColorDegreeBackground();
+    uint32_t getColorForeground();
+    uint32_t getColorBackground();
+    uint8_t getSaturation();
+    uint8_t getDelay();
+
+    uint32_t getAllSegments();
+    uint32_t getEvenSegments();
+    uint32_t getOddSegments();
+    uint32_t getFirstSegments(uint8_t n);
+    uint32_t getLastSegments(uint8_t n);
+    uint32_t getAllPixels();
+    uint32_t getEvenPixels();
+    uint32_t getOddPixels();
+    uint32_t getFirstPixels(uint8_t n);
+    uint32_t getLastPixels(uint8_t n);
+    
+    // public setters
+    void resetFrameCounter(void);
+    void setBrightness(uint8_t);
+    void increaseBrightness(uint8_t b);
+    void decreaseBrightness(uint8_t b);
+    void increaseBrightnessStep(void);
+    void decreaseBrightnessStep(void);
+    void increaseColorDegreeForeground(uint16_t c);
+    void decreaseColorDegreeForeground(uint16_t c);
+    void increaseColorDegreeBackground(uint16_t c);
+    void decreaseColorDegreeBackground(uint16_t c);
+    void setSaturation(uint8_t s);
+    void increaseDelay(uint8_t d);
+    void decreaseDelay(uint8_t d);
+
+
+  private:
+    // private attributes
+    Segment *segments;  // extract array of Segments elements from array of segment_starts
+    uint8_t n_segments;
+    uint8_t longest_segment;  // n_pixels in the longest segment
+    uint32_t frame_counter = 0;
+    uint8_t brightness = 100;
+    uint8_t brightnessSteps[11] = {0, 5, 10, 20, 30, 50, 75, 100, 150, 200, 255};
+    uint8_t nBrightnessSteps = 10;  // -1: do not count 0!
+    uint8_t brightnessStep = 5;
+    uint16_t colorDegreeForeground = 0;
+    uint16_t colorDegreeBackground = 0;
+    uint8_t saturation = 255;
+    uint8_t delay = 0;
+
+    uint8_t MAX_NUMBER_SEGMENTS       = 32;
+    uint8_t MAX_NUMBER_SEGMENT_PIXELS = 32;
+    uint32_t ALL_SEGMENTS;  // binary representations
+    uint32_t EVEN_SEGMENTS;
+    uint32_t ODD_SEGMENTS;
+    uint32_t ALL_PIXELS;  // given by longest_segment!!!
+    uint32_t EVEN_PIXELS;
+    uint32_t ODD_PIXELS;
+
+    // private methods
+    void update_segments(uint8_t segment_starts[]);
+    void update_longest_segment();
+};
+```
+
+
+___
+## 4.2 NeoPixelHelper Animations  
+
 ```cpp
 // 1. blink complete segments
 // blink all Segments
@@ -922,3 +919,26 @@ complex:
 - sinus wave
 - set state using infrared/ble
 - add color gradients like fastled for each segment i.e. animation
+
+
+___
+# 5. GitHub Pages
+
+1. **Docker Image**  
+  &rarr; build and publish custom doxygen image   
+
+2. **Doxygen Documentation**  
+  &rarr; adapt doxyfile settings  
+
+https://stackoverflow.com/questions/35500277/doxygen-for-ino-files-arduino  
+```ini
+INPUT                  = src/Critical_Mass_07_21 doxygen_pages/ README.md
+HTML_EXTRA_STYLESHEET  = doxygen_pages/doxygen-awesome.css
+FILE_PATTERNS          = [...] *.ino
+EXTENSION_MAPPING      = ino=c 
+```
+
+add `/**@file filename */ ` to the top of the file  
+
+3. **CI Pipeline**  
+  add DOCKER_CONTAINER_REGISTRY_TOKEN to the repository secrets  
