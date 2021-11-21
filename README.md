@@ -1,4 +1,4 @@
-![doxygen_to_github_pages workflow](https://github.com/Fleaurent/github_actions_docker/actions/workflows/doxygen_to_github_pages.yml/badge.svg)  
+![doxygen_to_github_pages workflow badge](https://github.com/Fleaurent/RGB_Cycle/actions/workflows/doxygen_to_github_pages.yml/badge.svg)  
 @mainpage RGB Cycle Main Page
 
 # RGB Cycle  
