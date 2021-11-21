@@ -2,7 +2,7 @@ name: Doxygen_to_Github_Pages_CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [ master ]
 
 jobs:
   deploy_job:  

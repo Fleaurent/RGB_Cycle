@@ -1,3 +1,4 @@
+![doxygen_to_github_pages workflow](https://github.com/Fleaurent/github_actions_docker/actions/workflows/doxygen_to_github_pages.yml/badge.svg)  
 @mainpage RGB Cycle Main Page
 
 # RGB Cycle  
@@ -942,3 +943,40 @@ add `/**@file filename */ ` to the top of the file
 
 3. **CI Pipeline**  
   add DOCKER_CONTAINER_REGISTRY_TOKEN to the repository secrets  
+
+doxygen_to_github_pages.yml  
+```yml
+name: Doxygen_to_Github_Pages_CI
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  deploy_job:  
+    runs-on: ubuntu-18.04
+    
+    container:
+      image: ghcr.io/fleaurent/doxygen_image:latest
+      credentials:
+        username: fleaurent
+        password: ${{  secrets.DOCKER_CONTAINER_REGISTRY_TOKEN }}
+    
+    # create HTML files
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: generate documentation
+        run: doxygen Doxyfile
+        
+      - name: copy documentation to the build directory
+        run: cp -r html/ build/
+        
+    # push the HTML files to github-pages
+      - name: GitHub Pages action
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./build
+
+```
